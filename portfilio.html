@@ -1,0 +1,751 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Portfolio - Yassine Ben Mokrane </title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<style>
+    /* --- Reset & Fonts --- */
+    * { 
+        margin:0; 
+        padding:0; 
+        box-sizing:border-box; 
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+    
+    :root {
+        --primary-color: #000;
+        --secondary-color: #fff;
+        --accent-color: #0078D7; /* اللون الأزرق الشبيه بويندوز */
+        --card-bg: #1a1a1a;
+        --text-color: #f5f5f5;
+        --border-color: #444;
+        --hover-color: #3a3a3a;
+    }
+    
+    body { 
+        line-height:1.6; 
+        background: var(--primary-color); 
+        color: var(--text-color);
+        transition: all 0.3s ease;
+    }
+    
+    [dir="ltr"] {
+        direction: ltr;
+        text-align: left;
+    }
+    
+    [dir="rtl"] {
+        direction: rtl;
+        text-align: right;
+    }
+    
+    a { 
+        text-decoration:none; 
+        color:inherit; 
+    }
+    
+    img { 
+        max-width:100%; 
+    }
+
+    /* --- Navbar --- */
+    nav { 
+        background: var(--primary-color); 
+        color: var(--secondary-color); 
+        display:flex; 
+        justify-content:space-between; 
+        align-items:center; 
+        padding:1rem 2rem; 
+        position:sticky; 
+        top:0; 
+        z-index:100;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.5);
+    }
+    
+    nav .logo { 
+        font-weight:bold; 
+        font-size:1.5rem; 
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+    
+    nav select { 
+        padding:0.6rem 1rem; 
+        border-radius:5px; 
+        border: 1px solid var(--border-color);
+        background: var(--card-bg);
+        color: var(--text-color);
+        outline:none; 
+        cursor: pointer;
+        transition: all 0.3s ease;
+    }
+    
+    nav select:hover {
+        background: var(--hover-color);
+    }
+
+    /* --- Header --- */
+    header { 
+        display:flex; 
+        flex-direction:column; 
+        align-items:center; 
+        text-align:center; 
+        padding:4rem 1rem; 
+        background: linear-gradient(to bottom, var(--primary-color), var(--card-bg));
+        color: var(--secondary-color);
+        position: relative;
+        overflow: hidden;
+    }
+    
+    header::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" preserveAspectRatio="none"><path d="M0,0 L100,0 L100,100 Z" fill="rgba(0,120,215,0.05)"/></svg>');
+        background-size: cover;
+    }
+    
+    header img { 
+        border-radius:50%; 
+        width:180px; 
+        height:180px; 
+        object-fit:cover; 
+        margin-bottom:1.5rem; 
+        border:4px solid var(--secondary-color); 
+        box-shadow: 0 0 25px rgba(255,255,255,0.2);
+        transition: all 0.5s ease;
+        z-index: 1;
+    }
+    
+    header img:hover {
+        transform: scale(1.05);
+        box-shadow: 0 0 35px rgba(255,255,255,0.3);
+    }
+    
+    header h1 { 
+        font-size:2.5rem; 
+        margin-bottom:1rem; 
+        position: relative;
+        z-index: 1;
+    }
+    
+    header h1::after {
+        content: '';
+        display: block;
+        width: 80px;
+        height: 3px;
+        background: var(--accent-color);
+        margin: 15px auto;
+    }
+    
+    header p { 
+        font-size:1.1rem; 
+        max-width:700px; 
+        line-height: 1.8;
+        z-index: 1;
+    }
+
+    /* --- Sections --- */
+    section { 
+        padding:4rem 1.5rem; 
+        max-width:1200px; 
+        margin:0 auto; 
+    }
+    
+    h2 { 
+        font-size:2rem; 
+        margin-bottom:2rem; 
+        color: var(--secondary-color); 
+        display:inline-block; 
+        padding-bottom:0.5rem; 
+        position: relative;
+    }
+    
+    h2::after {
+        content: '';
+        position: absolute;
+        bottom: -5px;
+        left: 0;
+        width: 60px;
+        height: 3px;
+        background: var(--accent-color);
+    }
+
+    .services, .skills, .contact, .projects { 
+        display:flex; 
+        flex-wrap:wrap; 
+        gap:1.5rem; 
+        justify-content:center; 
+    }
+    
+    .card { 
+        background: var(--card-bg); 
+        padding:1.8rem; 
+        flex: 1 1 300px;
+        border-radius:12px; 
+        box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+        transition: all 0.3s ease;
+        border: 1px solid var(--border-color);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+    }
+    
+    .card:hover {
+        transform: translateY(-8px);
+        box-shadow: 0 12px 25px rgba(0,0,0,0.4);
+        border-color: rgba(255,255,255,0.1);
+    }
+    
+    .card i {
+        font-size: 2.5rem;
+        margin-bottom: 1.2rem;
+        color: var(--accent-color);
+    }
+    
+    /* تصميم خاص لقسم المشاريع */
+    .project-card {
+        position: relative;
+        overflow: hidden;
+        min-height: 200px;
+        display: flex;
+        flex-direction: column;
+        padding: 1rem;
+    }
+    
+    .project-card .project-content {
+        padding: 0.8rem;
+        flex-grow: 1;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+    }
+    
+    .project-card .project-title {
+        font-size: 1.2rem;
+        margin-bottom: 0.5rem;
+        color: var(--secondary-color);
+    }
+    
+    .project-card .project-link {
+        display: inline-block;
+        margin-top: 1rem;
+        padding: 0.5rem 1.2rem;
+        background: var(--primary-color);
+        color: var(--secondary-color);
+        border-radius: 5px;
+        transition: all 0.3s ease;
+        border: 1px solid var(--border-color);
+        font-size: 0.9rem;
+    }
+    
+    .project-card .project-link:hover {
+        background: var(--accent-color);
+        color: var(--secondary-color);
+    }
+
+    /* تصميم خاص لبطاقات التواصل */
+    .contact-card {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        height: 100%;
+    }
+    
+    .contact-button {
+        display: inline-block;
+        margin-top: 1.2rem;
+        padding: 0.8rem 1.5rem;
+        background: var(--accent-color);
+        color: var(--secondary-color);
+        border-radius: 6px;
+        transition: all 0.3s ease;
+        border: none;
+        font-weight: bold;
+        font-size: 1rem;
+        cursor: pointer;
+    }
+    
+    .contact-button:hover {
+        background: #0066b3;
+        transform: translateY(-3px);
+    }
+
+    .cta { 
+        display:inline-block; 
+        text-align:center; 
+        margin-top:2.5rem; 
+        padding:1.2rem 2.5rem; 
+        background: var(--accent-color); 
+        color: var(--secondary-color); 
+        border-radius:8px; 
+        font-weight:bold; 
+        transition:0.4s; 
+        border: none;
+        cursor: pointer;
+        font-size: 1.1rem;
+        box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+    }
+    
+    .cta:hover { 
+        transform: translateY(-5px);
+        box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+        background: #0066b3;
+    }
+
+    /* --- Responsive Design --- */
+    @media (max-width: 768px) {
+        nav {
+            flex-direction: column;
+            gap: 1rem;
+            padding: 1rem;
+        }
+        
+        header {
+            padding: 3rem 1rem;
+        }
+        
+        header h1 {
+            font-size: 2rem;
+        }
+        
+        header p {
+            font-size: 1rem;
+        }
+        
+        section {
+            padding: 3rem 1rem;
+        }
+        
+        h2 {
+            font-size: 1.7rem;
+        }
+        
+        .card {
+            flex: 1 1 100%;
+        }
+        
+        .project-card {
+            min-height: 180px;
+            padding: 0.8rem;
+        }
+    }
+
+    @media (max-width: 480px) {
+        header img {
+            width: 150px;
+            height: 150px;
+        }
+        
+        header h1 {
+            font-size: 1.8rem;
+        }
+        
+        h2 {
+            font-size: 1.5rem;
+        }
+        
+        .card {
+            padding: 1.3rem;
+        }
+        
+        .project-card {
+            min-height: 160px;
+            padding: 0.6rem;
+        }
+        
+        .project-card .project-content {
+            padding: 0.6rem;
+        }
+        
+        .cta {
+            padding: 1rem 2rem;
+            font-size: 1rem;
+        }
+    }
+
+    /* Animation */
+    @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(20px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+    
+    .animate {
+        animation: fadeIn 0.8s ease forwards;
+    }
+    
+    .delay-1 { animation-delay: 0.2s; }
+    .delay-2 { animation-delay: 0.4s; }
+    .delay-3 { animation-delay: 0.6s; }
+    .delay-4 { animation-delay: 0.8s; }
+</style>
+</head>
+<body>
+
+<!-- Navbar -->
+<nav>
+    <div class="logo">
+        <i class="fas fa-code"></i>
+        Yassine Ben Mokrane 
+    </div>
+    <select id="langSelect">
+        <option value="ar">العربية</option>
+        <option value="en">English</option>
+        <option value="fr">Français</option>
+    </select>
+</nav>
+
+<!-- Header -->
+<header id="header">
+    <img src="picture.png" alt="Yassine Ben Mokrane ">
+    <h1 id="name">ياسين بن مقران</h1>
+    <p id="intro">أنا مطور ويب Full-Stack أعمل على بناء مواقع ومشاريع ويب متكاملة بدءًا من الواجهة التفاعلية وحتى الخادم والسكربتات الخلفية. أطور صفحات هبوط احترافية، سكربتات بايثون بسيطة، وأهتم بالواجهة لتقديم تجربة مستخدم سلسة وجذابة.</p>
+</header>
+
+<!-- الخدمات -->
+<section>
+    <h2 id="servicesTitle"><i class="fas fa-concierge-bell"></i> خدماتي</h2>
+    <div class="services" id="services">
+        <div class="card animate">
+            <i class="fas fa-laptop-code"></i>
+            <h3>تصميم وتطوير مواقع ويب كاملة</h3>
+            <p>(Front-End + Back-End)</p>
+        </div>
+        <div class="card animate delay-1">
+            <i class="fas fa-window-restore"></i>
+            <h3>تطوير صفحات هبوط</h3>
+            <p>(Landing Pages)</p>
+        </div>
+        <div class="card animate delay-2">
+            <i class="fas fa-shopping-cart"></i>
+            <h3>إنشاء متاجر إلكترونية</h3>
+            <p>ودمج بوابات الدفع</p>
+        </div>
+        <div class="card animate delay-3">
+            <i class="fab fa-python"></i>
+            <h3>تطوير سكربتات بايثون بسيطة</h3>
+        </div>
+        <div class="card animate delay-4">
+            <i class="fas fa-paint-brush"></i>
+            <h3>تحسين أداء المواقع وتجربة المستخدم</h3>
+            <p>(UI/UX)</p>
+        </div>
+    </div>
+</section>
+
+<!-- التقنيات -->
+<section>
+    <h2 id="skillsTitle"><i class="fas fa-cogs"></i> التقنيات والمهارات</h2>
+    <div class="skills" id="skills">
+        <div class="card animate"><i class="fab fa-html5"></i> HTML5</div>
+        <div class="card animate delay-1"><i class="fab fa-css3-alt"></i> CSS3</div>
+        <div class="card animate delay-2"><i class="fab fa-js-square"></i> JavaScript</div>
+        <div class="card animate delay-3"><i class="fab fa-react"></i> React</div>
+        <div class="card animate"><i class="fab fa-node-js"></i> Express.js</div>
+        <div class="card animate delay-1"><i class="fab fa-node"></i> Node.js</div>
+        <div class="card animate delay-2"><i class="fab fa-python"></i> Python Scripts</div>
+        <div class="card animate delay-3"><i class="fas fa-wind"></i> Tailwind CSS</div>
+        <div class="card animate"><i class="fab fa-git-alt"></i> Git/GitHub</div>
+    </div>
+</section>
+
+<!-- الأعمال السابقة -->
+<section>
+    <h2 id="projectsTitle"><i class="fas fa-briefcase"></i> عينات من بعض أعمالي</h2>
+    <div class="projects" id="projectsContainer">
+        <div class="card project-card animate">
+            <div class="project-content">
+                <h3 class="project-title">Storakeg</h3>
+                <a href="https://storakeg.com" target="_blank" class="project-link">زيارة الموقع</a>
+            </div>
+        </div>
+        <div class="card project-card animate delay-1">
+            <div class="project-content">
+                <h3 class="project-title">Qeematech</h3>
+                <a href="https://www.qeematech.net" target="_blank" class="project-link">زيارة الموقع</a>
+            </div>
+        </div>
+        <div class="card project-card animate delay-2">
+            <div class="project-content">
+                <h3 class="project-title">Barmaja</h3>
+                <a href="https://www.barmaja.qa" target="_blank" class="project-link">زيارة الموقع</a>
+            </div>
+        </div>
+        <div class="card project-card animate delay-3">
+            <div class="project-content">
+                <h3 class="project-title">IBTDI</h3>
+                <a href="https://www.ibtdi.com" target="_blank" class="project-link">زيارة الموقع</a>
+            </div>
+        </div>
+        <div class="card project-card animate">
+            <div class="project-content">
+                <h3 class="project-title">Adselams</h3>
+                <a href="https://adselams.com" target="_blank" class="project-link">زيارة الموقع</a>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- التواصل -->
+<section>
+    <h2 id="contactTitle"><i class="fas fa-envelope"></i> تواصل معي</h2>
+    <div class="contact" id="contactContainer">
+        <div class="card animate contact-card">
+            <i class="fas fa-envelope"></i>
+            <h3 id="contactEmailTitle">البريد الإلكتروني</h3>
+            <p>yassinebenmokran@gmail.com</p>
+        </div>
+        <div class="card animate delay-1 contact-card">
+            <i class="fas fa-phone"></i>
+            <h3 id="contactPhoneTitle">الهاتف</h3>
+            <p>+213795082763</p>
+        </div>
+        <div class="card animate delay-2 contact-card">
+            <i class="fas fa-globe"></i>
+            <h3 id="contactLinksTitle">روابط التواصل</h3>
+            <p id="contactLinksDesc">جميع حساباتي وروابط التواصل</p>
+            <a href="https://yacine2007.github.io/Yacine2007/communication.html" target="_blank" class="contact-button" id="contactLinkButton">صفحة التواصل</a>
+        </div>
+    </div>
+    
+
+</section>
+
+<script>
+const langData = {
+  ar: {
+    dir: "rtl",
+    name: "ياسين بن مقران",
+    intro: "أنا مطور ويب Full-Stack أعمل على بناء مواقع ومشاريع ويب متكاملة بدءًا من الواجهة التفاعلية وحتى الخادم والسكربتات الخلفية. أطور صفحات هبوط احترافية، سكربتات بايثون بسيطة، وأهتم بالواجهة لتقديم تجربة مستخدم سلسة وجذابة.",
+    servicesTitle: "خدماتي",
+    skillsTitle: "التقنيات والمهارات",
+    projectsTitle: "عينات من بعض أعمالي",
+    contactTitle: "تواصل معي",
+    services: [
+      {icon: "fas fa-laptop-code", title: "تصميم وتطوير مواقع ويب كاملة", desc: "(Front-End + Back-End)"},
+      {icon: "fas fa-window-restore", title: "تطوير صفحات هبوط", desc: "(Landing Pages)"},
+      {icon: "fas fa-shopping-cart", title: "إنشاء متاجر إلكترونية", desc: "ودمج بوابات الدفع"},
+      {icon: "fab fa-python", title: "تطوير سكربتات بايثون بسيطة", desc: ""},
+      {icon: "fas fa-paint-brush", title: "تحسين أداء المواقع وتجربة المستخدم", desc: "(UI/UX)"}
+    ],
+    skills: [
+      {icon: "fab fa-html5", name: "HTML5"},
+      {icon: "fab fa-css3-alt", name: "CSS3"},
+      {icon: "fab fa-js-square", name: "JavaScript"},
+      {icon: "fab fa-react", name: "React"},
+      {icon: "fab fa-node-js", name: "Express.js"},
+      {icon: "fab fa-node", name: "Node.js"},
+      {icon: "fab fa-python", name: "Python Scripts"},
+      {icon: "fas fa-wind", name: "Tailwind CSS"},
+      {icon: "fab fa-git-alt", name: "Git/GitHub"}
+    ],
+    projects: [
+      {title: "Storakeg", link: "https://storakeg.com"},
+      {title: "Qeematech", link: "https://www.qeematech.net"},
+      {title: "Barmaja", link: "https://www.barmaja.qa"},
+      {title: "IBTDI", link: "https://www.ibtdi.com"},
+      {title: "Adselams", link: "https://adselams.com"}
+    ],
+    contact: {
+        emailTitle: "البريد الإلكتروني",
+        phoneTitle: "الهاتف",
+        linksTitle: "روابط التواصل",
+        linksDesc: "جميع حساباتي وروابط التواصل",
+        linkButton: "صفحة التواصل",
+        cta: "تواصل معي الآن"
+    }
+  },
+  en: {
+    dir: "ltr",
+    name: "Yassine Ben Mokrane ",
+    intro: "I am a Full-Stack Web Developer building complete websites and web projects from interactive front-ends to back-end scripts. I create professional landing pages, simple Python scripts, and focus on UI to provide smooth and attractive user experiences.",
+    servicesTitle: "My Services",
+    skillsTitle: "Skills & Technologies",
+    projectsTitle: "Samples of My Work",
+    contactTitle: "Contact Me",
+    services: [
+      {icon: "fas fa-laptop-code", title: "Full website development", desc: "(Front-End + Back-End)"},
+      {icon: "fas fa-window-restore", title: "Landing Pages development", desc: ""},
+      {icon: "fas fa-shopping-cart", title: "E-commerce setup", desc: "with payment gateways"},
+      {icon: "fab fa-python", title: "Simple Python scripts", desc: ""},
+      {icon: "fas fa-paint-brush", title: "Website performance & UI/UX optimization", desc: ""}
+    ],
+    skills: [
+      {icon: "fab fa-html5", name: "HTML5"},
+      {icon: "fab fa-css3-alt", name: "CSS3"},
+      {icon: "fab fa-js-square", name: "JavaScript"},
+      {icon: "fab fa-react", name: "React"},
+      {icon: "fab fa-node-js", name: "Express.js"},
+      {icon: "fab fa-node", name: "Node.js"},
+      {icon: "fab fa-python", name: "Python Scripts"},
+      {icon: "fas fa-wind", name: "Tailwind CSS"},
+      {icon: "fab fa-git-alt", name: "Git/GitHub"}
+    ],
+    projects: [
+      {title: "Storakeg", link: "https://storakeg.com"},
+      {title: "Qeematech", link: "https://www.qeematech.net"},
+      {title: "Barmaja", link: "https://www.barmaja.qa"},
+      {title: "IBTDI", link: "https://www.ibtdi.com"},
+      {title: "Adselams", link: "https://adselams.com"}
+    ],
+    contact: {
+        emailTitle: "Email",
+        phoneTitle: "Phone",
+        linksTitle: "Communication Links",
+        linksDesc: "All my accounts and communication links",
+        linkButton: "Communication Page",
+        cta: "Contact Me Now"
+    }
+  },
+  fr: {
+    dir: "ltr",
+    name: "Yassine Ben Mokrane ",
+    intro: "Je suis développeur web Full-Stack, créant des sites web complets et des projets web, du front-end interactif aux scripts back-end. Je développe des landing pages professionnelles, des scripts Python simples et je me concentre sur l'UI pour offrir une expérience utilisateur fluide et attrayante.",
+    servicesTitle: "Mes Services",
+    skillsTitle: "Compétences & Technologies",
+    projectsTitle: "Exemples de Mes Travaux",
+    contactTitle: "Contactez-moi",
+    services: [
+      {icon: "fas fa-laptop-code", title: "Développement complet de sites web", desc: "(Front-End + Back-End)"},
+      {icon: "fas fa-window-restore", title: "Développement de Landing Pages", desc: ""},
+      {icon: "fas fa-shopping-cart", title: "Création de boutiques en ligne", desc: "avec passerelles de paiement"},
+      {icon: "fab fa-python", title: "Scripts Python simples", desc: ""},
+      {icon: "fas fa-paint-brush", title: "Optimisation de la performance et UI/UX", desc: ""}
+    ],
+    skills: [
+      {icon: "fab fa-html5", name: "HTML5"},
+      {icon: "fab fa-css3-alt", name: "CSS3"},
+      {icon: "fab fa-js-square", name: "JavaScript"},
+      {icon: "fab fa-react", name: "React"},
+      {icon: "fab fa-node-js", name: "Express.js"},
+      {icon: "fab fa-node", name: "Node.js"},
+      {icon: "fab fa-python", name: "Python Scripts"},
+      {icon: "fas fa-wind", name: "Tailwind CSS"},
+      {icon: "fab fa-git-alt", name: "Git/GitHub"}
+    ],
+    projects: [
+      {title: "Storakeg", link: "https://storakeg.com"},
+      {title: "Qeematech", link: "https://www.qeematech.net"},
+      {title: "Barmaja", link: "https://www.barmaja.qa"},
+      {title: "IBTDI", link: "https://www.ibtdi.com"},
+      {title: "Adselams", link: "https://adselams.com"}
+    ],
+    contact: {
+        emailTitle: "E-mail",
+        phoneTitle: "Téléphone",
+        linksTitle: "Liens de Communication",
+        linksDesc: "Tous mes comptes et liens de communication",
+        linkButton: "Page de Communication",
+        cta: "Contactez-moi maintenant"
+    }
+  }
+};
+
+const langSelect = document.getElementById("langSelect");
+langSelect.addEventListener("change", function(){
+  const lang = this.value;
+  const data = langData[lang];
+  
+  // تغيير اتجاه الصفحة
+  document.documentElement.dir = data.dir;
+  document.documentElement.lang = lang;
+  
+  // تحديث النصوص
+  document.getElementById("name").textContent = data.name;
+  document.getElementById("intro").textContent = data.intro;
+  document.getElementById("servicesTitle").innerHTML = `<i class="fas fa-concierge-bell"></i> ${data.servicesTitle}`;
+  document.getElementById("skillsTitle").innerHTML = `<i class="fas fa-cogs"></i> ${data.skillsTitle}`;
+  document.getElementById("projectsTitle").innerHTML = `<i class="fas fa-briefcase"></i> ${data.projectsTitle}`;
+  document.getElementById("contactTitle").innerHTML = `<i class="fas fa-envelope"></i> ${data.contactTitle}`;
+  document.getElementById("ctaBtn").textContent = data.contact.cta;
+
+  // تحديث الخدمات
+  const servicesDiv = document.getElementById("services");
+  servicesDiv.innerHTML = "";
+  data.services.forEach((s, index) => {
+    const div = document.createElement("div");
+    div.className = `card animate${index > 0 ? ` delay-${index}` : ''}`;
+    div.innerHTML = `
+      <i class="${s.icon}"></i>
+      <h3>${s.title}</h3>
+      ${s.desc ? `<p>${s.desc}</p>` : ''}
+    `;
+    servicesDiv.appendChild(div);
+  });
+
+  // تحديث المهارات
+  const skillsDiv = document.getElementById("skills");
+  skillsDiv.innerHTML = "";
+  data.skills.forEach((s, index) => {
+    const div = document.createElement("div");
+    div.className = `card animate${index > 0 ? ` delay-${index % 4}` : ''}`;
+    div.innerHTML = `
+      <i class="${s.icon}"></i>
+      ${s.name}
+    `;
+    skillsDiv.appendChild(div);
+  });
+  
+  // تحديث المشاريع
+  const projectsContainer = document.getElementById("projectsContainer");
+  projectsContainer.innerHTML = "";
+  data.projects.forEach((p, index) => {
+    const div = document.createElement("div");
+    div.className = `card project-card animate${index > 0 ? ` delay-${index % 4}` : ''}`;
+    div.innerHTML = `
+      <div class="project-content">
+        <h3 class="project-title">${p.title}</h3>
+        <a href="${p.link}" target="_blank" class="project-link">${lang === 'ar' ? 'زيارة الموقع' : (lang === 'fr' ? 'Visiter le site' : 'Visit Website')}</a>
+      </div>
+    `;
+    projectsContainer.appendChild(div);
+  });
+  
+  // تحديث قسم التواصل
+  document.getElementById("contactEmailTitle").textContent = data.contact.emailTitle;
+  document.getElementById("contactPhoneTitle").textContent = data.contact.phoneTitle;
+  document.getElementById("contactLinksTitle").textContent = data.contact.linksTitle;
+  document.getElementById("contactLinksDesc").textContent = data.contact.linksDesc;
+  document.getElementById("contactLinkButton").textContent = data.contact.linkButton;
+  
+  // إضافة تأثيرات للعناصر بعد التحميل
+  setTimeout(initAnimations, 100);
+});
+
+// تهيئة الحركات عند التمرير
+function initAnimations() {
+  const animatedElements = document.querySelectorAll('.animate');
+  animatedElements.forEach(el => {
+    el.style.opacity = '0';
+  });
+  
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.style.animationPlayState = 'running';
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.1 });
+  
+  animatedElements.forEach(el => {
+    observer.observe(el);
+  });
+}
+
+// تهيئة أولية للصفحة
+document.addEventListener('DOMContentLoaded', function() {
+  initAnimations();
+});
+</script>
+
+</body>
+</html>

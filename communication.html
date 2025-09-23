@@ -1,68 +1,153 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Contact & Social Links</title>
-<style>
-    body {
-        font-family: Arial, sans-serif;
-        background-color: #f0f2f5;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        padding: 50px 20px;
-    }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contact & Social Links</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f2f5;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 50px 20px;
+            margin: 0;
+        }
 
-    h1 {
-        font-size: 2.2em;
-        margin-bottom: 30px;
-        color: #333;
-    }
+        h1 {
+            font-size: 2.2em;
+            margin-bottom: 10px;
+            color: #333;
+            text-align: center;
+        }
 
-    .link-list {
-        list-style: none;
-        padding: 0;
-        width: 100%;
-        max-width: 500px;
-    }
+        .explanation-text {
+            text-align: center;
+            margin-bottom: 30px;
+            color: #555;
+            max-width: 600px;
+            line-height: 1.5;
+            font-size: 1.1em;
+        }
 
-    .link-item {
-        display: flex;
-        align-items: center;
-        margin: 15px 0;
-        padding: 15px 20px;
-        background: #fff;
-        border-radius: 25px;
-        box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-        cursor: pointer;
-        transition: 0.3s;
-        font-size: 1.1em;
-    }
+        .link-list {
+            list-style: none;
+            padding: 0;
+            width: 100%;
+            max-width: 500px;
+        }
 
-    .link-item:hover {
-        background: #e6e6e6;
-    }
+        .link-item {
+            display: flex;
+            align-items: center;
+            margin: 15px 0;
+            padding: 15px 20px;
+            background: #fff;
+            border-radius: 25px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+            cursor: pointer;
+            transition: 0.3s;
+            font-size: 1.1em;
+            position: relative;
+        }
 
-    .link-item img {
-        width: 40px;
-        height: 40px;
-        border-radius: 50%;
-        margin-right: 20px;
-        object-fit: cover;
-    }
+        .link-item:hover {
+            background: #e6e6e6;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 15px rgba(0,0,0,0.15);
+        }
 
-    .contact-text {
-        margin-top: 40px;
-        font-size: 1.2em;
-        text-align: center;
-        color: #555;
-    }
-</style>
+        .link-item img {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            margin-right: 20px;
+            object-fit: cover;
+        }
+
+        .contact-text {
+            margin-top: 40px;
+            font-size: 1.2em;
+            text-align: center;
+            color: #555;
+        }
+
+        /* Golden card styles */
+        .golden-card {
+            background: linear-gradient(135deg, #ffd700, #ffed4e, #ffd700);
+            border: 2px solid #ffcc00;
+            box-shadow: 0 4px 15px rgba(255, 215, 0, 0.4);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .golden-card:hover {
+            box-shadow: 0 6px 20px rgba(255, 215, 0, 0.6);
+        }
+
+        .golden-card::before {
+            content: "★";
+            position: absolute;
+            top: 5px;
+            right: 15px;
+            font-size: 1.5em;
+            color: #ff9900;
+        }
+
+        .golden-card::after {
+            content: "";
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(
+                to bottom right,
+                rgba(255,255,255,0) 0%,
+                rgba(255,255,255,0.8) 50%,
+                rgba(255,255,255,0) 100%
+            );
+            transform: rotate(30deg);
+            animation: shine 3s infinite;
+        }
+
+        @keyframes shine {
+            0% {
+                transform: translateX(-100%) translateY(-100%) rotate(30deg);
+            }
+            100% {
+                transform: translateX(100%) translateY(100%) rotate(30deg);
+            }
+        }
+
+        /* Badge for the golden card */
+        .badge {
+            position: absolute;
+            top: -8px;
+            right: -8px;
+            background: #ff4444;
+            color: white;
+            border-radius: 50%;
+            width: 24px;
+            height: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.8em;
+            font-weight: bold;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+        }
+    </style>
 </head>
 <body>
 
 <h1>Connect with Me</h1>
+<p class="explanation-text">
+    The <strong>golden card</strong> below symbolizes my most active and frequently used social media account. 
+    This is the best way to reach me quickly!
+</p>
+
 <ul class="link-list">
     <!-- الحساب الرئيسي -->
     <li class="link-item" onclick="window.open('https://www.facebook.com/yacineben2007','_blank')">
@@ -77,11 +162,12 @@
         <img src="https://cdn-icons-png.flaticon.com/512/124/124010.png" alt="Facebook"> B.Y PRO Facebook <br> (The company)
     </li>
     
-<!-- <li class="link-item" onclick="window.open('')"> <img src="https://cdn-icons-png.flaticon.com/512/124/124010.png" alt="Facebook"> Yacine Dev Facebook </li> -->
-
-    <li class="link-item" onclick="window.open('https://www.facebook.com/profile.php?id=61580260328404','_blank')">
-        <img src="https://cdn-icons-png.flaticon.com/512/124/124010.png" alt="Facebook"> Yacine Ben mokrane 1
+    <!-- Golden Card - Most Active Account -->
+    <li class="link-item golden-card" onclick="window.open('https://www.facebook.com/profile.php?id=61580260328404','_blank')">
+        <span class="badge">1</span>
+        <img src="https://cdn-icons-png.flaticon.com/512/124/124010.png" alt="Facebook"> Yacine Ben Mokrane 1
     </li>
+
     <li class="link-item" onclick="window.open('https://www.facebook.com/profile.php?id=61579708632130','_blank')">
         <img src="https://cdn-icons-png.flaticon.com/512/124/124010.png" alt="Facebook"> Yacine ben mokrane 2
     </li>

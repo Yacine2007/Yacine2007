@@ -1,3 +1,464 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ma Ryam - Portfolio</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
 
+        body {
+            background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .header {
+            text-align: center;
+            padding: 60px 20px;
+            color: white;
+            animation: fadeIn 1s ease-in-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .name {
+            font-size: 4.5em;
+            font-weight: bold;
+            margin-bottom: 20px;
+            text-shadow: 3px 3px 6px rgba(0, 0, 0, 0.3);
+            background: linear-gradient(45deg, #ff6b6b, #ee5a24, #feca57, #48dbfb, #ff9ff3);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            background-size: 300% 300%;
+            animation: gradientShift 3s ease infinite;
+        }
+
+        @keyframes gradientShift {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        .title {
+            font-size: 1.4em;
+            opacity: 0.9;
+            color: #ddd;
+            letter-spacing: 2px;
+        }
+
+        /* Grid Gallery Modern */
+        .gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 30px;
+            padding: 40px 20px;
+        }
+
+        .gallery-item {
+            position: relative;
+            border-radius: 25px;
+            overflow: hidden;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+            transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            cursor: pointer;
+            aspect-ratio: 4/5;
+            background: #000;
+        }
+
+        .gallery-item:hover {
+            transform: translateY(-15px) scale(1.03);
+            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.6);
+        }
+
+        .gallery-item::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(45deg, rgba(255,107,107,0.1), rgba(72,219,251,0.1));
+            opacity: 0;
+            transition: opacity 0.4s ease;
+            z-index: 2;
+        }
+
+        .gallery-item:hover::before {
+            opacity: 1;
+        }
+
+        .gallery-img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: all 0.6s ease;
+            filter: brightness(0.9);
+        }
+
+        .gallery-item:hover .gallery-img {
+            transform: scale(1.15);
+            filter: brightness(1.1);
+        }
+
+        .gallery-overlay {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: linear-gradient(transparent, rgba(0,0,0,0.8));
+            padding: 40px 20px 20px;
+            transform: translateY(100%);
+            transition: transform 0.4s ease;
+        }
+
+        .gallery-item:hover .gallery-overlay {
+            transform: translateY(0);
+        }
+
+        .photo-number {
+            color: white;
+            font-size: 0.9em;
+            opacity: 0.8;
+            letter-spacing: 1px;
+        }
+
+        /* Facebook Button Modern */
+        .contact-section {
+            text-align: center;
+            padding: 60px 20px;
+        }
+
+        .facebook-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 20px;
+            background: linear-gradient(45deg, #1877f2, #0d5cb6, #1877f2);
+            background-size: 200% 200%;
+            color: white;
+            text-decoration: none;
+            padding: 22px 50px;
+            border-radius: 60px;
+            font-size: 1.4em;
+            font-weight: 600;
+            box-shadow: 0 15px 35px rgba(24, 119, 242, 0.4);
+            transition: all 0.4s ease;
+            animation: gradientShift 3s ease infinite, pulse 2s infinite;
+            border: 2px solid rgba(255,255,255,0.1);
+        }
+
+        .facebook-btn:hover {
+            transform: translateY(-8px) scale(1.05);
+            box-shadow: 0 25px 50px rgba(24, 119, 242, 0.6);
+            background-position: 100% 50%;
+        }
+
+        .facebook-btn i {
+            font-size: 1.6em;
+            filter: drop-shadow(0 2px 4px rgba(0,0,0,0.3));
+        }
+
+        /* Footer */
+        .footer {
+            text-align: center;
+            color: rgba(255,255,255,0.7);
+            padding: 40px 20px;
+            margin-top: 40px;
+            border-top: 1px solid rgba(255,255,255,0.1);
+        }
+
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.95);
+            animation: fadeIn 0.4s ease;
+        }
+
+        .modal-content {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            max-width: 95%;
+            max-height: 95%;
+            border-radius: 15px;
+            box-shadow: 0 30px 60px rgba(0,0,0,0.5);
+        }
+
+        .close {
+            position: absolute;
+            top: 25px;
+            right: 35px;
+            color: white;
+            font-size: 45px;
+            font-weight: bold;
+            cursor: pointer;
+            z-index: 1001;
+            transition: color 0.3s ease;
+        }
+
+        .close:hover {
+            color: #ff6b6b;
+        }
+
+        /* Responsive */
+        @media (max-width: 1200px) {
+            .gallery-grid {
+                grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+                gap: 25px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .name {
+                font-size: 3em;
+            }
+            
+            .gallery-grid {
+                grid-template-columns: 1fr;
+                gap: 20px;
+                padding: 20px 10px;
+            }
+            
+            .gallery-item {
+                aspect-ratio: 3/4;
+            }
+            
+            .facebook-btn {
+                padding: 18px 35px;
+                font-size: 1.2em;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .name {
+                font-size: 2.5em;
+            }
+            
+            .title {
+                font-size: 1.1em;
+            }
+            
+            .gallery-grid {
+                gap: 15px;
+            }
+            
+            .facebook-btn {
+                padding: 15px 25px;
+                font-size: 1.1em;
+                gap: 12px;
+            }
+        }
+
+        /* Loading Animation */
+        .loading {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(255,255,255,.3);
+            border-radius: 50%;
+            border-top-color: #fff;
+            animation: spin 1s ease-in-out infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1 class="name">MA RYAM</h1>
+            <p class="title">PORTFOLIO PROFESSIONNEL</p>
+        </div>
+        
+        <div class="gallery-grid">
+            <div class="gallery-item" onclick="openModal('https://raw.githubusercontent.com/Yacine2007/Yacine2007/main/wiam/img%20(1).jpg')">
+                <img src="https://raw.githubusercontent.com/Yacine2007/Yacine2007/main/wiam/img%20(1).jpg" 
+                     alt="Photo 1" 
+                     class="gallery-img"
+                     onerror="this.src='https://images.unsplash.com/photo-1494790108755-2616b612b786?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80'">
+                <div class="gallery-overlay">
+                    <div class="photo-number">01</div>
+                </div>
+            </div>
+            
+            <div class="gallery-item" onclick="openModal('https://raw.githubusercontent.com/Yacine2007/Yacine2007/main/wiam/img%20(2).jpg')">
+                <img src="https://raw.githubusercontent.com/Yacine2007/Yacine2007/main/wiam/img%20(2).jpg" 
+                     alt="Photo 2" 
+                     class="gallery-img"
+                     onerror="this.src='https://images.unsplash.com/photo-1517841905240-472988babdf9?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80'">
+                <div class="gallery-overlay">
+                    <div class="photo-number">02</div>
+                </div>
+            </div>
+            
+            <div class="gallery-item" onclick="openModal('https://raw.githubusercontent.com/Yacine2007/Yacine2007/main/wiam/img%20(3).jpg')">
+                <img src="https://raw.githubusercontent.com/Yacine2007/Yacine2007/main/wiam/img%20(3).jpg" 
+                     alt="Photo 3" 
+                     class="gallery-img"
+                     onerror="this.src='https://images.unsplash.com/photo-1534528741775-53994a69daeb?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80'">
+                <div class="gallery-overlay">
+                    <div class="photo-number">03</div>
+                </div>
+            </div>
+            
+            <div class="gallery-item" onclick="openModal('https://raw.githubusercontent.com/Yacine2007/Yacine2007/main/wiam/img%20(4).jpg')">
+                <img src="https://raw.githubusercontent.com/Yacine2007/Yacine2007/main/wiam/img%20(4).jpg" 
+                     alt="Photo 4" 
+                     class="gallery-img"
+                     onerror="this.src='https://images.unsplash.com/photo-1529626455594-4ff0802cfb7e?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80'">
+                <div class="gallery-overlay">
+                    <div class="photo-number">04</div>
+                </div>
+            </div>
+            
+            <div class="gallery-item" onclick="openModal('https://raw.githubusercontent.com/Yacine2007/Yacine2007/main/wiam/img%20(5).jpg')">
+                <img src="https://raw.githubusercontent.com/Yacine2007/Yacine2007/main/wiam/img%20(5).jpg" 
+                     alt="Photo 5" 
+                     class="gallery-img"
+                     onerror="this.src='https://images.unsplash.com/photo-1544005313-94ddf0286df2?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80'">
+                <div class="gallery-overlay">
+                    <div class="photo-number">05</div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="contact-section">
+            <a href="https://www.facebook.com/ma.ryam.137206" target="_blank" class="facebook-btn">
+                <i class="fab fa-facebook-f"></i>
+                Contactez-moi sur Facebook
+            </a>
+        </div>
+        
+        <div class="footer">
+            <p>© 2024 Ma Ryam - Tous droits réservés</p>
+            <p style="margin-top: 15px; opacity: 0.6; font-size: 0.9em;">Portfolio Professionnel</p>
+        </div>
+    </div>
+
+    <!-- Modal -->
+    <div id="imageModal" class="modal">
+        <span class="close" onclick="closeModal()">&times;</span>
+        <img class="modal-content" id="modalImage">
+    </div>
+
+    <script>
+        // Modal functions
+        function openModal(imageSrc) {
+            const modal = document.getElementById('imageModal');
+            const modalImg = document.getElementById('modalImage');
+            modal.style.display = 'block';
+            modalImg.src = imageSrc;
+            
+            // Add loading state
+            modalImg.style.opacity = '0';
+            modalImg.onload = function() {
+                modalImg.style.opacity = '1';
+            }
+        }
+
+        function closeModal() {
+            document.getElementById('imageModal').style.display = 'none';
+        }
+
+        // Close modal on outside click and ESC key
+        document.getElementById('imageModal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeModal();
+            }
+        });
+
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                closeModal();
+            }
+        });
+
+        // Scroll animations
+        document.addEventListener('DOMContentLoaded', function() {
+            const observerOptions = {
+                threshold: 0.1,
+                rootMargin: '0px 0px -50px 0px'
+            };
+
+            const observer = new IntersectionObserver(function(entries) {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.style.opacity = '1';
+                        entry.target.style.transform = 'translateY(0)';
+                    }
+                });
+            }, observerOptions);
+
+            // Animate gallery items
+            const galleryItems = document.querySelectorAll('.gallery-item');
+            galleryItems.forEach((item, index) => {
+                item.style.opacity = '0';
+                item.style.transform = 'translateY(50px)';
+                item.style.transition = `opacity 0.6s ease ${index * 0.1}s, transform 0.6s ease ${index * 0.1}s`;
+                observer.observe(item);
+            });
+
+            // Typewriter effect for name
+            const nameElement = document.querySelector('.name');
+            const originalName = nameElement.textContent;
+            nameElement.textContent = '';
+            
+            let i = 0;
+            function typeWriter() {
+                if (i < originalName.length) {
+                    nameElement.textContent += originalName.charAt(i);
+                    i++;
+                    setTimeout(typeWriter, 120);
+                }
+            }
+            
+            setTimeout(typeWriter, 800);
+        });
+
+        // Preload images for better performance
+        function preloadImages() {
+            const imageUrls = [
+                'https://raw.githubusercontent.com/Yacine2007/Yacine2007/main/wiam/img%20(1).jpg',
+                'https://raw.githubusercontent.com/Yacine2007/Yacine2007/main/wiam/img%20(2).jpg',
+                'https://raw.githubusercontent.com/Yacine2007/Yacine2007/main/wiam/img%20(3).jpg',
+                'https://raw.githubusercontent.com/Yacine2007/Yacine2007/main/wiam/img%20(4).jpg',
+                'https://raw.githubusercontent.com/Yacine2007/Yacine2007/main/wiam/img%20(5).jpg'
+            ];
+
+            imageUrls.forEach(url => {
+                const img = new Image();
+                img.src = url;
+            });
+        }
+
+        // Start preloading when page loads
+        window.addEventListener('load', preloadImages);
+    </script>
+</body>
+</html>
 
 

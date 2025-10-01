@@ -84,6 +84,7 @@
 
         .golden-card:hover {
             box-shadow: 0 6px 20px rgba(255, 215, 0, 0.6);
+            transform: translateY(-3px);
         }
 
         .golden-card::before {
@@ -121,7 +122,66 @@
             }
         }
 
-        /* Badge for the golden card */
+        /* Royal Golden Style (for phone) */
+        .royal-golden {
+            background: linear-gradient(135deg, #d4af37, #f9e076, #d4af37);
+            border: 2px solid #b8941f;
+            box-shadow: 0 4px 20px rgba(212, 175, 55, 0.6);
+            position: relative;
+        }
+
+        .royal-golden:hover {
+            box-shadow: 0 6px 25px rgba(212, 175, 55, 0.8);
+            transform: translateY(-4px) scale(1.02);
+        }
+
+        .royal-golden::before {
+            content: "👑";
+            position: absolute;
+            top: 5px;
+            right: 15px;
+            font-size: 1.5em;
+        }
+
+        .royal-golden::after {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            border-radius: 23px;
+            padding: 2px;
+            background: linear-gradient(135deg, #ffd700, #b8941f, #ffd700);
+            -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+            -webkit-mask-composite: xor;
+            mask-composite: exclude;
+        }
+
+        /* Gray card for inactive accounts */
+        .gray-card {
+            background: linear-gradient(135deg, #a0a0a0, #c0c0c0, #a0a0a0);
+            border: 2px solid #808080;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+            cursor: not-allowed;
+            opacity: 0.7;
+        }
+
+        .gray-card:hover {
+            transform: none;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+            background: linear-gradient(135deg, #a0a0a0, #c0c0c0, #a0a0a0);
+        }
+
+        .gray-card::before {
+            content: "⚠️";
+            position: absolute;
+            top: 5px;
+            right: 15px;
+            font-size: 1.5em;
+        }
+
+        /* Badge styles */
         .badge {
             position: absolute;
             top: -8px;
@@ -137,6 +197,35 @@
             font-size: 0.8em;
             font-weight: bold;
             box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+            z-index: 2;
+        }
+
+        .status-note {
+            font-size: 0.8em;
+            color: #d32f2f;
+            margin-top: 5px;
+            font-style: italic;
+        }
+
+        .response-note {
+            font-size: 0.75em;
+            color: #666;
+            margin-top: 3px;
+            font-style: italic;
+        }
+
+        .coming-soon {
+            background: linear-gradient(135deg, #4CAF50, #8BC34A, #4CAF50);
+            border: 2px solid #388E3C;
+            position: relative;
+        }
+
+        .coming-soon::before {
+            content: "🆕";
+            position: absolute;
+            top: 5px;
+            right: 15px;
+            font-size: 1.5em;
         }
     </style>
 </head>
@@ -144,73 +233,148 @@
 
 <h1>Connect with Me</h1>
 <p class="explanation-text">
-    The <strong>golden card</strong> below symbolizes my most active and frequently used social media account. 
-    This is the best way to reach me quickly!
+    The <strong>golden cards</strong> below represent my most active and recommended contact methods. 
+    The <strong>royal golden card</strong> is my primary contact method for immediate response!
 </p>
 
 <ul class="link-list">
-    <!-- الحساب الرئيسي -->
+    <!-- Royal Golden Card - Phone Number -->
+    <li class="link-item royal-golden" onclick="window.location.href='tel:+213795082763'">
+        <span class="badge">👑</span>
+        <img src="https://cdn-icons-png.flaticon.com/512/724/724664.png" alt="Phone"> 
+        <div>
+            <strong>0795082763</strong><br>
+            <span style="font-size: 0.9em;">Primary Contact - Immediate Response</span>
+        </div>
+    </li>
+
+    <!-- Golden Cards - Active Social Media -->
+    <li class="link-item golden-card" onclick="window.open('https://wa.me/213795082763','_blank')">
+        <img src="https://cdn-icons-png.flaticon.com/512/733/733585.png" alt="WhatsApp"> 
+        <div>
+            <strong>WhatsApp</strong><br>
+            <span class="response-note">Response based on notifications</span>
+        </div>
+    </li>
+
+    <li class="link-item golden-card" onclick="window.open('https://t.me/ycnbnmkrn','_blank')">
+        <img src="https://cdn-icons-png.flaticon.com/512/2111/2111646.png" alt="Telegram"> 
+        <div>
+            <strong>Telegram</strong><br>
+            <span class="response-note">Response based on notifications</span>
+        </div>
+    </li>
+
+    <li class="link-item golden-card" onclick="window.open('https://www.instagram.com/yacine20072025','_blank')">
+        <img src="https://cdn-icons-png.flaticon.com/512/2111/2111463.png" alt="Instagram"> 
+        <div>
+            <strong>Instagram</strong><br>
+            <span class="response-note">Response based on notifications</span>
+        </div>
+    </li>
+
+    <!-- Gray Cards - Inactive Facebook Accounts -->
+    <li class="link-item gray-card">
+        <span class="badge">!</span>
+        <img src="https://cdn-icons-png.flaticon.com/512/124/124010.png" alt="Facebook"> 
+        <div>
+            <strong>Yacine Ben Mokrane 1</strong><br>
+            <span class="status-note">Temporarily inactive - Recovering in 2 months</span>
+        </div>
+    </li>
+
+    <li class="link-item gray-card">
+        <span class="badge">!</span>
+        <img src="https://cdn-icons-png.flaticon.com/512/124/124010.png" alt="Facebook"> 
+        <div>
+            <strong>Yacine Ben Mokrane 2</strong><br>
+            <span class="status-note">Temporarily inactive - Recovering in 2 months</span>
+        </div>
+    </li>
+
+    <li class="link-item gray-card">
+        <img src="https://cdn-icons-png.flaticon.com/512/124/124010.png" alt="Facebook"> 
+        <div>
+            <strong>Yacine Ben Mokrane 3</strong><br>
+            <span class="status-note">Recovery attempt in progress</span>
+        </div>
+    </li>
+
+    <!-- Regular Facebook Accounts -->
     <li class="link-item" onclick="window.open('https://www.facebook.com/yacineben2007','_blank')">
-        <img src="https://cdn-icons-png.flaticon.com/512/124/124010.png" alt="Facebook"> Yacine Ben Mokrane Facebook
+        <img src="https://cdn-icons-png.flaticon.com/512/124/124010.png" alt="Facebook"> 
+        <div>
+            <strong>Yacine Ben Mokrane Facebook</strong>
+        </div>
     </li>
-    <!-- رقم الهاتف -->
-    <li class="link-item" onclick="window.location.href='tel:+213795082763'">
-        <img src="https://cdn-icons-png.flaticon.com/512/724/724664.png" alt="Phone"> 0795082763
-    </li>
-    <!-- باقي الحسابات -->
+
     <li class="link-item" onclick="window.open('https://www.facebook.com/bypro2007','_blank')">
-        <img src="https://cdn-icons-png.flaticon.com/512/124/124010.png" alt="Facebook"> B.Y PRO Facebook <br> (The company)
-    </li>
-    
-    <!-- Golden Card - Most Active Account -->
-    <li class="link-item golden-card" onclick="window.open('https://www.facebook.com/profile.php?id=61580260328404','_blank')">
-        <span class="badge">1</span>
-        <img src="https://cdn-icons-png.flaticon.com/512/124/124010.png" alt="Facebook"> Yacine Ben Mokrane 1
+        <img src="https://cdn-icons-png.flaticon.com/512/124/124010.png" alt="Facebook"> 
+        <div>
+            <strong>B.Y PRO Facebook</strong><br>
+            <span style="font-size: 0.9em;">(The Company - Occasionally responds)</span>
+        </div>
     </li>
 
-
-<!-- Golden Card - Most Active Account -->
-    <li class="link-item golden-card" onclick="window.open('https://www.facebook.com/yacinebn2007','_blank')">
-        <span class="badge">2</span>
-        <img src="https://cdn-icons-png.flaticon.com/512/124/124010.png" alt="Facebook"> Yacine Ben Mokrane 2
-    </li>
-
-    <li class="link-item" onclick="window.open('https://www.facebook.com/profile.php?id=61579708632130','_blank')">
-        <img src="https://cdn-icons-png.flaticon.com/512/124/124010.png" alt="Facebook"> Yacine ben mokrane 3
-    </li>
-    <li class="link-item" onclick="window.open('https://t.me/ycnbnmkrn','_blank')">
-        <img src="https://cdn-icons-png.flaticon.com/512/2111/2111646.png" alt="Telegram"> Telegram
-    </li>
-    <li class="link-item" onclick="window.open('https://www.instagram.com/yacine20072025','_blank')">
-        <img src="https://cdn-icons-png.flaticon.com/512/2111/2111463.png" alt="Instagram"> Instagram
-    </li>
+    <!-- Other Contact Methods -->
     <li class="link-item" onclick="window.open('https://bypro.kesug.com/','_blank')">
-        <img src="https://cdn-icons-png.flaticon.com/512/841/841364.png" alt="Website"> B.YPRO Website
+        <img src="https://cdn-icons-png.flaticon.com/512/841/841364.png" alt="Website"> 
+        <div>
+            <strong>B.YPRO Website</strong>
+        </div>
     </li>
+
     <li class="link-item" onclick="window.open('https://www.youtube.com/@technoYT2024','_blank')">
-        <img src="https://cdn-icons-png.flaticon.com/512/1384/1384060.png" alt="YouTube"> YouTube
+        <img src="https://cdn-icons-png.flaticon.com/512/1384/1384060.png" alt="YouTube"> 
+        <div>
+            <strong>YouTube</strong>
+        </div>
     </li>
+
     <li class="link-item" onclick="window.open('https://vm.tiktok.com/ZSHnDytJ9xhRM-vio3o/','_blank')">
-        <img src="https://cdn-icons-png.flaticon.com/512/3046/3046120.png" alt="TikTok"> TikTok
+        <img src="https://cdn-icons-png.flaticon.com/512/3046/3046120.png" alt="TikTok"> 
+        <div>
+            <strong>TikTok</strong>
+        </div>
     </li>
-    <li class="link-item" onclick="window.open('https://wa.me/213795082763','_blank')">
-        <img src="https://cdn-icons-png.flaticon.com/512/733/733585.png" alt="WhatsApp"> WhatsApp
-    </li>
-    <!-- البريد الإلكتروني -->
+
+    <!-- Email Contacts -->
     <li class="link-item" onclick="window.location.href='mailto:yassinebenmokran@gmail.com'">
-        <img src="https://cdn-icons-png.flaticon.com/512/732/732200.png" alt="Gmail"> Email (Gmail)
+        <img src="https://cdn-icons-png.flaticon.com/512/732/732200.png" alt="Gmail"> 
+        <div>
+            <strong>Email (Gmail)</strong>
+        </div>
     </li>
+
     <li class="link-item" onclick="window.location.href='mailto:bypro2023@outlook.com'">
-        <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSvAQ0cLmkBvpcY5izwlF56hth8fsaymbgz07MNtcRoeA&s" alt="Outlook"> Email (Outlook)
+        <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSvAQ0cLmkBvpcY5izwlF56hth8fsaymbgz07MNtcRoeA&s" alt="Outlook"> 
+        <div>
+            <strong>Email (Outlook)</strong>
+        </div>
     </li>
-    <!-- الموقع الجغرافي -->
+
+    <!-- Location -->
     <li class="link-item" onclick="window.open('https://www.google.com/maps?q=35.3018861,-1.3516349','_blank')">
-        <img src="https://cdn-icons-png.flaticon.com/512/684/684908.png" alt="Location"> Location
+        <img src="https://cdn-icons-png.flaticon.com/512/684/684908.png" alt="Location"> 
+        <div>
+            <strong>Location</strong>
+        </div>
+    </li>
+
+    <!-- Coming Soon - New Communication Platform -->
+    <li class="link-item coming-soon">
+        <img src="https://cdn-icons-png.flaticon.com/512/1006/1006771.png" alt="New Platform"> 
+        <div>
+            <strong>New Communication Platform</strong><br>
+            <span class="response-note">Coming Soon - Special dedicated platform</span>
+        </div>
     </li>
 </ul>
 
 <p class="contact-text">
-    You can contact me anytime via the links above!
+    <strong>Note:</strong> We're currently experiencing issues with some Facebook accounts. 
+    They will be restored within 2 months. For immediate contact, use the golden highlighted methods above!<br>
+    <em>A new dedicated communication platform may be developed later for better service.</em>
 </p>
 
 </body>

@@ -3,7 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Contact & Social Links</title>
+    <title>Contact Me - Social Links</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -58,12 +59,21 @@
             box-shadow: 0 6px 15px rgba(0,0,0,0.15);
         }
 
+        .link-item i {
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 20px;
+            font-size: 1.5em;
+        }
+
         .link-item img {
             width: 40px;
             height: 40px;
-            border-radius: 50%;
             margin-right: 20px;
-            object-fit: cover;
+            object-fit: contain;
         }
 
         .contact-text {
@@ -73,56 +83,7 @@
             color: #555;
         }
 
-        /* Golden card styles */
-        .golden-card {
-            background: linear-gradient(135deg, #ffd700, #ffed4e, #ffd700);
-            border: 2px solid #ffcc00;
-            box-shadow: 0 4px 15px rgba(255, 215, 0, 0.4);
-            position: relative;
-            overflow: hidden;
-        }
-
-        .golden-card:hover {
-            box-shadow: 0 6px 20px rgba(255, 215, 0, 0.6);
-            transform: translateY(-3px);
-        }
-
-        .golden-card::before {
-            content: "★";
-            position: absolute;
-            top: 5px;
-            right: 15px;
-            font-size: 1.5em;
-            color: #ff9900;
-        }
-
-        .golden-card::after {
-            content: "";
-            position: absolute;
-            top: -50%;
-            left: -50%;
-            width: 200%;
-            height: 200%;
-            background: linear-gradient(
-                to bottom right,
-                rgba(255,255,255,0) 0%,
-                rgba(255,255,255,0.8) 50%,
-                rgba(255,255,255,0) 100%
-            );
-            transform: rotate(30deg);
-            animation: shine 3s infinite;
-        }
-
-        @keyframes shine {
-            0% {
-                transform: translateX(-100%) translateY(-100%) rotate(30deg);
-            }
-            100% {
-                transform: translateX(100%) translateY(100%) rotate(30deg);
-            }
-        }
-
-        /* Royal Golden Style (for phone) */
+        /* Royal Golden Style (Primary) */
         .royal-golden {
             background: linear-gradient(135deg, #d4af37, #f9e076, #d4af37);
             border: 2px solid #b8941f;
@@ -133,14 +94,6 @@
         .royal-golden:hover {
             box-shadow: 0 6px 25px rgba(212, 175, 55, 0.8);
             transform: translateY(-4px) scale(1.02);
-        }
-
-        .royal-golden::before {
-            content: "👑";
-            position: absolute;
-            top: 5px;
-            right: 15px;
-            font-size: 1.5em;
         }
 
         .royal-golden::after {
@@ -158,54 +111,50 @@
             mask-composite: exclude;
         }
 
-        /* Gray card for inactive accounts */
-        .gray-card {
-            background: linear-gradient(135deg, #a0a0a0, #c0c0c0, #a0a0a0);
-            border: 2px solid #808080;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
-            cursor: not-allowed;
-            opacity: 0.7;
+        /* Golden card styles */
+        .golden-card {
+            background: linear-gradient(135deg, #ffd700, #ffed4e, #ffd700);
+            border: 2px solid #ffcc00;
+            box-shadow: 0 4px 15px rgba(255, 215, 0, 0.4);
+            position: relative;
+            overflow: hidden;
         }
 
-        .gray-card:hover {
-            transform: none;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
-            background: linear-gradient(135deg, #a0a0a0, #c0c0c0, #a0a0a0);
+        .golden-card:hover {
+            box-shadow: 0 6px 20px rgba(255, 215, 0, 0.6);
+            transform: translateY(-3px);
         }
 
-        .gray-card::before {
-            content: "⚠️";
-            position: absolute;
-            top: 5px;
-            right: 15px;
-            font-size: 1.5em;
+        /* Silver card styles */
+        .silver-card {
+            background: linear-gradient(135deg, #c0c0c0, #e8e8e8, #c0c0c0);
+            border: 2px solid #a8a8a8;
+            box-shadow: 0 4px 15px rgba(192, 192, 192, 0.4);
+            position: relative;
         }
 
-        /* Badge styles */
-        .badge {
-            position: absolute;
-            top: -8px;
-            right: -8px;
-            background: #ff4444;
-            color: white;
-            border-radius: 50%;
-            width: 24px;
-            height: 24px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 0.8em;
-            font-weight: bold;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
-            z-index: 2;
+        .silver-card:hover {
+            box-shadow: 0 6px 20px rgba(192, 192, 192, 0.6);
+            transform: translateY(-3px);
         }
 
-        .status-note {
-            font-size: 0.8em;
-            color: #d32f2f;
-            margin-top: 5px;
-            font-style: italic;
+        /* Brand Colors for Icons */
+        .fa-facebook { color: #1877F2; }
+        .fa-phone { color: #25D366; }
+        .fa-instagram { 
+            background: linear-gradient(45deg, #405DE6, #5851DB, #833AB4, #C13584, #E1306C, #FD1D1D, #F56040, #F77737, #FCAF45, #FFDC80);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
         }
+        .fa-telegram { color: #0088CC; }
+        .fa-whatsapp { color: #25D366; }
+        .fa-globe { color: #0066CC; }
+        .fa-youtube { color: #FF0000; }
+        .fa-tiktok { color: #000000; }
+        .fa-envelope { color: #EA4335; }
+        .fa-envelope.outlook { color: #0078D4; }
+        .fa-map-marker-alt { color: #4285F4; }
+        .fa-rocket { color: #FF6B35; }
 
         .response-note {
             font-size: 0.75em;
@@ -227,104 +176,98 @@
             box-shadow: 0 6px 15px rgba(13, 71, 161, 0.4);
         }
 
-        .coming-soon::before {
-            content: "🚀";
-            position: absolute;
-            top: 5px;
-            right: 15px;
-            font-size: 1.5em;
+        .coming-soon img {
+            filter: brightness(0) invert(1);
         }
     </style>
 </head>
 <body>
 
-<h1>Connect with Me</h1>
+<h1>Contact Me</h1>
 <p class="explanation-text">
-    The <strong>golden cards</strong> below represent my most active and recommended contact methods. 
-    The <strong>royal golden card</strong> is my primary contact method for immediate response!
+    The <strong>golden</strong> cards below represent the most active and preferred communication methods
 </p>
 
 <ul class="link-list">
     <!-- Royal Golden Card - Yacine ben mokrane 2 Facebook -->
     <li class="link-item royal-golden" onclick="window.open('https://www.facebook.com/yacineben2007','_blank')">
-        <span class="badge">👑</span>
-        <img src="https://cdn-icons-png.flaticon.com/512/124/124010.png" alt="Facebook"> 
+        <i class="fab fa-facebook"></i>
         <div>
             <strong>Yacine Ben Mokrane 2</strong><br>
-            <span style="font-size: 0.9em;">Primary Facebook - Active Now</span>
+            <span class="response-note">Primary Account - Active Now</span>
+        </div>
+    </li>
+
+    <!-- Golden Card - Yacine ben mokrane 1 Facebook -->
+    <li class="link-item golden-card" onclick="window.open('https://www.facebook.com/yacine.benmokrane.52','_blank')">
+        <i class="fab fa-facebook"></i>
+        <div>
+            <strong>Yacine Ben Mokrane 1</strong><br>
+            <span class="response-note">Recovered Account - Active Now</span>
         </div>
     </li>
 
     <!-- Golden Card - Phone Number -->
     <li class="link-item golden-card" onclick="window.location.href='tel:+213795082763'">
-        <img src="https://cdn-icons-png.flaticon.com/512/724/724664.png" alt="Phone"> 
+        <i class="fas fa-phone"></i>
         <div>
             <strong>0795082763</strong><br>
             <span class="response-note">Direct Call - Quick Response</span>
         </div>
     </li>
 
-    <!-- Golden Cards - Active Social Media -->
-    <li class="link-item golden-card" onclick="window.open('https://www.instagram.com/yacine20072025','_blank')">
-        <img src="https://cdn-icons-png.flaticon.com/512/2111/2111463.png" alt="Instagram"> 
+    <!-- Silver Card - Instagram -->
+    <li class="link-item silver-card" onclick="window.open('https://www.instagram.com/yacine20072025','_blank')">
+        <i class="fab fa-instagram"></i>
         <div>
             <strong>Instagram</strong><br>
-            <span class="response-note">Response based on notifications</span>
+            <span class="response-note">Responds based on notifications</span>
         </div>
     </li>
 
-    <li class="link-item golden-card" onclick="window.open('https://t.me/ycnbnmkrn','_blank')">
-        <img src="https://cdn-icons-png.flaticon.com/512/2111/2111646.png" alt="Telegram"> 
+    <!-- Regular Cards - Telegram & WhatsApp -->
+    <li class="link-item" onclick="window.open('https://t.me/ycnbnmkrn','_blank')">
+        <i class="fab fa-telegram"></i>
         <div>
             <strong>Telegram</strong><br>
-            <span class="response-note">Response based on notifications</span>
+            <span class="response-note">Responds based on notifications</span>
         </div>
     </li>
 
-    <li class="link-item golden-card" onclick="window.open('https://wa.me/213795082763','_blank')">
-        <img src="https://cdn-icons-png.flaticon.com/512/733/733585.png" alt="WhatsApp"> 
+    <li class="link-item" onclick="window.open('https://wa.me/213795082763','_blank')">
+        <i class="fab fa-whatsapp"></i>
         <div>
             <strong>WhatsApp</strong><br>
-            <span class="response-note">Response based on notifications</span>
-        </div>
-    </li>
-
-    <!-- Gray Cards - Inactive Facebook Account -->
-    <li class="link-item gray-card">
-        <span class="badge">!</span>
-        <img src="https://cdn-icons-png.flaticon.com/512/124/124010.png" alt="Facebook"> 
-        <div>
-            <strong>Yacine Ben Mokrane 1</strong><br>
-            <span class="status-note">Temporarily inactive - Recovering in 2 months</span>
+            <span class="response-note">Responds based on notifications</span>
         </div>
     </li>
 
     <!-- Regular Facebook Accounts -->
     <li class="link-item" onclick="window.open('https://www.facebook.com/bypro2007','_blank')">
-        <img src="https://cdn-icons-png.flaticon.com/512/124/124010.png" alt="Facebook"> 
+        <i class="fab fa-facebook"></i>
         <div>
             <strong>B.Y PRO Facebook</strong><br>
-            <span style="font-size: 0.9em;">(The Company - Occasionally responds)</span>
+            <span class="response-note">Company Page - Responds occasionally</span>
         </div>
     </li>
 
     <!-- Other Contact Methods -->
     <li class="link-item" onclick="window.open('https://bypro.kesug.com/','_blank')">
-        <img src="https://cdn-icons-png.flaticon.com/512/841/841364.png" alt="Website"> 
+        <i class="fas fa-globe"></i>
         <div>
             <strong>B.YPRO Website</strong>
         </div>
     </li>
 
     <li class="link-item" onclick="window.open('https://www.youtube.com/@technoYT2024','_blank')">
-        <img src="https://cdn-icons-png.flaticon.com/512/1384/1384060.png" alt="YouTube"> 
+        <i class="fab fa-youtube"></i>
         <div>
             <strong>YouTube</strong>
         </div>
     </li>
 
     <li class="link-item" onclick="window.open('https://vm.tiktok.com/ZSHnDytJ9xhRM-vio3o/','_blank')">
-        <img src="https://cdn-icons-png.flaticon.com/512/3046/3046120.png" alt="TikTok"> 
+        <i class="fab fa-tiktok"></i>
         <div>
             <strong>TikTok</strong>
         </div>
@@ -332,14 +275,14 @@
 
     <!-- Email Contacts -->
     <li class="link-item" onclick="window.location.href='mailto:yassinebenmokran@gmail.com'">
-        <img src="https://cdn-icons-png.flaticon.com/512/732/732200.png" alt="Gmail"> 
+        <i class="fas fa-envelope"></i>
         <div>
             <strong>Email (Gmail)</strong>
         </div>
     </li>
 
     <li class="link-item" onclick="window.location.href='mailto:bypro2023@outlook.com'">
-        <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSvAQ0cLmkBvpcY5izwlF56hth8fsaymbgz07MNtcRoeA&s" alt="Outlook"> 
+        <i class="fas fa-envelope outlook"></i>
         <div>
             <strong>Email (Outlook)</strong>
         </div>
@@ -347,7 +290,7 @@
 
     <!-- Location -->
     <li class="link-item" onclick="window.open('https://www.google.com/maps?q=35.3018861,-1.3516349','_blank')">
-        <img src="https://cdn-icons-png.flaticon.com/512/684/684908.png" alt="Location"> 
+        <i class="fas fa-map-marker-alt"></i>
         <div>
             <strong>Location</strong>
         </div>
@@ -355,18 +298,16 @@
 
     <!-- Coming Soon - UltraSpace Platform -->
     <li class="link-item coming-soon">
-        <img src="https://cdn-icons-png.flaticon.com/512/1006/1006771.png" alt="New Platform"> 
+        <img src="https://raw.githubusercontent.com/Yacine2007/UltraSpace/refs/heads/main/logo/favicon.png" alt="UltraSpace">
         <div>
             <strong>UltraSpace with Yacine</strong><br>
-            <span class="response-note">Coming Soon - Special dedicated platform</span>
+            <span class="response-note">Coming Soon - Dedicated Private Platform</span>
         </div>
     </li>
 </ul>
 
 <p class="contact-text">
-    <strong>Note:</strong> We're currently experiencing issues with one Facebook account (Yacine Ben Mokrane 1). 
-    It will be restored within 2 months. For immediate contact, use the golden highlighted methods above!<br>
-    <em>UltraSpace - a new dedicated communication platform is coming soon for better service.</em>
+    <em>UltraSpace - New dedicated communication platform coming soon for better service</em>
 </p>
 
 </body>

@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Portfolio - Yassine Ben Mokrane </title>
+<title>Portfolio - Yassine Ben Mokrane</title>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 <style>
     /* --- Reset & Fonts --- */
@@ -279,28 +279,6 @@
         transform: translateY(-3px);
     }
 
-    .cta { 
-        display:inline-block; 
-        text-align:center; 
-        margin-top:2.5rem; 
-        padding:1.2rem 2.5rem; 
-        background: var(--accent-color); 
-        color: var(--secondary-color); 
-        border-radius:8px; 
-        font-weight:bold; 
-        transition:0.4s; 
-        border: none;
-        cursor: pointer;
-        font-size: 1.1rem;
-        box-shadow: 0 5px 15px rgba(0,0,0,0.2);
-    }
-    
-    .cta:hover { 
-        transform: translateY(-5px);
-        box-shadow: 0 8px 20px rgba(0,0,0,0.3);
-        background: #0066b3;
-    }
-
     /* --- Responsive Design --- */
     @media (max-width: 768px) {
         nav {
@@ -365,11 +343,6 @@
         .project-card .project-content {
             padding: 0.6rem;
         }
-        
-        .cta {
-            padding: 1rem 2rem;
-            font-size: 1rem;
-        }
     }
 
     /* Animation */
@@ -394,7 +367,7 @@
 <nav>
     <div class="logo">
         <i class="fas fa-code"></i>
-        Yassine Ben Mokrane 
+        <span id="logoText">Yassine Ben Mokrane</span>
     </div>
     <select id="langSelect">
         <option value="ar">العربية</option>
@@ -405,7 +378,7 @@
 
 <!-- Header -->
 <header id="header">
-    <img src="picture.png" alt="Yassine Ben Mokrane ">
+    <img src="picture.png" alt="Yassine Ben Mokrane">
     <h1 id="name">ياسين بن مقران</h1>
     <p id="intro">أنا مطور ويب Full-Stack أعمل على بناء مواقع ومشاريع ويب متكاملة بدءًا من الواجهة التفاعلية وحتى الخادم والسكربتات الخلفية. أطور صفحات هبوط احترافية، سكربتات بايثون بسيطة، وأهتم بالواجهة لتقديم تجربة مستخدم سلسة وجذابة.</p>
 </header>
@@ -438,6 +411,11 @@
             <h3>تحسين أداء المواقع وتجربة المستخدم</h3>
             <p>(UI/UX)</p>
         </div>
+        <div class="card animate">
+            <i class="fas fa-palette"></i>
+            <h3>تصميم شعارات ورموز احترافية</h3>
+            <p>(Logo Design)</p>
+        </div>
     </div>
 </section>
 
@@ -454,6 +432,8 @@
         <div class="card animate delay-2"><i class="fab fa-python"></i> Python Scripts</div>
         <div class="card animate delay-3"><i class="fas fa-wind"></i> Tailwind CSS</div>
         <div class="card animate"><i class="fab fa-git-alt"></i> Git/GitHub</div>
+        <div class="card animate delay-1"><i class="fas fa-palette"></i> Adobe Illustrator</div>
+        <div class="card animate delay-2"><i class="fas fa-pen-nib"></i> Adobe Photoshop</div>
     </div>
 </section>
 
@@ -515,8 +495,6 @@
             <a href="https://yacine2007.github.io/Yacine2007/communication.html" target="_blank" class="contact-button" id="contactLinkButton">صفحة التواصل</a>
         </div>
     </div>
-    
-
 </section>
 
 <script>
@@ -534,7 +512,8 @@ const langData = {
       {icon: "fas fa-window-restore", title: "تطوير صفحات هبوط", desc: "(Landing Pages)"},
       {icon: "fas fa-shopping-cart", title: "إنشاء متاجر إلكترونية", desc: "ودمج بوابات الدفع"},
       {icon: "fab fa-python", title: "تطوير سكربتات بايثون بسيطة", desc: ""},
-      {icon: "fas fa-paint-brush", title: "تحسين أداء المواقع وتجربة المستخدم", desc: "(UI/UX)"}
+      {icon: "fas fa-paint-brush", title: "تحسين أداء المواقع وتجربة المستخدم", desc: "(UI/UX)"},
+      {icon: "fas fa-palette", title: "تصميم شعارات ورموز احترافية", desc: "(Logo Design)"}
     ],
     skills: [
       {icon: "fab fa-html5", name: "HTML5"},
@@ -545,7 +524,9 @@ const langData = {
       {icon: "fab fa-node", name: "Node.js"},
       {icon: "fab fa-python", name: "Python Scripts"},
       {icon: "fas fa-wind", name: "Tailwind CSS"},
-      {icon: "fab fa-git-alt", name: "Git/GitHub"}
+      {icon: "fab fa-git-alt", name: "Git/GitHub"},
+      {icon: "fas fa-palette", name: "Adobe Illustrator"},
+      {icon: "fas fa-pen-nib", name: "Adobe Photoshop"}
     ],
     projects: [
       {title: "Storakeg", link: "https://storakeg.com"},
@@ -559,13 +540,12 @@ const langData = {
         phoneTitle: "الهاتف",
         linksTitle: "روابط التواصل",
         linksDesc: "جميع حساباتي وروابط التواصل",
-        linkButton: "صفحة التواصل",
-        cta: "تواصل معي الآن"
+        linkButton: "صفحة التواصل"
     }
   },
   en: {
     dir: "ltr",
-    name: "Yassine Ben Mokrane ",
+    name: "Yassine Ben Mokrane",
     intro: "I am a Full-Stack Web Developer building complete websites and web projects from interactive front-ends to back-end scripts. I create professional landing pages, simple Python scripts, and focus on UI to provide smooth and attractive user experiences.",
     servicesTitle: "My Services",
     skillsTitle: "Skills & Technologies",
@@ -576,7 +556,8 @@ const langData = {
       {icon: "fas fa-window-restore", title: "Landing Pages development", desc: ""},
       {icon: "fas fa-shopping-cart", title: "E-commerce setup", desc: "with payment gateways"},
       {icon: "fab fa-python", title: "Simple Python scripts", desc: ""},
-      {icon: "fas fa-paint-brush", title: "Website performance & UI/UX optimization", desc: ""}
+      {icon: "fas fa-paint-brush", title: "Website performance & UI/UX optimization", desc: ""},
+      {icon: "fas fa-palette", title: "Professional logo and icon design", desc: "(Logo Design)"}
     ],
     skills: [
       {icon: "fab fa-html5", name: "HTML5"},
@@ -587,7 +568,9 @@ const langData = {
       {icon: "fab fa-node", name: "Node.js"},
       {icon: "fab fa-python", name: "Python Scripts"},
       {icon: "fas fa-wind", name: "Tailwind CSS"},
-      {icon: "fab fa-git-alt", name: "Git/GitHub"}
+      {icon: "fab fa-git-alt", name: "Git/GitHub"},
+      {icon: "fas fa-palette", name: "Adobe Illustrator"},
+      {icon: "fas fa-pen-nib", name: "Adobe Photoshop"}
     ],
     projects: [
       {title: "Storakeg", link: "https://storakeg.com"},
@@ -601,13 +584,12 @@ const langData = {
         phoneTitle: "Phone",
         linksTitle: "Communication Links",
         linksDesc: "All my accounts and communication links",
-        linkButton: "Communication Page",
-        cta: "Contact Me Now"
+        linkButton: "Communication Page"
     }
   },
   fr: {
     dir: "ltr",
-    name: "Yassine Ben Mokrane ",
+    name: "Yassine Ben Mokrane",
     intro: "Je suis développeur web Full-Stack, créant des sites web complets et des projets web, du front-end interactif aux scripts back-end. Je développe des landing pages professionnelles, des scripts Python simples et je me concentre sur l'UI pour offrir une expérience utilisateur fluide et attrayante.",
     servicesTitle: "Mes Services",
     skillsTitle: "Compétences & Technologies",
@@ -618,7 +600,8 @@ const langData = {
       {icon: "fas fa-window-restore", title: "Développement de Landing Pages", desc: ""},
       {icon: "fas fa-shopping-cart", title: "Création de boutiques en ligne", desc: "avec passerelles de paiement"},
       {icon: "fab fa-python", title: "Scripts Python simples", desc: ""},
-      {icon: "fas fa-paint-brush", title: "Optimisation de la performance et UI/UX", desc: ""}
+      {icon: "fas fa-paint-brush", title: "Optimisation de la performance et UI/UX", desc: ""},
+      {icon: "fas fa-palette", title: "Conception de logos et icônes professionnels", desc: "(Logo Design)"}
     ],
     skills: [
       {icon: "fab fa-html5", name: "HTML5"},
@@ -629,7 +612,9 @@ const langData = {
       {icon: "fab fa-node", name: "Node.js"},
       {icon: "fab fa-python", name: "Python Scripts"},
       {icon: "fas fa-wind", name: "Tailwind CSS"},
-      {icon: "fab fa-git-alt", name: "Git/GitHub"}
+      {icon: "fab fa-git-alt", name: "Git/GitHub"},
+      {icon: "fas fa-palette", name: "Adobe Illustrator"},
+      {icon: "fas fa-pen-nib", name: "Adobe Photoshop"}
     ],
     projects: [
       {title: "Storakeg", link: "https://storakeg.com"},
@@ -643,8 +628,7 @@ const langData = {
         phoneTitle: "Téléphone",
         linksTitle: "Liens de Communication",
         linksDesc: "Tous mes comptes et liens de communication",
-        linkButton: "Page de Communication",
-        cta: "Contactez-moi maintenant"
+        linkButton: "Page de Communication"
     }
   }
 };
@@ -665,14 +649,16 @@ langSelect.addEventListener("change", function(){
   document.getElementById("skillsTitle").innerHTML = `<i class="fas fa-cogs"></i> ${data.skillsTitle}`;
   document.getElementById("projectsTitle").innerHTML = `<i class="fas fa-briefcase"></i> ${data.projectsTitle}`;
   document.getElementById("contactTitle").innerHTML = `<i class="fas fa-envelope"></i> ${data.contactTitle}`;
-  document.getElementById("ctaBtn").textContent = data.contact.cta;
+  
+  // تحديث نص الشعار
+  document.getElementById("logoText").textContent = lang === 'ar' ? 'ياسين بن مقران' : 'Yassine Ben Mokrane';
 
   // تحديث الخدمات
   const servicesDiv = document.getElementById("services");
   servicesDiv.innerHTML = "";
   data.services.forEach((s, index) => {
     const div = document.createElement("div");
-    div.className = `card animate${index > 0 ? ` delay-${index}` : ''}`;
+    div.className = `card animate${index > 0 ? ` delay-${index % 6}` : ''}`;
     div.innerHTML = `
       <i class="${s.icon}"></i>
       <h3>${s.title}</h3>
@@ -699,7 +685,7 @@ langSelect.addEventListener("change", function(){
   projectsContainer.innerHTML = "";
   data.projects.forEach((p, index) => {
     const div = document.createElement("div");
-    div.className = `card project-card animate${index > 0 ? ` delay-${index % 4}` : ''}`;
+    div.className = `card project-card animate${index > 0 ? ` delay-${index % 5}` : ''}`;
     div.innerHTML = `
       <div class="project-content">
         <h3 class="project-title">${p.title}</h3>

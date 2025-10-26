@@ -1,0 +1,583 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Portfolio - Nour-Dev</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<style>
+    /* --- Reset & Fonts --- */
+    * { 
+        margin:0; 
+        padding:0; 
+        box-sizing:border-box; 
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+    
+    :root {
+        --primary-color: #1a1a2e;
+        --secondary-color: #fff;
+        --accent-color: #e91e63; /* اللون الوردي بدلاً من الأزرق */
+        --card-bg: #16213e;
+        --text-color: #f5f5f5;
+        --border-color: #444;
+        --hover-color: #0f3460;
+    }
+    
+    body { 
+        line-height:1.6; 
+        background: var(--primary-color); 
+        color: var(--text-color);
+        transition: all 0.3s ease;
+    }
+    
+    [dir="ltr"] {
+        direction: ltr;
+        text-align: left;
+    }
+    
+    [dir="rtl"] {
+        direction: rtl;
+        text-align: right;
+    }
+    
+    a { 
+        text-decoration:none; 
+        color:inherit; 
+    }
+    
+    img { 
+        max-width:100%; 
+    }
+
+    /* --- Navbar --- */
+    nav { 
+        background: var(--primary-color); 
+        color: var(--secondary-color); 
+        display:flex; 
+        justify-content:space-between; 
+        align-items:center; 
+        padding:1rem 2rem; 
+        position:sticky; 
+        top:0; 
+        z-index:100;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.5);
+    }
+    
+    nav .logo { 
+        font-weight:bold; 
+        font-size:1.5rem; 
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+    
+    nav select { 
+        padding:0.6rem 1rem; 
+        border-radius:5px; 
+        border: 1px solid var(--border-color);
+        background: var(--card-bg);
+        color: var(--text-color);
+        outline:none; 
+        cursor: pointer;
+        transition: all 0.3s ease;
+    }
+    
+    nav select:hover {
+        background: var(--hover-color);
+    }
+
+    /* --- Header --- */
+    header { 
+        display:flex; 
+        flex-direction:column; 
+        align-items:center; 
+        text-align:center; 
+        padding:4rem 1rem; 
+        background: linear-gradient(to bottom, var(--primary-color), var(--card-bg));
+        color: var(--secondary-color);
+        position: relative;
+        overflow: hidden;
+    }
+    
+    header::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" preserveAspectRatio="none"><path d="M0,0 L100,0 L100,100 Z" fill="rgba(233,30,99,0.05)"/></svg>');
+        background-size: cover;
+    }
+    
+    header img { 
+        border-radius:50%; 
+        width:180px; 
+        height:180px; 
+        object-fit:cover; 
+        margin-bottom:1.5rem; 
+        border:4px solid var(--secondary-color); 
+        box-shadow: 0 0 25px rgba(255,255,255,0.2);
+        transition: all 0.5s ease;
+        z-index: 1;
+    }
+    
+    header img:hover {
+        transform: scale(1.05);
+        box-shadow: 0 0 35px rgba(255,255,255,0.3);
+    }
+    
+    header h1 { 
+        font-size:2.5rem; 
+        margin-bottom:1rem; 
+        position: relative;
+        z-index: 1;
+    }
+    
+    header h1::after {
+        content: '';
+        display: block;
+        width: 80px;
+        height: 3px;
+        background: var(--accent-color);
+        margin: 15px auto;
+    }
+    
+    header p { 
+        font-size:1.1rem; 
+        max-width:700px; 
+        line-height: 1.8;
+        z-index: 1;
+    }
+
+    /* --- Sections --- */
+    section { 
+        padding:4rem 1.5rem; 
+        max-width:1200px; 
+        margin:0 auto; 
+    }
+    
+    h2 { 
+        font-size:2rem; 
+        margin-bottom:2rem; 
+        color: var(--secondary-color); 
+        display:inline-block; 
+        padding-bottom:0.5rem; 
+        position: relative;
+    }
+    
+    h2::after {
+        content: '';
+        position: absolute;
+        bottom: -5px;
+        left: 0;
+        width: 60px;
+        height: 3px;
+        background: var(--accent-color);
+    }
+
+    .services, .skills, .contact, .projects { 
+        display:flex; 
+        flex-wrap:wrap; 
+        gap:1.5rem; 
+        justify-content:center; 
+    }
+    
+    .card { 
+        background: var(--card-bg); 
+        padding:1.8rem; 
+        flex: 1 1 300px;
+        border-radius:12px; 
+        box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+        transition: all 0.3s ease;
+        border: 1px solid var(--border-color);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+    }
+    
+    .card:hover {
+        transform: translateY(-8px);
+        box-shadow: 0 12px 25px rgba(0,0,0,0.4);
+        border-color: rgba(255,255,255,0.1);
+    }
+    
+    .card i {
+        font-size: 2.5rem;
+        margin-bottom: 1.2rem;
+        color: var(--accent-color);
+    }
+    
+    /* تصميم خاص لبطاقات التواصل */
+    .contact-card {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        height: 100%;
+    }
+    
+    .contact-button {
+        display: inline-block;
+        margin-top: 1.2rem;
+        padding: 0.8rem 1.5rem;
+        background: var(--accent-color);
+        color: var(--secondary-color);
+        border-radius: 6px;
+        transition: all 0.3s ease;
+        border: none;
+        font-weight: bold;
+        font-size: 1rem;
+        cursor: pointer;
+    }
+    
+    .contact-button:hover {
+        background: #c2185b;
+        transform: translateY(-3px);
+    }
+
+    /* --- Responsive Design --- */
+    @media (max-width: 768px) {
+        nav {
+            flex-direction: column;
+            gap: 1rem;
+            padding: 1rem;
+        }
+        
+        header {
+            padding: 3rem 1rem;
+        }
+        
+        header h1 {
+            font-size: 2rem;
+        }
+        
+        header p {
+            font-size: 1rem;
+        }
+        
+        section {
+            padding: 3rem 1rem;
+        }
+        
+        h2 {
+            font-size: 1.7rem;
+        }
+        
+        .card {
+            flex: 1 1 100%;
+        }
+    }
+
+    @media (max-width: 480px) {
+        header img {
+            width: 150px;
+            height: 150px;
+        }
+        
+        header h1 {
+            font-size: 1.8rem;
+        }
+        
+        h2 {
+            font-size: 1.5rem;
+        }
+        
+        .card {
+            padding: 1.3rem;
+        }
+    }
+
+    /* Animation */
+    @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(20px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+    
+    .animate {
+        animation: fadeIn 0.8s ease forwards;
+    }
+    
+    .delay-1 { animation-delay: 0.2s; }
+    .delay-2 { animation-delay: 0.4s; }
+    .delay-3 { animation-delay: 0.6s; }
+    .delay-4 { animation-delay: 0.8s; }
+</style>
+</head>
+<body>
+
+<!-- Navbar -->
+<nav>
+    <div class="logo">
+        <i class="fas fa-code"></i>
+        <span id="logoText">Nour-Dev</span>
+    </div>
+    <select id="langSelect">
+        <option value="ar">العربية</option>
+        <option value="en">English</option>
+        <option value="fr">Français</option>
+    </select>
+</nav>
+
+<!-- Header -->
+<header id="header">
+    <img src="n.jpg" alt="Nour-Dev">
+    <h1 id="name">نور ديف</h1>
+    <p id="intro">أنا مطورة ويب Full-Stack متخصصة في بناء مواقع وتطبيقات ويب متكاملة. أعمل على تطوير واجهات مستخدم تفاعلية وجذابة، مع الاهتمام بتجربة المستخدم وأداء الموقع. أقدم حلولاً مبتكرة تلبي احتياجات العملاء.</p>
+</header>
+
+<!-- الخدمات -->
+<section>
+    <h2 id="servicesTitle"><i class="fas fa-concierge-bell"></i> خدماتي</h2>
+    <div class="services" id="services">
+        <div class="card animate">
+            <i class="fas fa-laptop-code"></i>
+            <h3>تصميم وتطوير مواقع ويب كاملة</h3>
+            <p>(Front-End + Back-End)</p>
+        </div>
+        <div class="card animate delay-1">
+            <i class="fas fa-window-restore"></i>
+            <h3>تطوير صفحات هبوط</h3>
+            <p>(Landing Pages)</p>
+        </div>
+        <div class="card animate delay-2">
+            <i class="fas fa-shopping-cart"></i>
+            <h3>إنشاء متاجر إلكترونية</h3>
+            <p>ودمج بوابات الدفع</p>
+        </div>
+        <div class="card animate delay-3">
+            <i class="fab fa-python"></i>
+            <h3>تطوير سكربتات بايثون بسيطة</h3>
+        </div>
+        <div class="card animate delay-4">
+            <i class="fas fa-paint-brush"></i>
+            <h3>تحسين أداء المواقع وتجربة المستخدم</h3>
+            <p>(UI/UX)</p>
+        </div>
+        <div class="card animate">
+            <i class="fas fa-palette"></i>
+            <h3>تصميم شعارات ورموز احترافية</h3>
+            <p>(Logo Design)</p>
+        </div>
+    </div>
+</section>
+
+<!-- التقنيات -->
+<section>
+    <h2 id="skillsTitle"><i class="fas fa-cogs"></i> التقنيات والمهارات</h2>
+    <div class="skills" id="skills">
+        <div class="card animate"><i class="fab fa-html5"></i> HTML5</div>
+        <div class="card animate delay-1"><i class="fab fa-css3-alt"></i> CSS3</div>
+        <div class="card animate delay-2"><i class="fab fa-js-square"></i> JavaScript</div>
+        <div class="card animate delay-3"><i class="fab fa-react"></i> React</div>
+        <div class="card animate"><i class="fab fa-node-js"></i> Express.js</div>
+        <div class="card animate delay-1"><i class="fab fa-node"></i> Node.js</div>
+        <div class="card animate delay-2"><i class="fab fa-python"></i> Python Scripts</div>
+        <div class="card animate delay-3"><i class="fas fa-wind"></i> Tailwind CSS</div>
+        <div class="card animate"><i class="fab fa-git-alt"></i> Git/GitHub</div>
+        <div class="card animate delay-1"><i class="fas fa-palette"></i> Adobe Illustrator</div>
+        <div class="card animate delay-2"><i class="fas fa-pen-nib"></i> Adobe Photoshop</div>
+    </div>
+</section>
+
+<!-- التواصل -->
+<section>
+    <h2 id="contactTitle"><i class="fas fa-envelope"></i> تواصل معي</h2>
+    <div class="contact" id="contactContainer">
+        <div class="card animate contact-card">
+            <i class="fab fa-facebook"></i>
+            <h3 id="contactFacebookTitle">فيسبوك</h3>
+            <p>Nour-Dev</p>
+            <a href="https://www.facebook.com/profile.php?id=61580228354334" target="_blank" class="contact-button" id="contactLinkButton">زيارة صفحتي</a>
+        </div>
+    </div>
+</section>
+
+<script>
+const langData = {
+  ar: {
+    dir: "rtl",
+    name: "نور ديف",
+    intro: "أنا مطورة ويب Full-Stack متخصصة في بناء مواقع وتطبيقات ويب متكاملة. أعمل على تطوير واجهات مستخدم تفاعلية وجذابة، مع الاهتمام بتجربة المستخدم وأداء الموقع. أقدم حلولاً مبتكرة تلبي احتياجات العملاء.",
+    servicesTitle: "خدماتي",
+    skillsTitle: "التقنيات والمهارات",
+    contactTitle: "تواصل معي",
+    services: [
+      {icon: "fas fa-laptop-code", title: "تصميم وتطوير مواقع ويب كاملة", desc: "(Front-End + Back-End)"},
+      {icon: "fas fa-window-restore", title: "تطوير صفحات هبوط", desc: "(Landing Pages)"},
+      {icon: "fas fa-shopping-cart", title: "إنشاء متاجر إلكترونية", desc: "ودمج بوابات الدفع"},
+      {icon: "fab fa-python", title: "تطوير سكربتات بايثون بسيطة", desc: ""},
+      {icon: "fas fa-paint-brush", title: "تحسين أداء المواقع وتجربة المستخدم", desc: "(UI/UX)"},
+      {icon: "fas fa-palette", title: "تصميم شعارات ورموز احترافية", desc: "(Logo Design)"}
+    ],
+    skills: [
+      {icon: "fab fa-html5", name: "HTML5"},
+      {icon: "fab fa-css3-alt", name: "CSS3"},
+      {icon: "fab fa-js-square", name: "JavaScript"},
+      {icon: "fab fa-react", name: "React"},
+      {icon: "fab fa-node-js", name: "Express.js"},
+      {icon: "fab fa-node", name: "Node.js"},
+      {icon: "fab fa-python", name: "Python Scripts"},
+      {icon: "fas fa-wind", name: "Tailwind CSS"},
+      {icon: "fab fa-git-alt", name: "Git/GitHub"},
+      {icon: "fas fa-palette", name: "Adobe Illustrator"},
+      {icon: "fas fa-pen-nib", name: "Adobe Photoshop"}
+    ],
+    contact: {
+        facebookTitle: "فيسبوك",
+        linkButton: "زيارة صفحتي"
+    }
+  },
+  en: {
+    dir: "ltr",
+    name: "Nour-Dev",
+    intro: "I am a Full-Stack Web Developer specializing in building complete websites and web applications. I work on developing interactive and attractive user interfaces, with attention to user experience and website performance. I provide innovative solutions that meet clients' needs.",
+    servicesTitle: "My Services",
+    skillsTitle: "Skills & Technologies",
+    contactTitle: "Contact Me",
+    services: [
+      {icon: "fas fa-laptop-code", title: "Full website development", desc: "(Front-End + Back-End)"},
+      {icon: "fas fa-window-restore", title: "Landing Pages development", desc: ""},
+      {icon: "fas fa-shopping-cart", title: "E-commerce setup", desc: "with payment gateways"},
+      {icon: "fab fa-python", title: "Simple Python scripts", desc: ""},
+      {icon: "fas fa-paint-brush", title: "Website performance & UI/UX optimization", desc: ""},
+      {icon: "fas fa-palette", title: "Professional logo and icon design", desc: "(Logo Design)"}
+    ],
+    skills: [
+      {icon: "fab fa-html5", name: "HTML5"},
+      {icon: "fab fa-css3-alt", name: "CSS3"},
+      {icon: "fab fa-js-square", name: "JavaScript"},
+      {icon: "fab fa-react", name: "React"},
+      {icon: "fab fa-node-js", name: "Express.js"},
+      {icon: "fab fa-node", name: "Node.js"},
+      {icon: "fab fa-python", name: "Python Scripts"},
+      {icon: "fas fa-wind", name: "Tailwind CSS"},
+      {icon: "fab fa-git-alt", name: "Git/GitHub"},
+      {icon: "fas fa-palette", name: "Adobe Illustrator"},
+      {icon: "fas fa-pen-nib", name: "Adobe Photoshop"}
+    ],
+    contact: {
+        facebookTitle: "Facebook",
+        linkButton: "Visit My Page"
+    }
+  },
+  fr: {
+    dir: "ltr",
+    name: "Nour-Dev",
+    intro: "Je suis une développeuse web Full-Stack spécialisée dans la création de sites web et d'applications web complètes. Je travaille sur le développement d'interfaces utilisateur interactives et attrayantes, en accordant une attention particulière à l'expérience utilisateur et aux performances du site. Je propose des solutions innovantes qui répondent aux besoins des clients.",
+    servicesTitle: "Mes Services",
+    skillsTitle: "Compétences & Technologies",
+    contactTitle: "Contactez-moi",
+    services: [
+      {icon: "fas fa-laptop-code", title: "Développement complet de sites web", desc: "(Front-End + Back-End)"},
+      {icon: "fas fa-window-restore", title: "Développement de Landing Pages", desc: ""},
+      {icon: "fas fa-shopping-cart", title: "Création de boutiques en ligne", desc: "avec passerelles de paiement"},
+      {icon: "fab fa-python", title: "Scripts Python simples", desc: ""},
+      {icon: "fas fa-paint-brush", title: "Optimisation de la performance et UI/UX", desc: ""},
+      {icon: "fas fa-palette", title: "Conception de logos et icônes professionnels", desc: "(Logo Design)"}
+    ],
+    skills: [
+      {icon: "fab fa-html5", name: "HTML5"},
+      {icon: "fab fa-css3-alt", name: "CSS3"},
+      {icon: "fab fa-js-square", name: "JavaScript"},
+      {icon: "fab fa-react", name: "React"},
+      {icon: "fab fa-node-js", name: "Express.js"},
+      {icon: "fab fa-node", name: "Node.js"},
+      {icon: "fab fa-python", name: "Python Scripts"},
+      {icon: "fas fa-wind", name: "Tailwind CSS"},
+      {icon: "fab fa-git-alt", name: "Git/GitHub"},
+      {icon: "fas fa-palette", name: "Adobe Illustrator"},
+      {icon: "fas fa-pen-nib", name: "Adobe Photoshop"}
+    ],
+    contact: {
+        facebookTitle: "Facebook",
+        linkButton: "Visiter ma page"
+    }
+  }
+};
+
+const langSelect = document.getElementById("langSelect");
+langSelect.addEventListener("change", function(){
+  const lang = this.value;
+  const data = langData[lang];
+  
+  // تغيير اتجاه الصفحة
+  document.documentElement.dir = data.dir;
+  document.documentElement.lang = lang;
+  
+  // تحديث النصوص
+  document.getElementById("name").textContent = data.name;
+  document.getElementById("intro").textContent = data.intro;
+  document.getElementById("servicesTitle").innerHTML = `<i class="fas fa-concierge-bell"></i> ${data.servicesTitle}`;
+  document.getElementById("skillsTitle").innerHTML = `<i class="fas fa-cogs"></i> ${data.skillsTitle}`;
+  document.getElementById("contactTitle").innerHTML = `<i class="fas fa-envelope"></i> ${data.contactTitle}`;
+  
+  // تحديث نص الشعار
+  document.getElementById("logoText").textContent = lang === 'ar' ? 'نور ديف' : 'Nour-Dev';
+
+  // تحديث الخدمات
+  const servicesDiv = document.getElementById("services");
+  servicesDiv.innerHTML = "";
+  data.services.forEach((s, index) => {
+    const div = document.createElement("div");
+    div.className = `card animate${index > 0 ? ` delay-${index % 6}` : ''}`;
+    div.innerHTML = `
+      <i class="${s.icon}"></i>
+      <h3>${s.title}</h3>
+      ${s.desc ? `<p>${s.desc}</p>` : ''}
+    `;
+    servicesDiv.appendChild(div);
+  });
+
+  // تحديث المهارات
+  const skillsDiv = document.getElementById("skills");
+  skillsDiv.innerHTML = "";
+  data.skills.forEach((s, index) => {
+    const div = document.createElement("div");
+    div.className = `card animate${index > 0 ? ` delay-${index % 4}` : ''}`;
+    div.innerHTML = `
+      <i class="${s.icon}"></i>
+      ${s.name}
+    `;
+    skillsDiv.appendChild(div);
+  });
+  
+  // تحديث قسم التواصل
+  document.getElementById("contactFacebookTitle").textContent = data.contact.facebookTitle;
+  document.getElementById("contactLinkButton").textContent = data.contact.linkButton;
+  
+  // إضافة تأثيرات للعناصر بعد التحميل
+  setTimeout(initAnimations, 100);
+});
+
+// تهيئة الحركات عند التمرير
+function initAnimations() {
+  const animatedElements = document.querySelectorAll('.animate');
+  animatedElements.forEach(el => {
+    el.style.opacity = '0';
+  });
+  
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.style.animationPlayState = 'running';
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.1 });
+  
+  animatedElements.forEach(el => {
+    observer.observe(el);
+  });
+}
+
+// تهيئة أولية للصفحة
+document.addEventListener('DOMContentLoaded', function() {
+  initAnimations();
+});
+</script>
+
+</body>
+</html>

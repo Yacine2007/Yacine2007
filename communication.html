@@ -232,29 +232,10 @@
             margin-top: 5px;
         }
 
-        /* Disabled account style */
-        .disabled-account {
-            background: linear-gradient(135deg, #cccccc, #e6e6e6, #cccccc);
-            border: 2px solid #999999;
-            color: #777;
-            position: relative;
-            cursor: not-allowed;
-            opacity: 0.7;
-        }
-
-        .disabled-account:hover {
-            transform: none;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-            background: linear-gradient(135deg, #cccccc, #e6e6e6, #cccccc);
-        }
-
-        .disabled-account i {
-            color: #999;
-        }
-
-        .warning-note {
+        /* Success note for recovered account */
+        .success-note {
             font-size: 0.75em;
-            color: #cc0000;
+            color: #28a745;
             margin-top: 3px;
             font-weight: bold;
         }
@@ -289,21 +270,21 @@
 </p>
 
 <ul class="link-list">
-    <!-- Royal Golden Card - Yacine ben mokrane 2 Facebook -->
-    <li class="link-item royal-golden" onclick="window.open('https://www.facebook.com/yacineben2007','_blank')">
-        <i class="fab fa-facebook"></i>
-        <div>
-            <strong>Yacine Ben Mokrane 2</strong><br>
-            <span class="response-note">Primary Account - Active Now</span>
-        </div>
-    </li>
-
-    <!-- Disabled Account - Yacine ben mokrane 1 Facebook -->
-    <li class="link-item disabled-account">
+    <!-- Royal Golden Card - Yacine ben mokrane 1 Facebook (Recovered) -->
+    <li class="link-item royal-golden" onclick="window.open('https://www.facebook.com/yacine.benmokrane.52','_blank')">
         <i class="fab fa-facebook"></i>
         <div>
             <strong>Yacine Ben Mokrane 1</strong><br>
-            <span class="warning-note">Temporarily Disabled - Protocol Fix (30 days)</span>
+            <span class="success-note">Account Recovered - Active Now</span>
+        </div>
+    </li>
+
+    <!-- Golden Card - Yacine ben mokrane 2 Facebook -->
+    <li class="link-item golden-card" onclick="window.open('https://www.facebook.com/yacineben2007','_blank')">
+        <i class="fab fa-facebook"></i>
+        <div>
+            <strong>Yacine Ben Mokrane 2</strong><br>
+            <span class="response-note">Secondary Account - Active Now</span>
         </div>
     </li>
 

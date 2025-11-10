@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="ar" dir="rtl">
+<html lang="en" dir="ltr">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Portfolio - Yassine Ben Mokrane</title>
+<title>Portfolio - Yacine-Dev</title>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 <style>
     /* --- Reset & Fonts --- */
@@ -17,7 +17,7 @@
     :root {
         --primary-color: #000;
         --secondary-color: #fff;
-        --accent-color: #0078D7; /* اللون الأزرق الشبيه بويندوز */
+        --accent-color: #0078D7;
         --card-bg: #1a1a1a;
         --text-color: #f5f5f5;
         --border-color: #444;
@@ -210,7 +210,7 @@
         color: var(--accent-color);
     }
     
-    /* تصميم خاص لقسم المشاريع */
+    /* Project cards styling */
     .project-card {
         position: relative;
         overflow: hidden;
@@ -234,6 +234,19 @@
         color: var(--secondary-color);
     }
     
+    .project-card .project-description {
+        font-size: 0.9rem;
+        margin-bottom: 1rem;
+        color: #ccc;
+    }
+    
+    .project-card .project-price {
+        font-size: 1rem;
+        font-weight: bold;
+        margin-bottom: 1rem;
+        color: var(--accent-color);
+    }
+    
     .project-card .project-link {
         display: inline-block;
         margin-top: 1rem;
@@ -251,7 +264,7 @@
         color: var(--secondary-color);
     }
 
-    /* تصميم خاص لبطاقات التواصل */
+    /* Contact cards styling */
     .contact-card {
         display: flex;
         flex-direction: column;
@@ -367,61 +380,59 @@
 <nav>
     <div class="logo">
         <i class="fas fa-code"></i>
-        <span id="logoText">Yassine Ben Mokrane</span>
+        <span id="logoText">Yacine-Dev</span>
     </div>
     <select id="langSelect">
-        <option value="ar">العربية</option>
         <option value="en">English</option>
+        <option value="ar">العربية</option>
         <option value="fr">Français</option>
     </select>
 </nav>
 
 <!-- Header -->
 <header id="header">
-    <img src="picture.png" alt="Yassine Ben Mokrane">
-    <h1 id="name">ياسين بن مقران</h1>
-    <p id="intro">أنا مطور ويب Full-Stack أعمل على بناء مواقع ومشاريع ويب متكاملة بدءًا من الواجهة التفاعلية وحتى الخادم والسكربتات الخلفية. أطور صفحات هبوط احترافية، سكربتات بايثون بسيطة، وأهتم بالواجهة لتقديم تجربة مستخدم سلسة وجذابة.</p>
+    <img src="picture.png" alt="Yacine-Dev">
+    <h1 id="name">Yacine-Dev</h1>
+    <p id="intro">I am a Full-Stack Web Developer building complete websites and web projects from interactive front-ends to back-end scripts. I create professional landing pages, simple Python scripts, and focus on UI to provide smooth and attractive user experiences.</p>
 </header>
 
-<!-- الخدمات -->
+<!-- Services -->
 <section>
-    <h2 id="servicesTitle"><i class="fas fa-concierge-bell"></i> خدماتي</h2>
+    <h2 id="servicesTitle"><i class="fas fa-concierge-bell"></i> My Services</h2>
     <div class="services" id="services">
         <div class="card animate">
             <i class="fas fa-laptop-code"></i>
-            <h3>تصميم وتطوير مواقع ويب كاملة</h3>
+            <h3>Full website development</h3>
             <p>(Front-End + Back-End)</p>
         </div>
         <div class="card animate delay-1">
             <i class="fas fa-window-restore"></i>
-            <h3>تطوير صفحات هبوط</h3>
-            <p>(Landing Pages)</p>
+            <h3>Landing Pages development</h3>
         </div>
         <div class="card animate delay-2">
             <i class="fas fa-shopping-cart"></i>
-            <h3>إنشاء متاجر إلكترونية</h3>
-            <p>ودمج بوابات الدفع</p>
+            <h3>E-commerce setup</h3>
+            <p>with payment gateways</p>
         </div>
         <div class="card animate delay-3">
             <i class="fab fa-python"></i>
-            <h3>تطوير سكربتات بايثون بسيطة</h3>
+            <h3>Simple Python scripts</h3>
         </div>
         <div class="card animate delay-4">
             <i class="fas fa-paint-brush"></i>
-            <h3>تحسين أداء المواقع وتجربة المستخدم</h3>
-            <p>(UI/UX)</p>
+            <h3>Website performance & UI/UX optimization</h3>
         </div>
         <div class="card animate">
             <i class="fas fa-palette"></i>
-            <h3>تصميم شعارات ورموز احترافية</h3>
+            <h3>Professional logo and icon design</h3>
             <p>(Logo Design)</p>
         </div>
     </div>
 </section>
 
-<!-- التقنيات -->
+<!-- Skills -->
 <section>
-    <h2 id="skillsTitle"><i class="fas fa-cogs"></i> التقنيات والمهارات</h2>
+    <h2 id="skillsTitle"><i class="fas fa-cogs"></i> Skills & Technologies</h2>
     <div class="skills" id="skills">
         <div class="card animate"><i class="fab fa-html5"></i> HTML5</div>
         <div class="card animate delay-1"><i class="fab fa-css3-alt"></i> CSS3</div>
@@ -437,119 +448,78 @@
     </div>
 </section>
 
-<!-- الأعمال السابقة -->
+<!-- Projects -->
 <section>
-    <h2 id="projectsTitle"><i class="fas fa-briefcase"></i> عينات من بعض أعمالي</h2>
+    <h2 id="projectsTitle"><i class="fas fa-briefcase"></i> Featured Projects</h2>
     <div class="projects" id="projectsContainer">
         <div class="card project-card animate">
             <div class="project-content">
-                <h3 class="project-title">Storakeg</h3>
-                <a href="https://storakeg.com" target="_blank" class="project-link">زيارة الموقع</a>
+                <h3 class="project-title">Algerian Freelancers Platform</h3>
+                <p class="project-description">A platform for Algerian freelancers where you can find me in the web development section</p>
+                <a href="https://dz-dev-freelancers.kesug.com/" target="_blank" class="project-link">Visit Platform</a>
             </div>
         </div>
         <div class="card project-card animate delay-1">
             <div class="project-content">
-                <h3 class="project-title">Qeematech</h3>
-                <a href="https://www.qeematech.net" target="_blank" class="project-link">زيارة الموقع</a>
+                <h3 class="project-title">Ready-to-Sell E-commerce Store</h3>
+                <p class="project-description">A complete e-commerce store ready for business</p>
+                <p class="project-price">7000DA / 35€ / 50$</p>
+                <a href="https://my-storewin.great-site.net/" target="_blank" class="project-link">Visit Store</a>
             </div>
         </div>
         <div class="card project-card animate delay-2">
             <div class="project-content">
-                <h3 class="project-title">Barmaja</h3>
-                <a href="https://www.barmaja.qa" target="_blank" class="project-link">زيارة الموقع</a>
+                <h3 class="project-title">Storakeg</h3>
+                <a href="https://storakeg.com" target="_blank" class="project-link">Visit Website</a>
             </div>
         </div>
         <div class="card project-card animate delay-3">
             <div class="project-content">
-                <h3 class="project-title">IBTDI</h3>
-                <a href="https://www.ibtdi.com" target="_blank" class="project-link">زيارة الموقع</a>
+                <h3 class="project-title">Qeematech</h3>
+                <a href="https://www.qeematech.net" target="_blank" class="project-link">Visit Website</a>
             </div>
         </div>
         <div class="card project-card animate">
             <div class="project-content">
-                <h3 class="project-title">Adselams</h3>
-                <a href="https://adselams.com" target="_blank" class="project-link">زيارة الموقع</a>
+                <h3 class="project-title">Barmaja</h3>
+                <a href="https://www.barmaja.qa" target="_blank" class="project-link">Visit Website</a>
             </div>
         </div>
     </div>
 </section>
 
-<!-- التواصل -->
+<!-- Contact -->
 <section>
-    <h2 id="contactTitle"><i class="fas fa-envelope"></i> تواصل معي</h2>
+    <h2 id="contactTitle"><i class="fas fa-envelope"></i> Contact Me</h2>
     <div class="contact" id="contactContainer">
         <div class="card animate contact-card">
             <i class="fas fa-envelope"></i>
-            <h3 id="contactEmailTitle">البريد الإلكتروني</h3>
+            <h3 id="contactEmailTitle">Email</h3>
             <p>yassinebenmokran@gmail.com</p>
         </div>
         <div class="card animate delay-1 contact-card">
             <i class="fas fa-phone"></i>
-            <h3 id="contactPhoneTitle">الهاتف</h3>
+            <h3 id="contactPhoneTitle">Phone</h3>
             <p>+213795082763</p>
         </div>
         <div class="card animate delay-2 contact-card">
             <i class="fas fa-globe"></i>
-            <h3 id="contactLinksTitle">روابط التواصل</h3>
-            <p id="contactLinksDesc">جميع حساباتي وروابط التواصل</p>
-            <a href="https://yacine2007.github.io/Yacine2007/communication.html" target="_blank" class="contact-button" id="contactLinkButton">صفحة التواصل</a>
+            <h3 id="contactLinksTitle">Communication Links</h3>
+            <p id="contactLinksDesc">All my accounts and communication links</p>
+            <a href="https://yacine2007.github.io/Yacine2007/communication.html" target="_blank" class="contact-button" id="contactLinkButton">Contact Page</a>
         </div>
     </div>
 </section>
 
 <script>
 const langData = {
-  ar: {
-    dir: "rtl",
-    name: "ياسين بن مقران",
-    intro: "أنا مطور ويب Full-Stack أعمل على بناء مواقع ومشاريع ويب متكاملة بدءًا من الواجهة التفاعلية وحتى الخادم والسكربتات الخلفية. أطور صفحات هبوط احترافية، سكربتات بايثون بسيطة، وأهتم بالواجهة لتقديم تجربة مستخدم سلسة وجذابة.",
-    servicesTitle: "خدماتي",
-    skillsTitle: "التقنيات والمهارات",
-    projectsTitle: "عينات من بعض أعمالي",
-    contactTitle: "تواصل معي",
-    services: [
-      {icon: "fas fa-laptop-code", title: "تصميم وتطوير مواقع ويب كاملة", desc: "(Front-End + Back-End)"},
-      {icon: "fas fa-window-restore", title: "تطوير صفحات هبوط", desc: "(Landing Pages)"},
-      {icon: "fas fa-shopping-cart", title: "إنشاء متاجر إلكترونية", desc: "ودمج بوابات الدفع"},
-      {icon: "fab fa-python", title: "تطوير سكربتات بايثون بسيطة", desc: ""},
-      {icon: "fas fa-paint-brush", title: "تحسين أداء المواقع وتجربة المستخدم", desc: "(UI/UX)"},
-      {icon: "fas fa-palette", title: "تصميم شعارات ورموز احترافية", desc: "(Logo Design)"}
-    ],
-    skills: [
-      {icon: "fab fa-html5", name: "HTML5"},
-      {icon: "fab fa-css3-alt", name: "CSS3"},
-      {icon: "fab fa-js-square", name: "JavaScript"},
-      {icon: "fab fa-react", name: "React"},
-      {icon: "fab fa-node-js", name: "Express.js"},
-      {icon: "fab fa-node", name: "Node.js"},
-      {icon: "fab fa-python", name: "Python Scripts"},
-      {icon: "fas fa-wind", name: "Tailwind CSS"},
-      {icon: "fab fa-git-alt", name: "Git/GitHub"},
-      {icon: "fas fa-palette", name: "Adobe Illustrator"},
-      {icon: "fas fa-pen-nib", name: "Adobe Photoshop"}
-    ],
-    projects: [
-      {title: "Storakeg", link: "https://storakeg.com"},
-      {title: "Qeematech", link: "https://www.qeematech.net"},
-      {title: "Barmaja", link: "https://www.barmaja.qa"},
-      {title: "IBTDI", link: "https://www.ibtdi.com"},
-      {title: "Adselams", link: "https://adselams.com"}
-    ],
-    contact: {
-        emailTitle: "البريد الإلكتروني",
-        phoneTitle: "الهاتف",
-        linksTitle: "روابط التواصل",
-        linksDesc: "جميع حساباتي وروابط التواصل",
-        linkButton: "صفحة التواصل"
-    }
-  },
   en: {
     dir: "ltr",
-    name: "Yassine Ben Mokrane",
+    name: "Yacine-Dev",
     intro: "I am a Full-Stack Web Developer building complete websites and web projects from interactive front-ends to back-end scripts. I create professional landing pages, simple Python scripts, and focus on UI to provide smooth and attractive user experiences.",
     servicesTitle: "My Services",
     skillsTitle: "Skills & Technologies",
-    projectsTitle: "Samples of My Work",
+    projectsTitle: "Featured Projects",
     contactTitle: "Contact Me",
     services: [
       {icon: "fas fa-laptop-code", title: "Full website development", desc: "(Front-End + Back-End)"},
@@ -573,27 +543,71 @@ const langData = {
       {icon: "fas fa-pen-nib", name: "Adobe Photoshop"}
     ],
     projects: [
-      {title: "Storakeg", link: "https://storakeg.com"},
-      {title: "Qeematech", link: "https://www.qeematech.net"},
-      {title: "Barmaja", link: "https://www.barmaja.qa"},
-      {title: "IBTDI", link: "https://www.ibtdi.com"},
-      {title: "Adselams", link: "https://adselams.com"}
+      {title: "Algerian Freelancers Platform", description: "A platform for Algerian freelancers where you can find me in the web development section", link: "https://dz-dev-freelancers.kesug.com/"},
+      {title: "Ready-to-Sell E-commerce Store", description: "A complete e-commerce store ready for business", price: "7000DA / 1400000€ / 1000000$", link: "https://my-storewin.great-site.net/"},
+      {title: "Storakeg", description: "", link: "https://storakeg.com"},
+      {title: "Qeematech", description: "", link: "https://www.qeematech.net"},
+      {title: "Barmaja", description: "", link: "https://www.barmaja.qa"}
     ],
     contact: {
         emailTitle: "Email",
         phoneTitle: "Phone",
         linksTitle: "Communication Links",
         linksDesc: "All my accounts and communication links",
-        linkButton: "Communication Page"
+        linkButton: "Contact Page"
+    }
+  },
+  ar: {
+    dir: "rtl",
+    name: "ياسين-ديف",
+    intro: "أنا مطور ويب Full-Stack أعمل على بناء مواقع ومشاريع ويب متكاملة بدءًا من الواجهة التفاعلية وحتى الخادم والسكربتات الخلفية. أطور صفحات هبوط احترافية، سكربتات بايثون بسيطة، وأهتم بالواجهة لتقديم تجربة مستخدم سلسة وجذابة.",
+    servicesTitle: "خدماتي",
+    skillsTitle: "التقنيات والمهارات",
+    projectsTitle: "المشاريع المميزة",
+    contactTitle: "تواصل معي",
+    services: [
+      {icon: "fas fa-laptop-code", title: "تصميم وتطوير مواقع ويب كاملة", desc: "(Front-End + Back-End)"},
+      {icon: "fas fa-window-restore", title: "تطوير صفحات هبوط", desc: "(Landing Pages)"},
+      {icon: "fas fa-shopping-cart", title: "إنشاء متاجر إلكترونية", desc: "ودمج بوابات الدفع"},
+      {icon: "fab fa-python", title: "تطوير سكربتات بايثون بسيطة", desc: ""},
+      {icon: "fas fa-paint-brush", title: "تحسين أداء المواقع وتجربة المستخدم", desc: "(UI/UX)"},
+      {icon: "fas fa-palette", title: "تصميم شعارات ورموز احترافية", desc: "(Logo Design)"}
+    ],
+    skills: [
+      {icon: "fab fa-html5", name: "HTML5"},
+      {icon: "fab fa-css3-alt", name: "CSS3"},
+      {icon: "fab fa-js-square", name: "JavaScript"},
+      {icon: "fab fa-react", name: "React"},
+      {icon: "fab fa-node-js", name: "Express.js"},
+      {icon: "fab fa-node", name: "Node.js"},
+      {icon: "fab fa-python", name: "Python Scripts"},
+      {icon: "fas fa-wind", name: "Tailwind CSS"},
+      {icon: "fab fa-git-alt", name: "Git/GitHub"},
+      {icon: "fas fa-palette", name: "Adobe Illustrator"},
+      {icon: "fas fa-pen-nib", name: "Adobe Photoshop"}
+    ],
+    projects: [
+      {title: "منصة المستقلين الجزائريين", description: "منصة للمستقلين الجزائريين حيث يمكنك العثور علي في قسم تطوير الويب", link: "https://dz-dev-freelancers.kesug.com/"},
+      {title: "متجر إلكتروني جاهز للبيع", description: "متجر إلكتروني كامل وجاهز للعمل", price: "7000DA / 1400000€ / 1000000$", link: "https://my-storewin.great-site.net/"},
+      {title: "Storakeg", description: "", link: "https://storakeg.com"},
+      {title: "Qeematech", description: "", link: "https://www.qeematech.net"},
+      {title: "Barmaja", description: "", link: "https://www.barmaja.qa"}
+    ],
+    contact: {
+        emailTitle: "البريد الإلكتروني",
+        phoneTitle: "الهاتف",
+        linksTitle: "روابط التواصل",
+        linksDesc: "جميع حساباتي وروابط التواصل",
+        linkButton: "صفحة التواصل"
     }
   },
   fr: {
     dir: "ltr",
-    name: "Yassine Ben Mokrane",
+    name: "Yacine-Dev",
     intro: "Je suis développeur web Full-Stack, créant des sites web complets et des projets web, du front-end interactif aux scripts back-end. Je développe des landing pages professionnelles, des scripts Python simples et je me concentre sur l'UI pour offrir une expérience utilisateur fluide et attrayante.",
     servicesTitle: "Mes Services",
     skillsTitle: "Compétences & Technologies",
-    projectsTitle: "Exemples de Mes Travaux",
+    projectsTitle: "Projets en Vedette",
     contactTitle: "Contactez-moi",
     services: [
       {icon: "fas fa-laptop-code", title: "Développement complet de sites web", desc: "(Front-End + Back-End)"},
@@ -617,18 +631,18 @@ const langData = {
       {icon: "fas fa-pen-nib", name: "Adobe Photoshop"}
     ],
     projects: [
-      {title: "Storakeg", link: "https://storakeg.com"},
-      {title: "Qeematech", link: "https://www.qeematech.net"},
-      {title: "Barmaja", link: "https://www.barmaja.qa"},
-      {title: "IBTDI", link: "https://www.ibtdi.com"},
-      {title: "Adselams", link: "https://adselams.com"}
+      {title: "Plateforme des Freelancers Algériens", description: "Une plateforme pour les freelancers algériens où vous pouvez me trouver dans la section développement web", link: "https://dz-dev-freelancers.kesug.com/"},
+      {title: "Boutique E-commerce Prête à Vendre", description: "Une boutique e-commerce complète prête pour les affaires", price: "7000DA / 1400000€ / 1000000$", link: "https://my-storewin.great-site.net/"},
+      {title: "Storakeg", description: "", link: "https://storakeg.com"},
+      {title: "Qeematech", description: "", link: "https://www.qeematech.net"},
+      {title: "Barmaja", description: "", link: "https://www.barmaja.qa"}
     ],
     contact: {
         emailTitle: "E-mail",
         phoneTitle: "Téléphone",
         linksTitle: "Liens de Communication",
         linksDesc: "Tous mes comptes et liens de communication",
-        linkButton: "Page de Communication"
+        linkButton: "Page de Contact"
     }
   }
 };
@@ -638,11 +652,11 @@ langSelect.addEventListener("change", function(){
   const lang = this.value;
   const data = langData[lang];
   
-  // تغيير اتجاه الصفحة
+  // Change page direction
   document.documentElement.dir = data.dir;
   document.documentElement.lang = lang;
   
-  // تحديث النصوص
+  // Update texts
   document.getElementById("name").textContent = data.name;
   document.getElementById("intro").textContent = data.intro;
   document.getElementById("servicesTitle").innerHTML = `<i class="fas fa-concierge-bell"></i> ${data.servicesTitle}`;
@@ -650,10 +664,10 @@ langSelect.addEventListener("change", function(){
   document.getElementById("projectsTitle").innerHTML = `<i class="fas fa-briefcase"></i> ${data.projectsTitle}`;
   document.getElementById("contactTitle").innerHTML = `<i class="fas fa-envelope"></i> ${data.contactTitle}`;
   
-  // تحديث نص الشعار
-  document.getElementById("logoText").textContent = lang === 'ar' ? 'ياسين بن مقران' : 'Yassine Ben Mokrane';
+  // Update logo text
+  document.getElementById("logoText").textContent = data.name;
 
-  // تحديث الخدمات
+  // Update services
   const servicesDiv = document.getElementById("services");
   servicesDiv.innerHTML = "";
   data.services.forEach((s, index) => {
@@ -667,7 +681,7 @@ langSelect.addEventListener("change", function(){
     servicesDiv.appendChild(div);
   });
 
-  // تحديث المهارات
+  // Update skills
   const skillsDiv = document.getElementById("skills");
   skillsDiv.innerHTML = "";
   data.skills.forEach((s, index) => {
@@ -680,33 +694,48 @@ langSelect.addEventListener("change", function(){
     skillsDiv.appendChild(div);
   });
   
-  // تحديث المشاريع
+  // Update projects
   const projectsContainer = document.getElementById("projectsContainer");
   projectsContainer.innerHTML = "";
   data.projects.forEach((p, index) => {
     const div = document.createElement("div");
     div.className = `card project-card animate${index > 0 ? ` delay-${index % 5}` : ''}`;
-    div.innerHTML = `
+    
+    let projectHTML = `
       <div class="project-content">
         <h3 class="project-title">${p.title}</h3>
-        <a href="${p.link}" target="_blank" class="project-link">${lang === 'ar' ? 'زيارة الموقع' : (lang === 'fr' ? 'Visiter le site' : 'Visit Website')}</a>
-      </div>
     `;
+    
+    if (p.description) {
+      projectHTML += `<p class="project-description">${p.description}</p>`;
+    }
+    
+    if (p.price) {
+      projectHTML += `<p class="project-price">${p.price}</p>`;
+    }
+    
+    let linkText = "Visit Website";
+    if (lang === 'ar') linkText = 'زيارة الموقع';
+    if (lang === 'fr') linkText = 'Visiter le site';
+    
+    projectHTML += `<a href="${p.link}" target="_blank" class="project-link">${linkText}</a></div>`;
+    
+    div.innerHTML = projectHTML;
     projectsContainer.appendChild(div);
   });
   
-  // تحديث قسم التواصل
+  // Update contact section
   document.getElementById("contactEmailTitle").textContent = data.contact.emailTitle;
   document.getElementById("contactPhoneTitle").textContent = data.contact.phoneTitle;
   document.getElementById("contactLinksTitle").textContent = data.contact.linksTitle;
   document.getElementById("contactLinksDesc").textContent = data.contact.linksDesc;
   document.getElementById("contactLinkButton").textContent = data.contact.linkButton;
   
-  // إضافة تأثيرات للعناصر بعد التحميل
+  // Add effects to elements after loading
   setTimeout(initAnimations, 100);
 });
 
-// تهيئة الحركات عند التمرير
+// Initialize animations on scroll
 function initAnimations() {
   const animatedElements = document.querySelectorAll('.animate');
   animatedElements.forEach(el => {
@@ -727,7 +756,7 @@ function initAnimations() {
   });
 }
 
-// تهيئة أولية للصفحة
+// Initial page setup
 document.addEventListener('DOMContentLoaded', function() {
   initAnimations();
 });

@@ -1,0 +1,944 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Yacine-Dev - Services Pricing</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        :root {
+            --primary: #0a0a1a;
+            --secondary: #1e40af;
+            --accent: #3b82f6;
+            --light: #e0f2fe;
+            --dark: #0f172a;
+            --success: #10b981;
+            --glass-bg: rgba(15, 23, 42, 0.9);
+            --glass-border: rgba(56, 189, 248, 0.3);
+            --glass-shadow: 0 8px 32px 0 rgba(2, 6, 23, 0.7);
+            --glow: 0 0 25px rgba(59, 130, 246, 0.4);
+        }
+
+        body {
+            background: #0f172a;
+            color: var(--light);
+            line-height: 1.5;
+            min-height: 100vh;
+            overflow-x: hidden;
+            scroll-behavior: smooth;
+        }
+
+        .background-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+        }
+
+        .background-image {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            filter: brightness(0.25);
+        }
+
+        .page {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            text-align: center;
+        }
+
+        /* Language Selection Page - Always visible first */
+        #language-page {
+            display: flex;
+        }
+
+        #usd-page, #eur-page, #dzd-page {
+            display: none;
+        }
+
+        .language-title {
+            font-size: 2.2rem;
+            margin-bottom: 3rem;
+            color: #e0f2fe;
+            font-weight: 600;
+            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+        }
+
+        .currency-options {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .currency-option {
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border);
+            border-radius: 20px;
+            padding: 2.5rem;
+            width: 280px;
+            cursor: pointer;
+            transition: all 0.4s ease;
+            box-shadow: var(--glass-shadow);
+            position: relative;
+            overflow: hidden;
+            text-decoration: none;
+            color: inherit;
+        }
+
+        .currency-option::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(to right, #38bdf8, #3b82f6);
+        }
+
+        .currency-option:hover {
+            transform: translateY(-10px);
+            box-shadow: var(--glass-shadow), var(--glow);
+            border-color: rgba(56, 189, 248, 0.5);
+        }
+
+        .flag {
+            font-size: 3.5rem;
+            margin-bottom: 1.5rem;
+            filter: drop-shadow(0 5px 15px rgba(0, 0, 0, 0.3));
+        }
+
+        .currency-name {
+            font-size: 1.4rem;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+            color: #e0f2fe;
+        }
+
+        .currency-code {
+            font-size: 1.1rem;
+            color: #38bdf8;
+            font-weight: 500;
+        }
+
+        /* Service Pages */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            width: 100%;
+        }
+
+        .hero-section {
+            background: var(--glass-bg);
+            backdrop-filter: blur(25px);
+            -webkit-backdrop-filter: blur(25px);
+            border: 1px solid var(--glass-border);
+            border-radius: 25px;
+            padding: 3rem 2rem;
+            text-align: center;
+            margin-bottom: 3rem;
+            box-shadow: var(--glass-shadow), var(--glow);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 100%;
+            background: linear-gradient(135deg, rgba(56, 189, 248, 0.1), rgba(30, 64, 175, 0.1));
+            z-index: -1;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 1rem;
+        }
+
+        .logo h1 {
+            color: #e0f2fe;
+            font-size: 2.5rem;
+            font-weight: 600;
+        }
+
+        .logo .en {
+            color: #38bdf8;
+            font-size: 1.8rem;
+            font-weight: 300;
+        }
+
+        .subtitle {
+            color: #e0f2fe;
+            font-size: 1.3rem;
+            margin-bottom: 1rem;
+            font-weight: 300;
+        }
+
+        .home-button {
+            position: fixed;
+            top: 25px;
+            left: 25px;
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border);
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: var(--glass-shadow);
+            transition: all 0.3s ease;
+            z-index: 100;
+            color: #e0f2fe;
+            font-size: 1.4rem;
+            text-decoration: none;
+        }
+
+        .home-button:hover {
+            transform: scale(1.1);
+            box-shadow: var(--glass-shadow), var(--glow);
+        }
+
+        .services-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+
+        .service-card {
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border);
+            border-radius: 20px;
+            padding: 2.5rem;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            box-shadow: var(--glass-shadow);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .service-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(to right, #38bdf8, #3b82f6);
+        }
+
+        .service-card:hover {
+            transform: translateY(-10px);
+            box-shadow: var(--glass-shadow), var(--glow);
+            border-color: rgba(56, 189, 248, 0.4);
+        }
+
+        .service-icon {
+            font-size: 2.5rem;
+            margin-bottom: 1.5rem;
+            color: #38bdf8;
+        }
+
+        .service-title {
+            color: #e0f2fe;
+            font-size: 1.4rem;
+            margin-bottom: 1.2rem;
+            font-weight: 600;
+        }
+
+        .service-title .en {
+            color: #38bdf8;
+            font-size: 1.1rem;
+            font-weight: 400;
+            display: block;
+            margin-top: 0.5rem;
+        }
+
+        .service-description {
+            color: rgba(224, 242, 254, 0.9);
+            margin-bottom: 1.5rem;
+            font-size: 0.95rem;
+            line-height: 1.6;
+        }
+
+        .price-range {
+            background: linear-gradient(135deg, var(--success), #059669);
+            color: white;
+            padding: 1.2rem;
+            border-radius: 12px;
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin: 1.5rem 0;
+            box-shadow: 0 5px 20px rgba(16, 185, 129, 0.4);
+            border: 1px solid rgba(16, 185, 129, 0.3);
+        }
+
+        .delivery-time {
+            background: linear-gradient(135deg, var(--secondary), #1d4ed8);
+            color: white;
+            padding: 1rem;
+            border-radius: 12px;
+            font-size: 1rem;
+            font-weight: 500;
+            margin: 1.2rem 0;
+            box-shadow: 0 5px 20px rgba(30, 64, 175, 0.4);
+            border: 1px solid rgba(30, 64, 175, 0.3);
+        }
+
+        .features {
+            margin: 1.8rem 0;
+        }
+
+        .features h4 {
+            color: #e0f2fe;
+            margin-bottom: 1.2rem;
+            font-size: 1.2rem;
+            font-weight: 600;
+        }
+
+        .features ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .features li {
+            padding: 0.6rem 0;
+            border-bottom: 1px solid rgba(56, 189, 248, 0.2);
+            color: rgba(224, 242, 254, 0.9);
+            font-size: 0.9rem;
+        }
+
+        .features li:before {
+            content: "✓ ";
+            color: var(--success);
+            font-weight: bold;
+            margin-left: 0.6rem;
+        }
+
+        .contact-section {
+            background: var(--glass-bg);
+            backdrop-filter: blur(25px);
+            -webkit-backdrop-filter: blur(25px);
+            border: 1px solid var(--glass-border);
+            padding: 3rem;
+            border-radius: 20px;
+            text-align: center;
+            box-shadow: var(--glass-shadow), var(--glow);
+            margin-top: 3rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .contact-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 100%;
+            background: linear-gradient(135deg, rgba(56, 189, 248, 0.1), rgba(30, 64, 175, 0.1));
+            z-index: -1;
+        }
+
+        .contact-section h2 {
+            color: #e0f2fe;
+            margin-bottom: 1.2rem;
+            font-size: 1.8rem;
+            font-weight: 600;
+        }
+
+        .contact-section p {
+            color: rgba(224, 242, 254, 0.9);
+            margin-bottom: 2.5rem;
+            font-size: 1.1rem;
+        }
+
+        .cta-button {
+            background: linear-gradient(135deg, var(--accent), #1d4ed8);
+            color: white;
+            padding: 1.2rem 2.5rem;
+            border: none;
+            border-radius: 35px;
+            font-size: 1.1rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 20px rgba(59, 130, 246, 0.4);
+            text-decoration: none;
+            display: inline-block;
+            border: 1px solid rgba(59, 130, 246, 0.3);
+        }
+
+        .cta-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(59, 130, 246, 0.6);
+        }
+
+        .note {
+            background: rgba(15, 23, 42, 0.8);
+            border-right: 4px solid var(--accent);
+            padding: 2rem;
+            border-radius: 15px;
+            margin: 2.5rem 0;
+            backdrop-filter: blur(15px);
+            border: 1px solid var(--glass-border);
+        }
+
+        .note h3 {
+            color: #e0f2fe;
+            margin-bottom: 1rem;
+            font-size: 1.3rem;
+            font-weight: 600;
+        }
+
+        .note p {
+            color: rgba(224, 242, 254, 0.9);
+            line-height: 1.6;
+            font-size: 0.95rem;
+        }
+
+        /* Text direction classes */
+        .rtl {
+            direction: rtl;
+            text-align: right;
+        }
+
+        .ltr {
+            direction: ltr;
+            text-align: left;
+        }
+
+        .ltr .features li:before {
+            margin-right: 0.6rem;
+            margin-left: 0;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .services-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .logo h1 {
+                font-size: 2rem;
+            }
+            
+            .logo .en {
+                font-size: 1.5rem;
+            }
+            
+            .language-title {
+                font-size: 1.8rem;
+            }
+            
+            .currency-option {
+                width: 100%;
+                max-width: 280px;
+                padding: 2rem;
+            }
+            
+            .hero-section {
+                padding: 2rem 1.5rem;
+            }
+            
+            .contact-section {
+                padding: 2rem 1.5rem;
+            }
+            
+            .home-button {
+                top: 15px;
+                left: 15px;
+                width: 45px;
+                height: 45px;
+                font-size: 1.2rem;
+            }
+            
+            .currency-options {
+                gap: 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Background Container -->
+    <div class="background-container">
+        <img src="https://images.unsplash.com/photo-1451187580459-43490279c0fa?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2072&q=80" alt="Background" class="background-image">
+    </div>
+
+    <!-- Language Selection Page - Always shown first -->
+    <section id="language-page" class="page">
+        <div class="container">
+            <h1 class="language-title">Select Your Region</h1>
+            <div class="currency-options">
+                <a href="#usd-page" class="currency-option" data-currency="USD">
+                    <div class="flag">🇺🇸</div>
+                    <div class="currency-name">United States</div>
+                    <div class="currency-code">USD ($)</div>
+                </a>
+                <a href="#eur-page" class="currency-option" data-currency="EUR">
+                    <div class="flag">🇪🇺</div>
+                    <div class="currency-name">European Union</div>
+                    <div class="currency-code">EUR (€)</div>
+                </a>
+                <a href="#dzd-page" class="currency-option" data-currency="DZD">
+                    <div class="flag">🇩🇿</div>
+                    <div class="currency-name">Algeria</div>
+                    <div class="currency-code">DZD (DA)</div>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- USD Services Page -->
+    <section id="usd-page" class="page">
+        <a href="#language-page" class="home-button">
+            <i class="fas fa-home"></i>
+        </a>
+        <div class="container">
+            <section class="hero-section">
+                <div class="logo">
+                    <h1>Yacine-Dev</h1>
+                </div>
+                <p class="subtitle">My Services Pricing</p>
+            </section>
+
+            <div class="note">
+                <h3>Important Note About Prices:</h3>
+                <p>Prices vary depending on the project, its content, features, complexity, working hours and resources used. These prices are estimates and may change after discussing project details.</p>
+            </div>
+
+            <div class="services-grid">
+                <div class="service-card">
+                    <div class="service-icon"><i class="fas fa-laptop-code"></i></div>
+                    <h3 class="service-title">
+                        Static Website
+                        <span class="en">Static Website</span>
+                    </h3>
+                    <p class="service-description">Websites with content that doesn't change frequently, ideal for personal portfolios and promotional company sites.</p>
+                    <div class="price-range">$4 - $176</div>
+                    <div class="delivery-time">Delivery: 3 days - 1 week</div>
+                    <div class="features">
+                        <h4>Features:</h4>
+                        <ul>
+                            <li>Responsive design for all devices</li>
+                            <li>1-5 web pages</li>
+                            <li>Delivery within 3 days to 1 week</li>
+                            <li>No technical support included</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="service-card">
+                    <div class="service-icon"><i class="fas fa-database"></i></div>
+                    <h3 class="service-title">
+                        Dynamic Website
+                        <span class="en">Dynamic Website</span>
+                    </h3>
+                    <p class="service-description">Websites with frequently changing content, using databases to store information.</p>
+                    <div class="price-range">$132 - $440</div>
+                    <div class="delivery-time">Delivery: 2 weeks - 1 month</div>
+                    <div class="features">
+                        <h4>Features:</h4>
+                        <ul>
+                            <li>Complete content management system</li>
+                            <li>Integrated database</li>
+                            <li>Dedicated server</li>
+                            <li>Delivery within 2 weeks to 1 month</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="service-card">
+                    <div class="service-icon"><i class="fas fa-mobile-alt"></i></div>
+                    <h3 class="service-title">
+                        Web Application
+                        <span class="en">Web Application</span>
+                    </h3>
+                    <p class="service-description">Web applications that provide specific services with focus on mobile responsiveness.</p>
+                    <div class="price-range">$88 - $440</div>
+                    <div class="delivery-time">Delivery: 2 weeks - 1 month</div>
+                    <div class="features">
+                        <h4>Features:</h4>
+                        <ul>
+                            <li>Mobile-first responsive design</li>
+                            <li>Advanced custom functions</li>
+                            <li>High performance on mobile devices</li>
+                            <li>Delivery within 2 weeks to 1 month</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="service-card">
+                    <div class="service-icon"><i class="fas fa-shopping-cart"></i></div>
+                    <h3 class="service-title">
+                        E-commerce Website
+                        <span class="en">E-commerce Website</span>
+                    </h3>
+                    <p class="service-description">Online stores for selling products and services over the internet.</p>
+                    <div class="price-range">$132 - $440</div>
+                    <div class="delivery-time">Delivery: 3 weeks - 1.5 months</div>
+                    <div class="features">
+                        <h4>Features:</h4>
+                        <ul>
+                            <li>Integrated shopping cart</li>
+                            <li>Product management system</li>
+                            <li>Electronic payment gateways</li>
+                            <li>Delivery within 3 weeks to 1.5 months</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="service-card">
+                    <div class="service-icon"><i class="fas fa-mobile"></i></div>
+                    <h3 class="service-title">
+                        Mobile Website
+                        <span class="en">Mobile Website</span>
+                    </h3>
+                    <p class="service-description">Websites specifically designed for optimal display on mobile devices.</p>
+                    <div class="price-range">$44 - $220</div>
+                    <div class="delivery-time">Delivery: 2 weeks - 1 month</div>
+                    <div class="features">
+                        <h4>Features:</h4>
+                        <ul>
+                            <li>Mobile-First design</li>
+                            <li>Fast loading on mobile phones</li>
+                            <li>Custom touch interface</li>
+                            <li>Delivery within 2 weeks to 1 month</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <section class="contact-section">
+                <h2>Order Your Service Now</h2>
+                <p>To get an accurate and suitable quote for your project</p>
+                <a href="https://yacine2007.github.io/Yacine2007/communication.html" class="cta-button">Contact Us</a>
+            </section>
+        </div>
+    </section>
+
+    <!-- EUR Services Page -->
+    <section id="eur-page" class="page">
+        <a href="#language-page" class="home-button">
+            <i class="fas fa-home"></i>
+        </a>
+        <div class="container">
+            <section class="hero-section">
+                <div class="logo">
+                    <h1>Yacine-Dev</h1>
+                </div>
+                <p class="subtitle">Tarification de Mes Services</p>
+            </section>
+
+            <div class="note">
+                <h3>Note importante sur les prix:</h3>
+                <p>Les prix varient en fonction du projet, de son contenu, des fonctionnalités, de la complexité, des heures de travail et des ressources utilisées. Ces prix sont des estimations et peuvent changer après discussion des détails du projet.</p>
+            </div>
+
+            <div class="services-grid">
+                <div class="service-card">
+                    <div class="service-icon"><i class="fas fa-laptop-code"></i></div>
+                    <h3 class="service-title">
+                        Site Web Statique
+                        <span class="en">Static Website</span>
+                    </h3>
+                    <p class="service-description">Sites Web dont le contenu ne change pas fréquemment, idéaux pour les sites personnels et de présentation.</p>
+                    <div class="price-range">4€ - 150€</div>
+                    <div class="delivery-time">Livraison: 3 jours - 1 semaine</div>
+                    <div class="features">
+                        <h4>Caractéristiques:</h4>
+                        <ul>
+                            <li>Design réactif pour tous les appareils</li>
+                            <li>1-5 pages Web</li>
+                            <li>Livraison en 3 jours à 1 semaine</li>
+                            <li>Support technique non inclus</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="service-card">
+                    <div class="service-icon"><i class="fas fa-database"></i></div>
+                    <h3 class="service-title">
+                        Site Web Dynamique
+                        <span class="en">Dynamic Website</span>
+                    </h3>
+                    <p class="service-description">Sites Web dont le contenu change fréquemment, utilisant des bases de données pour stocker des informations.</p>
+                    <div class="price-range">113€ - 375€</div>
+                    <div class="delivery-time">Livraison: 2 semaines - 1 mois</div>
+                    <div class="features">
+                        <h4>Caractéristiques:</h4>
+                        <ul>
+                            <li>Système de gestion de contenu complet</li>
+                            <li>Base de données intégrée</li>
+                            <li>Serveur dédié</li>
+                            <li>Livraison en 2 semaines à 1 mois</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="service-card">
+                    <div class="service-icon"><i class="fas fa-mobile-alt"></i></div>
+                    <h3 class="service-title">
+                        Application Web
+                        <span class="en">Web Application</span>
+                    </h3>
+                    <p class="service-description">Applications Web qui fournissent des services spécifiques avec accent sur la réactivité mobile.</p>
+                    <div class="price-range">75€ - 375€</div>
+                    <div class="delivery-time">Livraison: 2 semaines - 1 mois</div>
+                    <div class="features">
+                        <h4>Caractéristiques:</h4>
+                        <ul>
+                            <li>Design mobile-first</li>
+                            <li>Fonctionnalités avancées personnalisées</li>
+                            <li>Haute performance sur les appareils mobiles</li>
+                            <li>Livraison en 2 semaines à 1 mois</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="service-card">
+                    <div class="service-icon"><i class="fas fa-shopping-cart"></i></div>
+                    <h3 class="service-title">
+                        Site E-commerce
+                        <span class="en">E-commerce Website</span>
+                    </h3>
+                    <p class="service-description">Boutiques en ligne pour vendre des produits et services sur Internet.</p>
+                    <div class="price-range">113€ - 375€</div>
+                    <div class="delivery-time">Livraison: 3 semaines - 1.5 mois</div>
+                    <div class="features">
+                        <h4>Caractéristiques:</h4>
+                        <ul>
+                            <li>Panier d'achat intégré</li>
+                            <li>Système de gestion des produits</li>
+                            <li>Passerelles de paiement électronique</li>
+                            <li>Livraison en 3 semaines à 1.5 mois</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="service-card">
+                    <div class="service-icon"><i class="fas fa-mobile"></i></div>
+                    <h3 class="service-title">
+                        Site Web Mobile
+                        <span class="en">Mobile Website</span>
+                    </h3>
+                    <p class="service-description">Sites Web spécialement conçus pour un affichage optimal sur les appareils mobiles.</p>
+                    <div class="price-range">38€ - 188€</div>
+                    <div class="delivery-time">Livraison: 2 semaines - 1 mois</div>
+                    <div class="features">
+                        <h4>Caractéristiques:</h4>
+                        <ul>
+                            <li>Design Mobile-First</li>
+                            <li>Chargement rapide sur mobile</li>
+                            <li>Interface tactile personnalisée</li>
+                            <li>Livraison en 2 semaines à 1 mois</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <section class="contact-section">
+                <h2>Commandez Votre Service Maintenant</h2>
+                <p>Pour obtenir un devis précis et adapté à votre projet</p>
+                <a href="https://yacine2007.github.io/Yacine2007/communication.html" class="cta-button">Contactez-nous</a>
+            </section>
+        </div>
+    </section>
+
+    <!-- DZD Services Page -->
+    <section id="dzd-page" class="page rtl">
+        <a href="#language-page" class="home-button">
+            <i class="fas fa-home"></i>
+        </a>
+        <div class="container">
+            <section class="hero-section">
+                <div class="logo">
+                    <h1>Yacine-Dev</h1>
+                </div>
+                <p class="subtitle">تسعيرة خدماتي</p>
+            </section>
+
+            <div class="note">
+                <h3>ملاحظة هامة حول الأسعار:</h3>
+                <p>الأسعار تختلف حسب المشروع، محتواه، ميزاته، تعقيده، ساعات العمل والموارد المستخدمة. هذه الأسعار تقديرية وقد تتغير بعد مناقشة تفاصيل المشروع.</p>
+            </div>
+
+            <div class="services-grid">
+                <div class="service-card">
+                    <div class="service-icon"><i class="fas fa-laptop-code"></i></div>
+                    <h3 class="service-title">
+                        موقع ثابت
+                        <span class="en">Static Website</span>
+                    </h3>
+                    <p class="service-description">مواقع ويب ثابتة لا تتغير محتواها بشكل متكرر، مثالية للمواقع الشخصية والتقديمية.</p>
+                    <div class="price-range">1,000 دج - 40,000 دج</div>
+                    <div class="delivery-time">مدة التسليم: 3 أيام - أسبوع</div>
+                    <div class="features">
+                        <h4>المميزات:</h4>
+                        <ul>
+                            <li>تصميم متجاوب مع جميع الأجهزة</li>
+                            <li>1-5 صفحات ويب</li>
+                            <li>تسليم خلال 3 أيام إلى أسبوع</li>
+                            <li>لا يشمل الدعم الفني</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="service-card">
+                    <div class="service-icon"><i class="fas fa-database"></i></div>
+                    <h3 class="service-title">
+                        موقع ديناميكي
+                        <span class="en">Dynamic Website</span>
+                    </h3>
+                    <p class="service-description">مواقع ويب ديناميكية بمحتوى متغير، مع نظام إدارة محتوى كامل.</p>
+                    <div class="price-range">30,000 دج - 100,000 دج</div>
+                    <div class="delivery-time">مدة التسليم: أسبوعين - شهر</div>
+                    <div class="features">
+                        <h4>المميزات:</h4>
+                        <ul>
+                            <li>نظام إدارة محتوى كامل</li>
+                            <li>قاعدة بيانات متكاملة</li>
+                            <li>خادم مخصص</li>
+                            <li>تسليم خلال أسبوعين إلى شهر</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="service-card">
+                    <div class="service-icon"><i class="fas fa-mobile-alt"></i></div>
+                    <h3 class="service-title">
+                        تطبيق ويب
+                        <span class="en">Web Application</span>
+                    </h3>
+                    <p class="service-description">تطبيقات ويب متقدمة مع تركيز على التجاوب مع الهواتف والأجهزة المحمولة.</p>
+                    <div class="price-range">20,000 دج - 100,000 دج</div>
+                    <div class="delivery-time">مدة التسليم: أسبوعين - شهر</div>
+                    <div class="features">
+                        <h4>المميزات:</h4>
+                        <ul>
+                            <li>تصميم متجاوب مع الهواتف أولاً</li>
+                            <li>وظائف متقدمة مخصصة</li>
+                            <li>أداء عالي على الأجهزة المحمولة</li>
+                            <li>تسليم خلال أسبوعين إلى شهر</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="service-card">
+                    <div class="service-icon"><i class="fas fa-shopping-cart"></i></div>
+                    <h3 class="service-title">
+                        متجر إلكتروني
+                        <span class="en">E-commerce Website</span>
+                    </h3>
+                    <p class="service-description">متاجر إلكترونية متكاملة لبيع المنتجات والخدمات عبر الإنترنت.</p>
+                    <div class="price-range">30,000 دج - 100,000 دج</div>
+                    <div class="delivery-time">مدة التسليم: 3 أسابيع - شهر ونصف</div>
+                    <div class="features">
+                        <h4>المميزات:</h4>
+                        <ul>
+                            <li>عربة تسوق متكاملة</li>
+                            <li>نظام إدارة المنتجات</li>
+                            <li>بوابات دفع إلكتروني</li>
+                            <li>تسليم خلال 3 أسابيع إلى شهر ونصف</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="service-card">
+                    <div class="service-icon"><i class="fas fa-mobile"></i></div>
+                    <h3 class="service-title">
+                        موقع جوال
+                        <span class="en">Mobile Website</span>
+                    </h3>
+                    <p class="service-description">مواقع ويب مصممة خصيصاً للعرض الأمثل على الأجهزة المحمولة.</p>
+                    <div class="price-range">10,000 دج - 50,000 دج</div>
+                    <div class="delivery-time">مدة التسليم: أسبوعين - شهر</div>
+                    <div class="features">
+                        <h4>المميزات:</h4>
+                        <ul>
+                            <li>تصميم موبايل أول</li>
+                            <li>سرعة تحميل عالية على الهواتف</li>
+                            <li>واجهة لمس مخصصة</li>
+                            <li>تسليم خلال أسبوعين إلى شهر</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <section class="contact-section">
+                <h2>اطلب خدمتك الآن</h2>
+                <p>للحصول على عرض سعر دقيق ومناسب لمشروعك</p>
+                <a href="https://yacine2007.github.io/Yacine2007/communication.html" class="cta-button">تواصل معنا</a>
+            </section>
+        </div>
+    </section>
+
+    <script>
+        // Handle page navigation
+        document.addEventListener('DOMContentLoaded', function() {
+            // Show language page by default
+            showPage('language-page');
+            
+            // Handle hash changes
+            window.addEventListener('hashchange', function() {
+                const hash = window.location.hash.substring(1);
+                if (hash && document.getElementById(hash)) {
+                    showPage(hash);
+                } else {
+                    showPage('language-page');
+                }
+            });
+
+            // Handle initial hash
+            if (window.location.hash) {
+                const hash = window.location.hash.substring(1);
+                if (document.getElementById(hash)) {
+                    showPage(hash);
+                }
+            }
+        });
+
+        function showPage(pageId) {
+            // Hide all pages
+            document.querySelectorAll('.page').forEach(page => {
+                page.style.display = 'none';
+            });
+            
+            // Show selected page
+            document.getElementById(pageId).style.display = 'flex';
+            
+            // Scroll to top
+            window.scrollTo(0, 0);
+        }
+    </script>
+</body>
+</html>

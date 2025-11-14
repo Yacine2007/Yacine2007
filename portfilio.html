@@ -72,6 +72,12 @@
         gap: 10px;
     }
     
+    .nav-controls {
+        display: flex;
+        align-items: center;
+        gap: 15px;
+    }
+    
     nav select { 
         padding:0.6rem 1rem; 
         border-radius:5px; 
@@ -85,6 +91,25 @@
     
     nav select:hover {
         background: var(--hover-color);
+    }
+    
+    .pricing-btn {
+        padding: 0.6rem 1.2rem;
+        background: var(--accent-color);
+        color: var(--secondary-color);
+        border-radius: 5px;
+        font-weight: bold;
+        transition: all 0.3s ease;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        border: none;
+        cursor: pointer;
+    }
+    
+    .pricing-btn:hover {
+        background: #0066b3;
+        transform: translateY(-2px);
     }
 
     /* --- Header --- */
@@ -291,6 +316,19 @@
         background: #0066b3;
         transform: translateY(-3px);
     }
+    
+    /* Services section CTA */
+    .services-cta {
+        width: 100%;
+        text-align: center;
+        margin-top: 2rem;
+    }
+    
+    .services-cta .pricing-btn {
+        display: inline-flex;
+        padding: 0.8rem 1.8rem;
+        font-size: 1.1rem;
+    }
 
     /* --- Responsive Design --- */
     @media (max-width: 768px) {
@@ -298,6 +336,11 @@
             flex-direction: column;
             gap: 1rem;
             padding: 1rem;
+        }
+        
+        .nav-controls {
+            width: 100%;
+            justify-content: space-between;
         }
         
         header {
@@ -356,6 +399,17 @@
         .project-card .project-content {
             padding: 0.6rem;
         }
+        
+        .nav-controls {
+            flex-direction: column;
+            gap: 10px;
+            width: 100%;
+        }
+        
+        .pricing-btn {
+            width: 100%;
+            justify-content: center;
+        }
     }
 
     /* Animation */
@@ -382,11 +436,17 @@
         <i class="fas fa-code"></i>
         <span id="logoText">Yacine-Dev</span>
     </div>
-    <select id="langSelect">
-        <option value="en">English</option>
-        <option value="ar">العربية</option>
-        <option value="fr">Français</option>
-    </select>
+    <div class="nav-controls">
+        <a href="https://yacine2007.github.io/Yacine2007/My%20Services%20Pricing.html" target="_blank" class="pricing-btn" id="navPricingBtn">
+            <i class="fas fa-tags"></i>
+            <span id="pricingBtnText">My Services Pricing</span>
+        </a>
+        <select id="langSelect">
+            <option value="en">English</option>
+            <option value="ar">العربية</option>
+            <option value="fr">Français</option>
+        </select>
+    </div>
 </nav>
 
 <!-- Header -->
@@ -427,6 +487,12 @@
             <h3>Professional logo and icon design</h3>
             <p>(Logo Design)</p>
         </div>
+    </div>
+    <div class="services-cta">
+        <a href="https://yacine2007.github.io/Yacine2007/My%20Services%20Pricing.html" target="_blank" class="pricing-btn" id="servicesPricingBtn">
+            <i class="fas fa-tags"></i>
+            <span id="servicesPricingBtnText">Check My Services Pricing</span>
+        </a>
     </div>
 </section>
 
@@ -508,6 +574,12 @@
             <p id="contactLinksDesc">All my accounts and communication links</p>
             <a href="https://yacine2007.github.io/Yacine2007/communication.html" target="_blank" class="contact-button" id="contactLinkButton">Contact Page</a>
         </div>
+        <div class="card animate delay-3 contact-card">
+            <i class="fas fa-tags"></i>
+            <h3 id="contactPricingTitle">Services Pricing</h3>
+            <p id="contactPricingDesc">Check my services and pricing details</p>
+            <a href="https://yacine2007.github.io/Yacine2007/My%20Services%20Pricing.html" target="_blank" class="contact-button" id="contactPricingButton">View Pricing</a>
+        </div>
     </div>
 </section>
 
@@ -554,7 +626,14 @@ const langData = {
         phoneTitle: "Phone",
         linksTitle: "Communication Links",
         linksDesc: "All my accounts and communication links",
-        linkButton: "Contact Page"
+        linkButton: "Contact Page",
+        pricingTitle: "Services Pricing",
+        pricingDesc: "Check my services and pricing details",
+        pricingButton: "View Pricing"
+    },
+    pricing: {
+        navBtn: "My Services Pricing",
+        servicesBtn: "Check My Services Pricing"
     }
   },
   ar: {
@@ -598,7 +677,14 @@ const langData = {
         phoneTitle: "الهاتف",
         linksTitle: "روابط التواصل",
         linksDesc: "جميع حساباتي وروابط التواصل",
-        linkButton: "صفحة التواصل"
+        linkButton: "صفحة التواصل",
+        pricingTitle: "أسعار الخدمات",
+        pricingDesc: "اطلع على خدماتي وتفاصيل الأسعار",
+        pricingButton: "عرض الأسعار"
+    },
+    pricing: {
+        navBtn: "أسعار خدماتي",
+        servicesBtn: "اطلع على أسعار خدماتي"
     }
   },
   fr: {
@@ -642,7 +728,14 @@ const langData = {
         phoneTitle: "Téléphone",
         linksTitle: "Liens de Communication",
         linksDesc: "Tous mes comptes et liens de communication",
-        linkButton: "Page de Contact"
+        linkButton: "Page de Contact",
+        pricingTitle: "Tarifs des Services",
+        pricingDesc: "Consultez mes services et détails des tarifs",
+        pricingButton: "Voir les Tarifs"
+    },
+    pricing: {
+        navBtn: "Mes Tarifs de Services",
+        servicesBtn: "Consultez Mes Tarifs de Services"
     }
   }
 };
@@ -730,6 +823,13 @@ langSelect.addEventListener("change", function(){
   document.getElementById("contactLinksTitle").textContent = data.contact.linksTitle;
   document.getElementById("contactLinksDesc").textContent = data.contact.linksDesc;
   document.getElementById("contactLinkButton").textContent = data.contact.linkButton;
+  document.getElementById("contactPricingTitle").textContent = data.contact.pricingTitle;
+  document.getElementById("contactPricingDesc").textContent = data.contact.pricingDesc;
+  document.getElementById("contactPricingButton").textContent = data.contact.pricingButton;
+  
+  // Update pricing buttons
+  document.getElementById("navPricingBtn").innerHTML = `<i class="fas fa-tags"></i><span id="pricingBtnText">${data.pricing.navBtn}</span>`;
+  document.getElementById("servicesPricingBtn").innerHTML = `<i class="fas fa-tags"></i><span id="servicesPricingBtnText">${data.pricing.servicesBtn}</span>`;
   
   // Add effects to elements after loading
   setTimeout(initAnimations, 100);

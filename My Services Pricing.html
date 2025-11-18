@@ -57,7 +57,7 @@
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            padding: 20px;
+            padding: 15px;
             text-align: center;
         }
 
@@ -145,7 +145,7 @@
         .container {
             max-width: 1200px;
             margin: 0 auto;
-            padding: 20px;
+            padding: 15px;
             width: 100%;
         }
 
@@ -203,8 +203,8 @@
 
         .home-button {
             position: fixed;
-            top: 25px;
-            left: 25px;
+            top: 20px;
+            left: 20px;
             background: var(--glass-bg);
             backdrop-filter: blur(20px);
             -webkit-backdrop-filter: blur(20px);
@@ -429,7 +429,7 @@
             font-size: 0.95rem;
         }
 
-        /* Payment Methods Section */
+        /* Payment Methods Section - Larger with more padding */
         .payment-section {
             background: var(--glass-bg);
             backdrop-filter: blur(25px);
@@ -442,6 +442,7 @@
             margin-top: 3rem;
             position: relative;
             overflow: hidden;
+            width: 100%;
         }
 
         .payment-section::before {
@@ -482,8 +483,8 @@
             -webkit-backdrop-filter: blur(20px);
             border: 1px solid var(--glass-border);
             border-radius: 15px;
-            padding: 1.5rem;
-            width: 220px;
+            padding: 2rem;
+            width: 250px;
             cursor: pointer;
             transition: all 0.4s ease;
             box-shadow: var(--glass-shadow);
@@ -513,38 +514,38 @@
         }
 
         .payment-logo {
-            width: 80px;
-            height: 40px;
+            width: 90px;
+            height: 45px;
             object-fit: contain;
-            margin-bottom: 1rem;
+            margin-bottom: 1.2rem;
         }
 
         .payment-name {
-            font-size: 1.1rem;
-            margin-bottom: 0.5rem;
+            font-size: 1.2rem;
+            margin-bottom: 0.8rem;
             font-weight: 600;
             color: #e0f2fe;
         }
 
         .payment-details {
-            font-size: 0.9rem;
+            font-size: 1rem;
             color: #38bdf8;
             font-weight: 500;
-            margin-bottom: 1rem;
+            margin-bottom: 1.2rem;
         }
 
         .payment-actions {
             display: flex;
-            gap: 0.5rem;
+            gap: 0.8rem;
             width: 100%;
         }
 
         .copy-btn, .pay-btn {
             flex: 1;
-            padding: 0.5rem;
+            padding: 0.7rem;
             border: none;
             border-radius: 8px;
-            font-size: 0.8rem;
+            font-size: 0.9rem;
             font-weight: 500;
             cursor: pointer;
             transition: all 0.3s ease;
@@ -612,17 +613,17 @@
             
             .hero-section {
                 padding: 2.5rem 1.5rem;
-                margin: 1rem;
+                margin: 1rem 0;
             }
             
             .contact-section {
                 padding: 2.5rem 1.5rem;
-                margin: 1rem;
+                margin: 1rem 0;
             }
             
             .payment-section {
                 padding: 2.5rem 1.5rem;
-                margin: 1rem;
+                margin: 1rem 0;
             }
             
             .home-button {
@@ -642,27 +643,28 @@
             }
             
             .payment-option {
-                width: 160px;
-                padding: 1.2rem;
+                width: 100%;
+                max-width: 280px;
+                padding: 1.8rem;
             }
             
             /* Increased padding for mobile containers */
             .service-card {
                 padding: 2rem 1.5rem;
-                margin: 0.5rem;
+                margin: 0;
             }
             
             .container {
-                padding: 15px;
+                padding: 10px;
             }
             
             .page {
-                padding: 15px;
+                padding: 10px;
             }
             
             .note {
                 padding: 1.5rem;
-                margin: 1.5rem 0.5rem;
+                margin: 1.5rem 0;
             }
         }
 
@@ -685,6 +687,10 @@
             
             .price-range, .delivery-time {
                 padding: 1rem;
+            }
+            
+            .payment-option {
+                padding: 1.5rem;
             }
         }
     </style>
@@ -781,7 +787,7 @@
                         Static Website
                         <span class="en">Static Website</span>
                     </h3>
-                    <p class="service-description">Professional static websites with responsive design and modern features.</p>
+                    <p class="service-description">Professional static websites with responsive design and modern features including landing pages.</p>
                     <div class="price-range">$100 – $200</div>
                     <div class="delivery-time">Delivery: 1-2 weeks</div>
                     <div class="features">
@@ -792,6 +798,7 @@
                             <li>SEO optimization</li>
                             <li>Contact forms integration</li>
                             <li>Fast loading performance</li>
+                            <li>Landing pages included</li>
                         </ul>
                     </div>
                 </div>
@@ -831,9 +838,9 @@
                         <ul>
                             <li>Product catalog management</li>
                             <li>Shopping cart system</li>
-                            <li>Payment gateway integration</li>
                             <li>Order management system</li>
                             <li>Inventory tracking</li>
+                            <li>Customer accounts</li>
                         </ul>
                     </div>
                 </div>
@@ -893,7 +900,7 @@
                         موقع ثابت
                         <span class="en">Static Website</span>
                     </h3>
-                    <p class="service-description">مواقع ويب ثابتة لا تتغير محتواها بشكل متكرر، مثالية للمواقع الشخصية والتقديمية.</p>
+                    <p class="service-description">مواقع ويب ثابتة لا تتغير محتواها بشكل متكرر، مثالية للمواقع الشخصية والتقديمية وصفحات الهبوط.</p>
                     <div class="price-range">1,000 دج - 40,000 دج</div>
                     <div class="delivery-time">مدة التسليم: 3 أيام - أسبوع</div>
                     <div class="features">
@@ -903,6 +910,7 @@
                             <li>1-5 صفحات ويب</li>
                             <li>تسليم خلال 3 أيام إلى أسبوع</li>
                             <li>لا يشمل الدعم الفني</li>
+                            <li>يتضمن صفحات هبوط</li>
                         </ul>
                     </div>
                 </div>
@@ -941,7 +949,7 @@
                         <ul>
                             <li>عربة تسوق متكاملة</li>
                             <li>نظام إدارة المنتجات</li>
-                            <li>بوابات دفع إلكتروني</li>
+                            <li>نظام إدارة الطلبيات</li>
                             <li>تسليم خلال 3 أسابيع إلى شهر ونصف</li>
                         </ul>
                     </div>

@@ -1,0 +1,936 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>لوحة تحكم DZ Freelancer</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- إضافة Firebase SDK -->
+    <script type="module">
+        // Import the functions you need from the SDKs you need
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-app.js";
+        import { getFirestore, collection, getDocs, orderBy, query, deleteDoc, doc, updateDoc } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-firestore.js";
+
+        // تكوين Firebase
+        const firebaseConfig = {
+            apiKey: "AIzaSyCxIUS080EVqpOGBWlGCXw2f-aouua8H6g",
+            authDomain: "dzfdashboard.firebaseapp.com",
+            projectId: "dzfdashboard",
+            storageBucket: "dzfdashboard.firebasestorage.app",
+            messagingSenderId: "310522466448",
+            appId: "1:310522466448:web:d2b24776639238d0a34815",
+            measurementId: "G-80JNGJ9Q1T"
+        };
+
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+
+        // جعل المتغيرات متاحة عالمياً
+        window.firebaseApp = app;
+        window.db = db;
+        window.firestore = {
+            collection,
+            getDocs,
+            orderBy,
+            query,
+            deleteDoc,
+            doc,
+            updateDoc
+        };
+        
+        console.log('Firebase initialized successfully!');
+    </script>
+
+    <style>
+        body {
+            background: #0f172a;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        .stat-card {
+            background: linear-gradient(135deg, #1e293b 0%, #1e3a8a 100%);
+            border: 1px solid #334155;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        .stat-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+            border-color: #3b82f6;
+        }
+        .category-card {
+            background: linear-gradient(135deg, #1e293b 0%, #1e3a8a 100%);
+            border: 1px solid #374151;
+            transition: all 0.3s ease;
+        }
+        .category-card:hover {
+            border-color: #3b82f6;
+            transform: translateY(-2px);
+        }
+        .freelancer-item {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid #374151;
+            transition: all 0.3s ease;
+        }
+        .freelancer-item:hover {
+            background: rgba(255, 255, 255, 0.1);
+            border-color: #3b82f6;
+            transform: translateY(-2px);
+        }
+        .featured-card {
+            background: linear-gradient(135deg, #dbeafe 0%, #bfdbfe 100%);
+            border: 2px solid #3b82f6;
+            position: relative;
+            overflow: hidden;
+        }
+        .featured-card::before {
+            content: '';
+            position: absolute;
+            top: -10px;
+            right: -10px;
+            width: 30px;
+            height: 30px;
+            background: #3b82f6;
+            transform: rotate(45deg);
+        }
+        .featured-card::after {
+            content: '⭐';
+            position: absolute;
+            top: 5px;
+            right: 5px;
+            font-size: 12px;
+            color: white;
+            z-index: 2;
+        }
+        .nav-item {
+            transition: all 0.3s ease;
+        }
+        .nav-item.active {
+            background: linear-gradient(135deg, #3b82f6 0%, #1e40af 100%);
+        }
+        .mobile-sidebar {
+            transform: translateX(100%);
+            transition: transform 0.3s ease;
+        }
+        .mobile-sidebar.open {
+            transform: translateX(0);
+        }
+        .mobile-overlay {
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+        }
+        .mobile-overlay.open {
+            opacity: 1;
+            visibility: visible;
+        }
+        .section {
+            display: none;
+            animation: fadeIn 0.5s ease-in-out;
+        }
+        .section.active {
+            display: block;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .category-header {
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .category-header:hover {
+            background: rgba(59, 130, 246, 0.1);
+        }
+        .freelancers-list {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.5s ease;
+        }
+        .freelancers-list.open {
+            max-height: 500px;
+            overflow-y: auto;
+        }
+        .contact-btn {
+            transition: all 0.3s ease;
+        }
+        .contact-btn:hover {
+            transform: scale(1.05);
+        }
+        .star-btn {
+            transition: all 0.3s ease;
+        }
+        .star-btn:hover {
+            transform: scale(1.1);
+        }
+        .rotate-180 {
+            transform: rotate(180deg);
+        }
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 1rem;
+        }
+        .header-gradient {
+            background: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 100%);
+        }
+        .sidebar-gradient {
+            background: linear-gradient(180deg, #1e293b 0%, #1e3a8a 100%);
+        }
+        .btn-primary {
+            background: linear-gradient(135deg, #3b82f6 0%, #1e40af 100%);
+            transition: all 0.3s ease;
+        }
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(59, 130, 246, 0.4);
+        }
+    </style>
+</head>
+<body class="min-h-screen text-white">
+    <!-- شاشة تسجيل الدخول -->
+    <div id="loginScreen" class="fixed inset-0 bg-gray-900 flex items-center justify-center z-50 p-4">
+        <div class="bg-gray-800 rounded-2xl p-6 w-full max-w-md shadow-2xl">
+            <div class="text-center mb-6">
+                <div class="w-16 h-16 bg-blue-500/20 rounded-full flex items-center justify-center mx-auto mb-4">
+                    <i class="fas fa-lock text-2xl text-blue-500"></i>
+                </div>
+                <h2 class="text-xl sm:text-2xl font-bold text-white">تسجيل الدخول</h2>
+                <p class="text-gray-400 mt-2 text-sm">لوحة تحكم مجموعة DZ Freelancer</p>
+            </div>
+            
+            <form id="loginForm" class="space-y-4">
+                <div>
+                    <label class="block text-gray-300 text-sm font-medium mb-2">كلمة المرور</label>
+                    <input type="password" id="adminPassword" 
+                           class="w-full px-4 py-3 bg-gray-700 rounded-xl text-white focus:outline-none focus:ring-2 focus:ring-blue-500" 
+                           placeholder="أدخل كلمة المرور" required>
+                </div>
+                
+                <button type="submit" class="w-full btn-primary py-3 rounded-xl text-white font-bold">
+                    دخول
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- اللوحة الرئيسية -->
+    <div id="dashboard" class="hidden">
+        <!-- القائمة الجانبية للهواتف -->
+        <div id="mobileOverlay" class="mobile-overlay lg:hidden fixed inset-0 bg-black/50 z-30"></div>
+        <aside id="mobileSidebar" class="mobile-sidebar lg:hidden fixed top-0 right-0 w-64 h-full sidebar-gradient z-40 overflow-auto">
+            <div class="p-4 border-b border-gray-700 flex justify-between items-center">
+                <div>
+                    <h1 class="text-lg font-bold text-white">DZ Freelancer</h1>
+                    <p class="text-blue-400 text-xs">From B.Y PRO</p>
+                </div>
+                <button id="closeMobileMenu" class="text-gray-400 hover:text-white">
+                    <i class="fas fa-times text-lg"></i>
+                </button>
+            </div>
+            
+            <nav class="p-4 space-y-2">
+                <a href="#" data-section="stats" class="nav-item active flex items-center gap-3 p-3 rounded-xl text-white">
+                    <i class="fas fa-chart-bar"></i>
+                    <span>الإحصائيات</span>
+                </a>
+                <a href="#" data-section="featured" class="nav-item flex items-center gap-3 p-3 rounded-xl text-gray-400 hover:text-white hover:bg-blue-500/20">
+                    <i class="fas fa-star"></i>
+                    <span>المميزون</span>
+                </a>
+                <a href="#" data-section="freelancers" class="nav-item flex items-center gap-3 p-3 rounded-xl text-gray-400 hover:text-white hover:bg-blue-500/20">
+                    <i class="fas fa-users"></i>
+                    <span>جميع الفريلانسرز</span>
+                </a>
+                <a href="#" data-section="form" class="nav-item flex items-center gap-3 p-3 rounded-xl text-gray-400 hover:text-white hover:bg-blue-500/20">
+                    <i class="fas fa-file-alt"></i>
+                    <span>عرض الاستمارة</span>
+                </a>
+                <button onclick="logout()" class="w-full nav-item flex items-center gap-3 p-3 rounded-xl text-gray-400 hover:text-white hover:bg-red-500/20 mt-8">
+                    <i class="fas fa-sign-out-alt"></i>
+                    <span>تسجيل الخروج</span>
+                </button>
+            </nav>
+        </aside>
+
+        <div class="flex h-screen">
+            <!-- الشريط الجانبي للشاشات الكبيرة -->
+            <aside class="hidden lg:block w-64 sidebar-gradient border-l border-gray-700">
+                <div class="p-6 border-b border-gray-700">
+                    <h1 class="text-xl font-bold text-white">DZ Freelancer</h1>
+                    <p class="text-blue-400 text-sm">From B.Y PRO</p>
+                </div>
+                
+                <nav class="p-4 space-y-2">
+                    <a href="#" data-section="stats" class="nav-item active flex items-center gap-3 p-3 rounded-xl text-white">
+                        <i class="fas fa-chart-bar"></i>
+                        <span>الإحصائيات</span>
+                    </a>
+                    <a href="#" data-section="featured" class="nav-item flex items-center gap-3 p-3 rounded-xl text-gray-400 hover:text-white hover:bg-blue-500/20">
+                        <i class="fas fa-star"></i>
+                        <span>المميزون</span>
+                    </a>
+                    <a href="#" data-section="freelancers" class="nav-item flex items-center gap-3 p-3 rounded-xl text-gray-400 hover:text-white hover:bg-blue-500/20">
+                        <i class="fas fa-users"></i>
+                        <span>جميع الفريلانسرز</span>
+                    </a>
+                    <a href="#" data-section="form" class="nav-item flex items-center gap-3 p-3 rounded-xl text-gray-400 hover:text-white hover:bg-blue-500/20">
+                        <i class="fas fa-file-alt"></i>
+                        <span>عرض الاستمارة</span>
+                    </a>
+                    <button onclick="logout()" class="w-full nav-item flex items-center gap-3 p-3 rounded-xl text-gray-400 hover:text-white hover:bg-red-500/20 mt-8">
+                        <i class="fas fa-sign-out-alt"></i>
+                        <span>تسجيل الخروج</span>
+                    </button>
+                </nav>
+            </aside>
+
+            <!-- المحتوى الرئيسي -->
+            <main class="flex-1 overflow-auto bg-gray-900">
+                <!-- الهيدر -->
+                <header class="header-gradient border-b border-blue-700 p-4 sm:p-6">
+                    <div class="flex justify-between items-center">
+                        <div class="flex items-center gap-4">
+                            <!-- زر القائمة للهواتف - مدمج في الشريط العلوي -->
+                            <button id="mobileMenuButton" class="lg:hidden bg-blue-600/30 p-2 rounded-xl text-white">
+                                <i class="fas fa-bars text-lg"></i>
+                            </button>
+                            <h2 class="text-xl sm:text-2xl font-bold text-white">لوحة التحكم</h2>
+                        </div>
+                        <div class="flex items-center gap-3">
+                            <span class="text-blue-100 text-sm sm:text-base hidden sm:block">مدير النظام</span>
+                            <div class="w-8 h-8 sm:w-10 sm:h-10 bg-blue-600 rounded-full flex items-center justify-center">
+                                <i class="fas fa-user text-white text-sm sm:text-base"></i>
+                            </div>
+                        </div>
+                    </div>
+                </header>
+
+                <!-- قسم الإحصائيات -->
+                <section id="statsSection" class="section active p-4 sm:p-6">
+                    <h3 class="text-lg sm:text-xl font-bold text-white mb-6">الإحصائيات العامة</h3>
+                    
+                    <!-- الإجمالي -->
+                    <div class="stat-card rounded-2xl p-6 mb-8 text-center">
+                        <div class="text-4xl sm:text-5xl font-bold text-blue-400 mb-3" id="totalFreelancers">0</div>
+                        <div class="text-gray-300 text-lg">إجمالي عدد المسجلين</div>
+                    </div>
+
+                    <!-- التوزيع حسب المجالات -->
+                    <div class="stats-grid">
+                        <div class="stat-card rounded-xl p-4 text-center" onclick="navigateToCategory('web-dev')">
+                            <div class="text-2xl sm:text-3xl font-bold text-blue-300 mb-2" id="webDevCount">0</div>
+                            <div class="text-gray-400 text-sm">تطوير الويب</div>
+                        </div>
+                        <div class="stat-card rounded-xl p-4 text-center" onclick="navigateToCategory('mobile-dev')">
+                            <div class="text-2xl sm:text-3xl font-bold text-blue-300 mb-2" id="mobileDevCount">0</div>
+                            <div class="text-gray-400 text-sm">تطوير التطبيقات</div>
+                        </div>
+                        <div class="stat-card rounded-xl p-4 text-center" onclick="navigateToCategory('graphic-design')">
+                            <div class="text-2xl sm:text-3xl font-bold text-blue-300 mb-2" id="designCount">0</div>
+                            <div class="text-gray-400 text-sm">التصميم الجرافيكي</div>
+                        </div>
+                        <div class="stat-card rounded-xl p-4 text-center" onclick="navigateToCategory('digital-marketing')">
+                            <div class="text-2xl sm:text-3xl font-bold text-blue-300 mb-2" id="marketingCount">0</div>
+                            <div class="text-gray-400 text-sm">التسويق الرقمي</div>
+                        </div>
+                        <div class="stat-card rounded-xl p-4 text-center" onclick="navigateToCategory('writing-translation')">
+                            <div class="text-2xl sm:text-3xl font-bold text-blue-300 mb-2" id="writingCount">0</div>
+                            <div class="text-gray-400 text-sm">الكتابة والترجمة</div>
+                        </div>
+                        <div class="stat-card rounded-xl p-4 text-center" onclick="navigateToCategory('video-editing')">
+                            <div class="text-2xl sm:text-3xl font-bold text-blue-300 mb-2" id="videoCount">0</div>
+                            <div class="text-gray-400 text-sm">تحرير الفيديو</div>
+                        </div>
+                        <div class="stat-card rounded-xl p-4 text-center" onclick="navigateToCategory('content-creation')">
+                            <div class="text-2xl sm:text-3xl font-bold text-blue-300 mb-2" id="contentCount">0</div>
+                            <div class="text-gray-400 text-sm">إنشاء المحتوى</div>
+                        </div>
+                        <div class="stat-card rounded-xl p-4 text-center" onclick="navigateToCategory('other')">
+                            <div class="text-2xl sm:text-3xl font-bold text-blue-300 mb-2" id="otherCount">0</div>
+                            <div class="text-gray-400 text-sm">آخرون</div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- قسم الفريلانسرز المميزون -->
+                <section id="featuredSection" class="section p-4 sm:p-6">
+                    <div class="flex justify-between items-center mb-6">
+                        <div>
+                            <h3 class="text-lg sm:text-xl font-bold text-white">الفريلانسرز المميزون</h3>
+                            <p class="text-gray-400 text-sm mt-1">المطورون المتميزون في مجالاتهم ⭐</p>
+                        </div>
+                        <div class="flex gap-2">
+                            <button id="refreshFeaturedBtn" class="bg-blue-700 px-3 py-2 rounded-xl text-white hover:bg-blue-600 transition text-sm">
+                                <i class="fas fa-sync-alt"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- بطاقات الفريلانسرز المميزين -->
+                    <div id="featuredGrid" class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
+                        <!-- سيتم ملؤها بالبيانات -->
+                    </div>
+                </section>
+
+                <!-- قسم جميع الفريلانسرز -->
+                <section id="freelancersSection" class="section p-4 sm:p-6">
+                    <div class="flex justify-between items-center mb-6">
+                        <h3 class="text-lg sm:text-xl font-bold text-white">جميع الفريلانسرز</h3>
+                        <div class="flex gap-2">
+                            <button id="refreshBtn" class="bg-blue-700 px-3 py-2 rounded-xl text-white hover:bg-blue-600 transition text-sm">
+                                <i class="fas fa-sync-alt"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- فئات الفريلانسرز -->
+                    <div id="categoriesContainer" class="space-y-4">
+                        <!-- سيتم ملؤها بالبيانات -->
+                    </div>
+                </section>
+
+                <!-- قسم عرض الاستمارة -->
+                <section id="formSection" class="section p-4 sm:p-6">
+                    <div class="stat-card rounded-xl sm:rounded-2xl p-4 sm:p-6">
+                        <h3 class="text-lg sm:text-xl font-bold text-white mb-4 sm:mb-6">عرض استمارة التسجيل</h3>
+                        
+                        <div class="space-y-4 sm:space-y-6">
+                            <div class="bg-gray-800 rounded-xl p-4 sm:p-6">
+                                <h4 class="text-base sm:text-lg font-bold text-white mb-3">رابط الاستمارة</h4>
+                                <div class="flex flex-col sm:flex-row gap-3">
+                                    <input type="text" id="formUrl" value="https://dz-dev-freelancers.kesug.com/Freelancers%20Form.html" readonly 
+                                           class="flex-1 bg-gray-700 px-4 py-3 rounded-xl text-white text-sm">
+                                    <button onclick="copyFormUrl()" class="btn-primary px-4 py-3 rounded-xl text-white flex items-center justify-center gap-2 text-sm sm:text-base">
+                                        <i class="fas fa-copy"></i>
+                                        <span>نسخ الرابط</span>
+                                    </button>
+                                </div>
+                            </div>
+                            
+                            <div class="bg-gray-800 rounded-xl p-4 sm:p-6">
+                                <h4 class="text-base sm:text-lg font-bold text-white mb-3">الانتقال للاستمارة</h4>
+                                <p class="text-gray-400 mb-4 text-sm sm:text-base">
+                                    انقر على الزر أدناه للانتقال مباشرة إلى استمارة التسجيل
+                                </p>
+                                <a href="https://dz-dev-freelancers.kesug.com/Freelancers%20Form.html" target="_blank" class="bg-green-600 px-4 py-3 rounded-xl text-white hover:bg-green-700 transition flex items-center justify-center gap-2 text-sm sm:text-base w-full sm:w-auto inline-block text-center">
+                                    <i class="fas fa-external-link-alt"></i>
+                                    <span>الانتقال للاستمارة</span>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </main>
+        </div>
+    </div>
+
+    <script>
+        // بيانات تسجيل الدخول
+        const ADMIN_PASSWORD = "admin2025";
+
+        // عناصر DOM
+        const loginScreen = document.getElementById('loginScreen');
+        const dashboard = document.getElementById('dashboard');
+        const loginForm = document.getElementById('loginForm');
+        const mobileMenuButton = document.getElementById('mobileMenuButton');
+        const mobileSidebar = document.getElementById('mobileSidebar');
+        const mobileOverlay = document.getElementById('mobileOverlay');
+        const closeMobileMenu = document.getElementById('closeMobileMenu');
+
+        // إدارة القائمة الجانبية للهواتف
+        mobileMenuButton.addEventListener('click', function() {
+            mobileSidebar.classList.add('open');
+            mobileOverlay.classList.add('open');
+        });
+
+        closeMobileMenu.addEventListener('click', function() {
+            mobileSidebar.classList.remove('open');
+            mobileOverlay.classList.remove('open');
+        });
+
+        mobileOverlay.addEventListener('click', function() {
+            mobileSidebar.classList.remove('open');
+            mobileOverlay.classList.remove('open');
+        });
+
+        // تسجيل الدخول
+        loginForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            const password = document.getElementById('adminPassword').value;
+            
+            if (password === ADMIN_PASSWORD) {
+                loginScreen.classList.add('hidden');
+                dashboard.classList.remove('hidden');
+                loadDashboardData();
+            } else {
+                alert('كلمة المرور غير صحيحة!');
+            }
+        });
+
+        // تسجيل الخروج
+        function logout() {
+            dashboard.classList.add('hidden');
+            loginScreen.classList.remove('hidden');
+            document.getElementById('adminPassword').value = '';
+            
+            // إغلاق القائمة الجانبية على الهواتف
+            mobileSidebar.classList.remove('open');
+            mobileOverlay.classList.remove('open');
+        }
+
+        // نسخ رابط الاستمارة
+        function copyFormUrl() {
+            const formUrl = document.getElementById('formUrl');
+            formUrl.select();
+            document.execCommand('copy');
+            alert('تم نسخ رابط الاستمارة إلى الحافظة');
+        }
+
+        // دالة لجلب البيانات من Firebase
+        async function getFreelancers() {
+            try {
+                if (!window.db) {
+                    console.log('Firebase not initialized yet');
+                    return [];
+                }
+
+                const q = window.firestore.query(
+                    window.firestore.collection(window.db, 'freelancers'),
+                    window.firestore.orderBy('createdAt', 'desc')
+                );
+                
+                const snapshot = await window.firestore.getDocs(q);
+                
+                return snapshot.docs.map(doc => ({
+                    id: doc.id,
+                    ...doc.data()
+                }));
+            } catch (error) {
+                console.error('Error getting documents: ', error);
+                return [];
+            }
+        }
+
+        // دالة مساعدة للحصول على اسم المجال
+        function getFieldName(fieldKey) {
+            const fields = {
+                'web-dev': 'تطوير الويب',
+                'mobile-dev': 'تطوير التطبيقات',
+                'graphic-design': 'التصميم الجرافيكي',
+                'digital-marketing': 'التسويق الرقمي',
+                'writing-translation': 'الكتابة والترجمة',
+                'video-editing': 'تحرير الفيديو',
+                'content-creation': 'إنشاء المحتوى',
+                'other': 'آخرون'
+            };
+            return fields[fieldKey] || fieldKey;
+        }
+
+        // دالة مساعدة للحصول على أيقونة المجال
+        function getFieldIcon(fieldKey) {
+            const icons = {
+                'web-dev': 'fas fa-code',
+                'mobile-dev': 'fas fa-mobile-alt',
+                'graphic-design': 'fas fa-palette',
+                'digital-marketing': 'fas fa-chart-line',
+                'writing-translation': 'fas fa-pen-fancy',
+                'video-editing': 'fas fa-video',
+                'content-creation': 'fas fa-file-alt',
+                'other': 'fas fa-ellipsis-h'
+            };
+            return icons[fieldKey] || icons.other;
+        }
+
+        // دالة مساعدة للحصول على لون المجال
+        function getFieldColor(fieldKey) {
+            const colors = {
+                'web-dev': 'text-blue-300',
+                'mobile-dev': 'text-blue-300',
+                'graphic-design': 'text-blue-300',
+                'digital-marketing': 'text-blue-300',
+                'writing-translation': 'text-blue-300',
+                'video-editing': 'text-blue-300',
+                'content-creation': 'text-blue-300',
+                'other': 'text-blue-300'
+            };
+            return colors[fieldKey] || colors.other;
+        }
+
+        // تحديث الإحصائيات
+        async function updateStats() {
+            const freelancers = await getFreelancers();
+            const total = freelancers.length;
+            
+            const fieldCounts = {
+                'web-dev': freelancers.filter(f => f.field === 'web-dev').length,
+                'mobile-dev': freelancers.filter(f => f.field === 'mobile-dev').length,
+                'graphic-design': freelancers.filter(f => f.field === 'graphic-design').length,
+                'digital-marketing': freelancers.filter(f => f.field === 'digital-marketing').length,
+                'writing-translation': freelancers.filter(f => f.field === 'writing-translation').length,
+                'video-editing': freelancers.filter(f => f.field === 'video-editing').length,
+                'content-creation': freelancers.filter(f => f.field === 'content-creation').length,
+                'other': freelancers.filter(f => f.field === 'other').length
+            };
+
+            // تحديث الإحصائيات الرئيسية
+            document.getElementById('totalFreelancers').textContent = total;
+            document.getElementById('webDevCount').textContent = fieldCounts['web-dev'];
+            document.getElementById('mobileDevCount').textContent = fieldCounts['mobile-dev'];
+            document.getElementById('designCount').textContent = fieldCounts['graphic-design'];
+            document.getElementById('marketingCount').textContent = fieldCounts['digital-marketing'];
+            document.getElementById('writingCount').textContent = fieldCounts['writing-translation'];
+            document.getElementById('videoCount').textContent = fieldCounts['video-editing'];
+            document.getElementById('contentCount').textContent = fieldCounts['content-creation'];
+            document.getElementById('otherCount').textContent = fieldCounts['other'];
+        }
+
+        // عرض الفريلانسرز المميزين
+        async function renderFeaturedFreelancers() {
+            const freelancers = await getFreelancers();
+            const featuredFreelancers = freelancers.filter(f => f.featured === true);
+            const container = document.getElementById('featuredGrid');
+            
+            if (featuredFreelancers.length === 0) {
+                container.innerHTML = `
+                    <div class="col-span-3 text-center py-12">
+                        <i class="fas fa-star text-4xl text-blue-400 mb-4"></i>
+                        <p class="text-gray-400 text-lg">لا يوجد فريلانسرز مميزون حالياً</p>
+                        <p class="text-gray-500 text-sm mt-2">يمكنك تمييز الفريلانسرز من خلال زر النجمة</p>
+                    </div>
+                `;
+                return;
+            }
+
+            container.innerHTML = featuredFreelancers.map(freelancer => {
+                const fieldName = getFieldName(freelancer.field);
+                const fieldIcon = getFieldIcon(freelancer.field);
+                const fieldColor = getFieldColor(freelancer.field);
+                
+                return `
+                    <div class="featured-card rounded-2xl p-6 text-gray-800">
+                        <!-- الهيدر -->
+                        <div class="flex items-start justify-between mb-4">
+                            <div class="flex items-center gap-3">
+                                <div class="w-12 h-12 bg-blue-500 rounded-full flex items-center justify-center">
+                                    <i class="${fieldIcon} text-white text-lg"></i>
+                                </div>
+                                <div>
+                                    <h3 class="font-bold text-gray-900 text-lg">${freelancer.name}</h3>
+                                    <p class="text-gray-700 text-sm">${fieldName}</p>
+                                </div>
+                            </div>
+                            <button onclick="toggleFeatured('${freelancer.id}', false)" class="star-btn text-blue-600 hover:text-blue-700 transition">
+                                <i class="fas fa-star"></i>
+                            </button>
+                        </div>
+
+                        <!-- التخصص -->
+                        <div class="mb-4">
+                            <label class="text-gray-700 text-sm block mb-1">التخصص:</label>
+                            <p class="text-gray-900 font-medium">${freelancer.specialty}</p>
+                        </div>
+
+                        <!-- المهارات -->
+                        ${freelancer.skills ? `
+                        <div class="mb-4">
+                            <label class="text-gray-700 text-sm block mb-2">المهارات:</label>
+                            <p class="text-gray-800 text-sm">${freelancer.skills}</p>
+                        </div>
+                        ` : ''}
+
+                        <!-- معلومات الاتصال -->
+                        <div class="space-y-3 mb-4">
+                            <!-- الهاتف -->
+                            <div class="flex items-center justify-between">
+                                <div class="flex items-center gap-2">
+                                    <i class="fas fa-phone text-green-600"></i>
+                                    <span class="text-gray-700 text-sm">الهاتف:</span>
+                                </div>
+                                <a href="tel:${freelancer.phone}" class="contact-btn bg-green-600 hover:bg-green-700 px-3 py-1 rounded-lg text-white text-sm flex items-center gap-1">
+                                    <i class="fas fa-phone"></i>
+                                    اتصال
+                                </a>
+                            </div>
+
+                            <!-- البورتفوليو -->
+                            ${freelancer.portfolio ? `
+                            <div class="flex items-center justify-between">
+                                <div class="flex items-center gap-2">
+                                    <i class="fas fa-link text-blue-600"></i>
+                                    <span class="text-gray-700 text-sm">البورتفوليو:</span>
+                                </div>
+                                <a href="${freelancer.portfolio}" target="_blank" class="contact-btn bg-blue-600 hover:bg-blue-700 px-3 py-1 rounded-lg text-white text-sm flex items-center gap-1">
+                                    <i class="fas fa-external-link-alt"></i>
+                                    زيارة
+                                </a>
+                            </div>
+                            ` : ''}
+                        </div>
+
+                        <!-- روابط التواصل -->
+                        ${freelancer.socialLinks && freelancer.socialLinks.length > 0 ? `
+                        <div class="border-t border-blue-400 pt-4">
+                            <label class="text-gray-700 text-sm block mb-2">وسائل التواصل:</label>
+                            <div class="flex flex-wrap gap-2">
+                                ${freelancer.socialLinks.map((link, index) => `
+                                    <a href="${link}" target="_blank" class="contact-btn bg-blue-600 hover:bg-blue-700 px-3 py-2 rounded-lg text-white text-xs flex items-center gap-2">
+                                        <i class="fas fa-external-link-alt"></i>
+                                        وسيلة التواصل ${index + 1}
+                                    </a>
+                                `).join('')}
+                            </div>
+                        </div>
+                        ` : ''}
+                    </div>
+                `;
+            }).join('');
+        }
+
+        // عرض فئات الفريلانسرز
+        async function renderFreelancersByCategory() {
+            const freelancers = await getFreelancers();
+            const container = document.getElementById('categoriesContainer');
+            
+            const categories = [
+                { id: 'web-dev', name: 'تطوير الويب', icon: 'fas fa-code', color: 'text-blue-300' },
+                { id: 'mobile-dev', name: 'تطوير التطبيقات', icon: 'fas fa-mobile-alt', color: 'text-blue-300' },
+                { id: 'graphic-design', name: 'التصميم الجرافيكي', icon: 'fas fa-palette', color: 'text-blue-300' },
+                { id: 'digital-marketing', name: 'التسويق الرقمي', icon: 'fas fa-chart-line', color: 'text-blue-300' },
+                { id: 'writing-translation', name: 'الكتابة والترجمة', icon: 'fas fa-pen-fancy', color: 'text-blue-300' },
+                { id: 'video-editing', name: 'تحرير الفيديو', icon: 'fas fa-video', color: 'text-blue-300' },
+                { id: 'content-creation', name: 'إنشاء المحتوى', icon: 'fas fa-file-alt', color: 'text-blue-300' },
+                { id: 'other', name: 'آخرون', icon: 'fas fa-ellipsis-h', color: 'text-blue-300' }
+            ];
+
+            container.innerHTML = categories.map(category => {
+                const categoryFreelancers = freelancers.filter(f => f.field === category.id);
+                
+                return `
+                    <div class="category-card rounded-xl overflow-hidden">
+                        <div class="category-header p-4 flex justify-between items-center" onclick="toggleCategory('${category.id}')">
+                            <div class="flex items-center gap-3">
+                                <i class="${category.icon} ${category.color} text-lg"></i>
+                                <div>
+                                    <h4 class="font-bold text-white">${category.name}</h4>
+                                    <p class="text-gray-400 text-sm">${categoryFreelancers.length} فريلانسر</p>
+                                </div>
+                            </div>
+                            <div class="flex items-center gap-2">
+                                <span class="text-gray-400 text-sm">${categoryFreelancers.length}</span>
+                                <i class="fas fa-chevron-down text-gray-400 transition-transform" id="icon-${category.id}"></i>
+                            </div>
+                        </div>
+                        <div class="freelancers-list" id="list-${category.id}">
+                            <div class="p-4 space-y-4">
+                                ${categoryFreelancers.length > 0 ? 
+                                    categoryFreelancers.map(freelancer => `
+                                        <div class="freelancer-item rounded-lg p-4">
+                                            <div class="flex justify-between items-start mb-3">
+                                                <div class="flex-1">
+                                                    <div class="flex items-center gap-2">
+                                                        <h5 class="font-bold text-white text-lg">${freelancer.name}</h5>
+                                                        ${freelancer.featured ? '<i class="fas fa-star text-blue-400"></i>' : ''}
+                                                    </div>
+                                                    <p class="text-gray-400 text-sm">${freelancer.specialty}</p>
+                                                </div>
+                                                <div class="flex gap-2">
+                                                    <button onclick="toggleFeatured('${freelancer.id}', ${!freelancer.featured})" class="star-btn ${freelancer.featured ? 'text-blue-400' : 'text-gray-400'} hover:text-blue-400 transition">
+                                                        <i class="fas fa-star"></i>
+                                                    </button>
+                                                    <button onclick="deleteFreelancer('${freelancer.id}')" class="text-red-400 hover:text-red-300 text-sm">
+                                                        <i class="fas fa-trash"></i>
+                                                    </button>
+                                                </div>
+                                            </div>
+                                            
+                                            <!-- المعلومات الأساسية -->
+                                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-3">
+                                                <!-- الهاتف -->
+                                                <div class="flex items-center justify-between">
+                                                    <div class="flex items-center gap-2">
+                                                        <i class="fas fa-phone text-green-400"></i>
+                                                        <span class="text-gray-300 text-sm">الهاتف:</span>
+                                                    </div>
+                                                    <a href="tel:${freelancer.phone}" class="contact-btn bg-green-600 hover:bg-green-700 px-3 py-1 rounded-lg text-white text-sm flex items-center gap-1">
+                                                        <i class="fas fa-phone"></i>
+                                                        اتصال
+                                                    </a>
+                                                </div>
+
+                                                <!-- البورتفوليو -->
+                                                ${freelancer.portfolio ? `
+                                                <div class="flex items-center justify-between">
+                                                    <div class="flex items-center gap-2">
+                                                        <i class="fas fa-link text-blue-400"></i>
+                                                        <span class="text-gray-300 text-sm">البورتفوليو:</span>
+                                                    </div>
+                                                    <a href="${freelancer.portfolio}" target="_blank" class="contact-btn bg-blue-600 hover:bg-blue-700 px-3 py-1 rounded-lg text-white text-sm flex items-center gap-1">
+                                                        <i class="fas fa-external-link-alt"></i>
+                                                        زيارة
+                                                    </a>
+                                                </div>
+                                                ` : ''}
+                                            </div>
+
+                                            <!-- المهارات -->
+                                            ${freelancer.skills ? `
+                                            <div class="mb-3">
+                                                <label class="text-gray-400 text-sm block mb-2">المهارات:</label>
+                                                <p class="text-white text-sm">${freelancer.skills}</p>
+                                            </div>
+                                            ` : ''}
+
+                                            <!-- روابط التواصل -->
+                                            ${freelancer.socialLinks && freelancer.socialLinks.length > 0 ? `
+                                            <div class="border-t border-gray-600 pt-3">
+                                                <label class="text-gray-400 text-sm block mb-2">وسائل التواصل:</label>
+                                                <div class="flex flex-wrap gap-2">
+                                                    ${freelancer.socialLinks.map((link, index) => `
+                                                        <a href="${link}" target="_blank" class="contact-btn bg-blue-600 hover:bg-blue-700 px-3 py-2 rounded-lg text-white text-xs flex items-center gap-2">
+                                                            <i class="fas fa-external-link-alt"></i>
+                                                            وسيلة التواصل ${index + 1}
+                                                        </a>
+                                                    `).join('')}
+                                                </div>
+                                            </div>
+                                            ` : ''}
+
+                                            <!-- تاريخ التسجيل -->
+                                            <div class="border-t border-gray-600 pt-3 mt-3">
+                                                <p class="text-gray-500 text-xs">
+                                                    <i class="fas fa-clock mr-1"></i>
+                                                    مسجل منذ: ${freelancer.createdAt ? new Date(freelancer.createdAt.seconds * 1000).toLocaleDateString('ar-EG') : 'غير معروف'}
+                                                </p>
+                                            </div>
+                                        </div>
+                                    `).join('') : 
+                                    '<p class="text-gray-400 text-center py-4">لا يوجد فريلانسرز في هذا المجال</p>'
+                                }
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        // تبديل فتح/إغلاق الفئة
+        function toggleCategory(categoryId) {
+            const list = document.getElementById(`list-${categoryId}`);
+            const icon = document.getElementById(`icon-${categoryId}`);
+            
+            // إغلاق جميع القوائم الأخرى
+            document.querySelectorAll('.freelancers-list').forEach(item => {
+                if (item.id !== `list-${categoryId}`) {
+                    item.classList.remove('open');
+                }
+            });
+            
+            // إعادة جميع الأيقونات إلى وضعها الطبيعي
+            document.querySelectorAll('.category-header i.fa-chevron-down').forEach(item => {
+                if (item.id !== `icon-${categoryId}`) {
+                    item.classList.remove('rotate-180');
+                }
+            });
+            
+            // فتح/إغلاق القائمة المطلوبة
+            list.classList.toggle('open');
+            icon.classList.toggle('rotate-180');
+        }
+
+        // تمييز/إلغاء تمييز فريلانسر
+        async function toggleFeatured(freelancerId, isFeatured) {
+            try {
+                await window.firestore.updateDoc(
+                    window.firestore.doc(window.db, 'freelancers', freelancerId),
+                    { featured: isFeatured }
+                );
+                loadDashboardData();
+                alert(isFeatured ? 'تم تمييز الفريلانسر بنجاح ⭐' : 'تم إلغاء التمييز بنجاح');
+            } catch (error) {
+                console.error('Error updating document: ', error);
+                alert('حدث خطأ أثناء تحديث البيانات.');
+            }
+        }
+
+        // حذف فريلانسر
+        async function deleteFreelancer(id) {
+            if (confirm('هل أنت متأكد من حذف هذا الفريلانسر؟')) {
+                try {
+                    await window.firestore.deleteDoc(window.firestore.doc(window.db, 'freelancers', id));
+                    loadDashboardData();
+                    alert('تم حذف الفريلانسر بنجاح');
+                } catch (error) {
+                    console.error('Error deleting document: ', error);
+                    alert('حدث خطأ أثناء حذف البيانات.');
+                }
+            }
+        }
+
+        // تحميل بيانات اللوحة
+        function loadDashboardData() {
+            updateStats();
+            renderFeaturedFreelancers();
+            renderFreelancersByCategory();
+        }
+
+        // تبديل الأقسام
+        function switchSection(sectionId) {
+            // إخفاء جميع الأقسام
+            document.querySelectorAll('.section').forEach(section => {
+                section.classList.remove('active');
+            });
+            
+            // إظهار القسم المطلوب
+            const targetSection = document.getElementById(sectionId + 'Section');
+            targetSection.classList.add('active');
+            
+            // تحديث القائمة النشطة
+            document.querySelectorAll('.nav-item').forEach(item => {
+                item.classList.remove('active');
+                item.classList.add('text-gray-400', 'hover:text-white', 'hover:bg-blue-500/20');
+            });
+            
+            document.querySelector(`.nav-item[data-section="${sectionId}"]`).classList.add('active');
+            document.querySelector(`.nav-item[data-section="${sectionId}"]`).classList.remove('text-gray-400', 'hover:text-white', 'hover:bg-blue-500/20');
+        }
+
+        // الانتقال إلى القسم عند النقر على العداد
+        function navigateToCategory(categoryId) {
+            // الانتقال إلى قسم الفريلانسرز
+            switchSection('freelancers');
+            
+            // فتح الفئة المطلوبة بعد تحميل البيانات
+            setTimeout(() => {
+                toggleCategory(categoryId);
+                
+                // التمرير إلى الفئة المطلوبة
+                const categoryElement = document.getElementById(`list-${categoryId}`).parentElement;
+                categoryElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }, 300);
+        }
+
+        // التهيئة
+        document.addEventListener('DOMContentLoaded', function() {
+            // إضافة أحداث للتنقل
+            document.querySelectorAll('.nav-item').forEach(item => {
+                item.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const section = this.dataset.section;
+                    switchSection(section);
+                    
+                    // إغلاق القائمة الجانبية على الهواتف
+                    mobileSidebar.classList.remove('open');
+                    mobileOverlay.classList.remove('open');
+                });
+            });
+
+            // زر التحديث
+            document.getElementById('refreshBtn').addEventListener('click', loadDashboardData);
+            document.getElementById('refreshFeaturedBtn').addEventListener('click', loadDashboardData);
+        });
+    </script>
+</body>
+</html>

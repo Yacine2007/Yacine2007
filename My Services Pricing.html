@@ -587,6 +587,130 @@
             margin-left: 0;
         }
 
+        /* Work Process Section - New Design */
+        .work-process-section {
+            background: linear-gradient(135deg, rgba(139, 92, 246, 0.15), rgba(124, 58, 237, 0.15));
+            backdrop-filter: blur(25px);
+            -webkit-backdrop-filter: blur(25px);
+            border: 1px solid rgba(139, 92, 246, 0.4);
+            border-radius: 25px;
+            padding: 3rem;
+            margin: 3rem 0;
+            box-shadow: var(--glass-shadow), 0 0 30px rgba(139, 92, 246, 0.3);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .work-process-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 100%;
+            background: linear-gradient(135deg, rgba(139, 92, 246, 0.1), rgba(124, 58, 237, 0.1));
+            z-index: -1;
+        }
+
+        .work-process-section h2 {
+            color: #e0f2fe;
+            margin-bottom: 2rem;
+            font-size: 2rem;
+            font-weight: 600;
+            text-align: center;
+            position: relative;
+            display: inline-block;
+            width: 100%;
+        }
+
+        .work-process-section h2::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100px;
+            height: 4px;
+            background: linear-gradient(to right, #8b5cf6, #a78bfa);
+            border-radius: 2px;
+        }
+
+        .work-process-steps {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+            margin-top: 2rem;
+        }
+
+        .work-step {
+            display: flex;
+            align-items: flex-start;
+            gap: 1.5rem;
+            padding: 1.5rem;
+            background: rgba(15, 23, 42, 0.6);
+            border-radius: 15px;
+            border-left: 4px solid #8b5cf6;
+            transition: all 0.3s ease;
+        }
+
+        .work-step:hover {
+            transform: translateX(5px);
+            background: rgba(15, 23, 42, 0.8);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .step-number {
+            background: linear-gradient(135deg, #8b5cf6, #a78bfa);
+            color: white;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 1.2rem;
+            flex-shrink: 0;
+            box-shadow: 0 4px 10px rgba(139, 92, 246, 0.4);
+        }
+
+        .step-content {
+            flex: 1;
+        }
+
+        .step-title {
+            color: #e0f2fe;
+            font-size: 1.2rem;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+        }
+
+        .step-description {
+            color: rgba(224, 242, 254, 0.9);
+            line-height: 1.6;
+        }
+
+        .work-process-note {
+            background: rgba(15, 23, 42, 0.8);
+            border: 1px solid rgba(139, 92, 246, 0.3);
+            border-radius: 15px;
+            padding: 1.5rem;
+            margin-top: 2rem;
+            text-align: center;
+        }
+
+        .work-process-note h4 {
+            color: #e0f2fe;
+            margin-bottom: 0.8rem;
+            font-size: 1.2rem;
+            font-weight: 600;
+        }
+
+        .work-process-note p {
+            color: rgba(224, 242, 254, 0.9);
+            line-height: 1.6;
+        }
+
         /* Responsive Design - Improved for mobile */
         @media (max-width: 768px) {
             .services-grid {
@@ -666,6 +790,22 @@
                 padding: 1.5rem;
                 margin: 1.5rem 0;
             }
+            
+            /* Work Process Responsive */
+            .work-process-section {
+                padding: 2rem 1.5rem;
+                margin: 2rem 0;
+            }
+            
+            .work-step {
+                flex-direction: column;
+                gap: 1rem;
+                padding: 1.2rem;
+            }
+            
+            .step-number {
+                align-self: flex-start;
+            }
         }
 
         @media (max-width: 480px) {
@@ -691,6 +831,10 @@
             
             .payment-option {
                 padding: 1.5rem;
+            }
+            
+            .work-process-section {
+                padding: 1.5rem 1.2rem;
             }
         }
     </style>
@@ -773,6 +917,59 @@
                     <h1>Yacine-Dev</h1>
                 </div>
                 <p class="subtitle">My Services Pricing</p>
+            </section>
+
+            <!-- Work Process Section - English -->
+            <section class="work-process-section">
+                <h2>Work Process</h2>
+                <div class="work-process-steps">
+                    <div class="work-step">
+                        <div class="step-number">1</div>
+                        <div class="step-content">
+                            <h3 class="step-title">Discussion & Cost Estimation</h3>
+                            <p class="step-description">Understanding the client's requirements and providing an initial cost estimate for the project.</p>
+                        </div>
+                    </div>
+                    <div class="work-step">
+                        <div class="step-number">2</div>
+                        <div class="step-content">
+                            <h3 class="step-title">Interface Development & 30% Payment</h3>
+                            <p class="step-description">Starting with the interface development after receiving 30% of the total project cost.</p>
+                        </div>
+                    </div>
+                    <div class="work-step">
+                        <div class="step-number">3</div>
+                        <div class="step-content">
+                            <h3 class="step-title">Project Completion & Client Review</h3>
+                            <p class="step-description">Finalizing the project and presenting it to the client for review and any requested modifications.</p>
+                        </div>
+                    </div>
+                    <div class="work-step">
+                        <div class="step-number">4</div>
+                        <div class="step-content">
+                            <h3 class="step-title">40% Payment Upon Delivery</h3>
+                            <p class="step-description">Receiving 40% of the payment when the project is delivered to the client.</p>
+                        </div>
+                    </div>
+                    <div class="work-step">
+                        <div class="step-number">5</div>
+                        <div class="step-content">
+                            <h3 class="step-title">30% Payment After Testing</h3>
+                            <p class="step-description">Final 30% payment after the client tests the project and confirms everything is working properly.</p>
+                        </div>
+                    </div>
+                    <div class="work-step">
+                        <div class="step-number">6</div>
+                        <div class="step-content">
+                            <h3 class="step-title">Project Added to Portfolio</h3>
+                            <p class="step-description">Including the completed project in my professional portfolio.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="work-process-note">
+                    <h4>Important Note</h4>
+                    <p>If the final payment is not made, the server hosting will be suspended, and the project will not be accessible or functional. All work is conducted through a mediator who receives 40% of the total payment, while I receive 60%. The mediator acts as a witness and guarantor for the work and client interactions.</p>
+                </div>
             </section>
 
             <div class="note">
@@ -886,6 +1083,59 @@
                     <h1>Yacine-Dev</h1>
                 </div>
                 <p class="subtitle">تسعيرة خدماتي</p>
+            </section>
+
+            <!-- Work Process Section - Arabic -->
+            <section class="work-process-section">
+                <h2>نظام العمل</h2>
+                <div class="work-process-steps">
+                    <div class="work-step">
+                        <div class="step-number">1</div>
+                        <div class="step-content">
+                            <h3 class="step-title">التفاهم مع الزبون وتقدير التكلفة</h3>
+                            <p class="step-description">مناقشة متطلبات الزبون وتقديم تكلفة أولية للمشروع.</p>
+                        </div>
+                    </div>
+                    <div class="work-step">
+                        <div class="step-number">2</div>
+                        <div class="step-content">
+                            <h3 class="step-title">بدء العمل على الواجهة ودفع 30%</h3>
+                            <p class="step-description">بدء تطوير الواجهة بعد استلام 30% من التكلفة الإجمالية للمشروع.</p>
+                        </div>
+                    </div>
+                    <div class="work-step">
+                        <div class="step-number">3</div>
+                        <div class="step-content">
+                            <h3 class="step-title">إنهاء المشروع وعرضه على الزبون</h3>
+                            <p class="step-description">إنهاء المشروع وعرضه على الزبون للمراجعة وإجراء أي تعديلات مطلوبة.</p>
+                        </div>
+                    </div>
+                    <div class="work-step">
+                        <div class="step-number">4</div>
+                        <div class="step-content">
+                            <h3 class="step-title">دفع 40% عند الاستلام</h3>
+                            <p class="step-description">استلام 40% من الدفع عند تسليم المشروع للزبون.</p>
+                        </div>
+                    </div>
+                    <div class="work-step">
+                        <div class="step-number">5</div>
+                        <div class="step-content">
+                            <h3 class="step-title">دفع 30% بعد التجربة</h3>
+                            <p class="step-description">الدفع النهائي بنسبة 30% بعد أن يجرب الزبون المشروع ويتأكد من عمل كل شيء بشكل صحيح.</p>
+                        </div>
+                    </div>
+                    <div class="work-step">
+                        <div class="step-number">6</div>
+                        <div class="step-content">
+                            <h3 class="step-title">إضافة المشروع إلى البورتفوليو</h3>
+                            <p class="step-description">إضافة المشروع المكتمل إلى البورتفوليو المهني.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="work-process-note">
+                    <h4>ملاحظة هامة</h4>
+                    <p>إذا لم يتم الدفع النهائي، سيتم إيقاف خادم الاستضافة ولن يكون المشروع مرئيًا أو يعمل بدون فائدة. يتم كل العمل أمام وسيط يحصل على 40% من إجمالي الدفع، بينما أحصل أنا على 60%. الوسيط يكون شاهدًا وضامنًا على العمل وتعامل الزبون.</p>
+                </div>
             </section>
 
             <div class="note">

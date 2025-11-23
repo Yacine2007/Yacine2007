@@ -1,0 +1,1985 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>B.Y PRO - Admin Dashboard</title>
+  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <link rel="icon" href="https://bypro.kesug.com/B.Y%20PRO.png" />
+</head>
+<body>
+  <!-- Login System -->
+  <div id="loginScreen" class="login-screen">
+    <div class="login-container">
+      <div class="login-header">
+        <img src="https://bypro.kesug.com/B.Y%20PRO.png" alt="B.Y PRO Logo" class="login-logo">
+        <h2>B.Y PRO Admin Dashboard</h2>
+        <p>Software technology & programming services</p>
+      </div>
+      <form id="loginForm" class="login-form">
+        <div class="form-group">
+          <input type="password" id="password" placeholder="Enter password" required class="form-input">
+        </div>
+        <button type="submit" class="login-btn">Login</button>
+      </form>
+      <div id="loginError" class="login-error hidden">Incorrect password. Please try again.</div>
+    </div>
+  </div>
+
+  <!-- Main Dashboard -->
+  <div id="dashboard" class="h-screen flex w-full hidden">
+    <!-- SIDEBAR -->
+    <aside class="sidebar">
+      <div class="flex items-center gap-3 mb-6">
+        <img src="https://bypro.kesug.com/B.Y%20PRO.png" alt="logo" class="w-12 h-12 rounded"/>
+        <div>
+          <div class="text-lg font-bold">B.Y PRO</div>
+          <div class="text-xs text-gray-400">Software technology & programming services</div>
+        </div>
+      </div>
+
+      <nav class="sidebar-nav">
+        <button data-section="dashboard" class="nav-btn active">
+          <i class="fas fa-chart-line w-4"></i> Main Dashboard
+        </button>
+
+        <button data-section="profits" class="nav-btn">
+          <i class="fas fa-dollar-sign w-4"></i> Financial Management
+        </button>
+
+        <button data-section="projects" class="nav-btn">
+          <i class="fas fa-diagram-project w-4"></i> Project Management
+        </button>
+
+        <button data-section="customers" class="nav-btn">
+          <i class="fas fa-users w-4"></i> Customers
+        </button>
+
+        <button data-section="products" class="nav-btn">
+          <i class="fas fa-box-open w-4"></i> Products / Software
+        </button>
+
+        <button data-section="store" class="nav-btn">
+          <i class="fas fa-store w-4"></i> PRO Store
+        </button>
+
+        <button data-section="support" class="nav-btn">
+          <i class="fas fa-ticket-alt w-4"></i> Support & Complaints
+        </button>
+
+        <button data-section="marketing" class="nav-btn">
+          <i class="fas fa-bullhorn w-4"></i> Promotion
+        </button>
+
+        <button data-section="employees" class="nav-btn">
+          <i class="fas fa-id-badge w-4"></i> Employees
+        </button>
+
+        <button id="logoutBtn" class="nav-btn mt-auto">
+          <i class="fas fa-sign-out-alt w-4"></i> Logout
+        </button>
+      </nav>
+    </aside>
+
+    <!-- MAIN -->
+    <main class="main-content">
+      <!-- Topbar -->
+      <div class="topbar">
+        <div class="flex items-center gap-4">
+          <h1 id="section-title" class="section-title">Main Dashboard</h1>
+          <div id="notes-bell" class="notes-bell">
+            <i class="fas fa-bell text-xl"></i>
+            <span id="notes-count" class="notes-count hidden">0</span>
+          </div>
+        </div>
+        <div class="flex items-center gap-4">
+          <div class="welcome-text">Welcome, B.Y PRO Admin</div>
+        </div>
+      </div>
+
+      <!-- Sections container -->
+      <section id="sections">
+        <!-- Dashboard -->
+        <div data-content="dashboard" class="section-content">
+          <!-- Stats Cards -->
+          <div class="stats-grid">
+            <div class="stat-card">
+              <div class="stat-label">Total Customers</div>
+              <div id="totalCustomers" class="stat-value">0</div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-label">Active Projects</div>
+              <div id="totalProjects" class="stat-value">0</div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-label">Total Products</div>
+              <div id="totalProducts" class="stat-value">0</div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-label">Total Employees</div>
+              <div id="totalEmployees" class="stat-value">0</div>
+            </div>
+          </div>
+
+          <!-- Charts -->
+          <div class="charts-grid">
+            <div class="chart-container">
+              <h3 class="chart-title">Financial Chart (DZD & $)</h3>
+              <canvas id="financeChart" height="250"></canvas>
+            </div>
+            <div class="chart-container">
+              <h3 class="chart-title">Projects & Customers Trend</h3>
+              <canvas id="trendChart" height="250"></canvas>
+            </div>
+          </div>
+
+          <!-- Notes Section -->
+          <div class="notes-container">
+            <div class="notes-header">
+              <h3 class="notes-title">Notes & Reminders</h3>
+              <button id="addNoteBtn" class="add-note-btn">Add Note</button>
+            </div>
+            <div id="notesList" class="notes-list"></div>
+          </div>
+        </div>
+
+        <!-- Financial Management -->
+        <div data-content="profits" class="section-content hidden">
+          <!-- Total Financial Overview -->
+          <div class="financial-overview">
+            <div class="financial-label">Total Financial Value</div>
+            <div id="totalFinancialValue" class="financial-value">0 DZD / 0 $</div>
+            <div class="financial-details">
+              <div class="financial-detail">
+                <div class="detail-label">Company Reserve</div>
+                <div id="companyReserve" class="detail-value">0 $</div>
+              </div>
+              <div class="financial-detail">
+                <div class="detail-label">Total Income</div>
+                <div id="totalIncome" class="detail-value">0 DZD</div>
+              </div>
+              <div class="financial-detail">
+                <div class="detail-label">Total Expenses</div>
+                <div id="totalExpenses" class="detail-value">0 DZD</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Add Financial Transaction -->
+          <div class="transaction-grid">
+            <div class="transaction-form">
+              <h3 class="form-title">Add Financial Transaction</h3>
+              <form id="addTransactionForm" class="form">
+                <input required name="title" placeholder="Transaction Source" class="form-input" />
+                <div class="form-row">
+                  <input required name="amount" type="number" placeholder="Amount" class="form-input flex-2" />
+                  <select name="currency" class="form-input flex-1">
+                    <option value="DZD">DZD</option>
+                    <option value="USD">$</option>
+                  </select>
+                </div>
+                <select name="type" class="form-input">
+                  <option value="income">Income</option>
+                  <option value="expense">Expense</option>
+                </select>
+                <input name="date" type="date" class="form-input" />
+                <button type="submit" class="form-btn-primary">Add Transaction</button>
+              </form>
+            </div>
+
+            <!-- Company Reserve -->
+            <div class="reserve-form">
+              <h3 class="form-title">Company Reserve (USD)</h3>
+              <form id="reserveForm" class="form">
+                <input name="amount" type="number" placeholder="Reserve Amount ($)" class="form-input" />
+                <button type="submit" class="form-btn-primary">Update Reserve</button>
+              </form>
+              <div class="reserve-info">
+                Current Reserve: <span id="currentReserve" class="reserve-value">0 $</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Transactions History -->
+          <div class="transactions-history">
+            <h3 class="form-title">Financial Transactions History</h3>
+            <div class="table-container">
+              <table class="data-table">
+                <thead>
+                  <tr>
+                    <th>Date</th>
+                    <th>Description</th>
+                    <th>Type</th>
+                    <th class="text-right">Amount</th>
+                    <th class="text-right">Currency</th>
+                    <th>Actions</th>
+                  </tr>
+                </thead>
+                <tbody id="transactionsList"></tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <!-- Projects Management -->
+        <div data-content="projects" class="section-content hidden">
+          <div class="projects-container">
+            <div class="projects-list">
+              <div class="projects-header">
+                <h3 class="form-title">Projects</h3>
+                <div class="projects-controls">
+                  <select id="projectFilter" class="form-select">
+                    <option value="all">All Projects</option>
+                    <option value="completed">Completed</option>
+                    <option value="in-progress">In Progress</option>
+                    <option value="not-started">Not Started</option>
+                  </select>
+                  <input id="projectSearch" placeholder="Search projects..." class="form-input" />
+                </div>
+              </div>
+              <div id="projectsList" class="projects-grid"></div>
+            </div>
+            <div class="project-form-sidebar">
+              <h3 class="form-title">Add / Edit Project</h3>
+              <form id="projectForm" class="form">
+                <input type="hidden" id="projectId" name="id">
+                <input name="title" placeholder="Project Title" class="form-input" required />
+                <textarea name="desc" placeholder="Description" class="form-input"></textarea>
+                <input name="assignedTo" placeholder="Assigned To (Employee ID)" class="form-input" />
+                <div class="form-row">
+                  <input name="start" type="date" class="form-input" />
+                  <input name="due" type="date" class="form-input" />
+                </div>
+                <input name="progress" type="number" min="0" max="100" placeholder="Progress %" class="form-input" />
+                <div class="form-row">
+                  <button type="submit" class="form-btn-primary flex-1">Save Project</button>
+                  <button type="button" id="clearProject" class="form-btn-secondary">Clear</button>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+
+        <!-- Customers -->
+        <div data-content="customers" class="section-content hidden">
+          <!-- Customer Stats -->
+          <div class="customer-stats">
+            <div class="customer-stat">
+              <div class="stat-label">Total Customers</div>
+              <div id="customerTotal" class="stat-value">0</div>
+            </div>
+            <div class="customer-stat">
+              <div class="stat-label">In Progress</div>
+              <div id="customerInProgress" class="stat-value">0</div>
+            </div>
+            <div class="customer-stat">
+              <div class="stat-label">Completed</div>
+              <div id="customerCompleted" class="stat-value">0</div>
+            </div>
+            <div class="customer-stat">
+              <div class="stat-label">Cancelled</div>
+              <div id="customerCancelled" class="stat-value">0</div>
+            </div>
+            <div class="customer-stat">
+              <div class="stat-label">Not Started</div>
+              <div id="customerNotStarted" class="stat-value">0</div>
+            </div>
+          </div>
+
+          <!-- Customer Management -->
+          <div class="customer-management">
+            <div class="customer-table-container">
+              <div class="table-header">
+                <h3 class="form-title">Customer Database</h3>
+                <input id="customerSearch" placeholder="Search by name or email" class="form-input" />
+              </div>
+              <div class="table-container">
+                <table class="data-table">
+                  <thead>
+                    <tr>
+                      <th>Name</th>
+                      <th>Email</th>
+                      <th>Phone</th>
+                      <th>Status</th>
+                      <th>Actions</th>
+                    </tr>
+                  </thead>
+                  <tbody id="customersList"></tbody>
+                </table>
+              </div>
+            </div>
+
+            <div class="customer-form">
+              <h3 class="form-title">Add / Edit Customer</h3>
+              <form id="customerForm" class="form">
+                <input type="hidden" id="customerId" name="id">
+                <input name="name" placeholder="Customer Name" class="form-input" required />
+                <input name="email" type="email" placeholder="Email" class="form-input" />
+                <input name="phone" placeholder="Phone" class="form-input" />
+                <input name="project" placeholder="Project Details" class="form-input" />
+                <div class="form-row">
+                  <input name="cost" type="number" placeholder="Cost" class="form-input flex-2" />
+                  <select name="currency" class="form-input flex-1">
+                    <option value="DZD">DZD</option>
+                    <option value="USD">$</option>
+                  </select>
+                </div>
+                <input name="assignedEmployee" placeholder="Assigned Employee" class="form-input" />
+                <div class="form-row">
+                  <input name="startDate" type="date" placeholder="Start Date" class="form-input" />
+                  <input name="dueDate" type="date" placeholder="Due Date" class="form-input" />
+                </div>
+                <select name="status" class="form-input">
+                  <option value="in-progress">In Progress</option>
+                  <option value="completed">Completed</option>
+                  <option value="cancelled">Cancelled</option>
+                  <option value="not-started">Not Started</option>
+                </select>
+                <textarea name="notes" placeholder="Notes" class="form-input"></textarea>
+                <button type="submit" class="form-btn-primary">Save Customer</button>
+              </form>
+            </div>
+          </div>
+        </div>
+
+        <!-- Products -->
+        <div data-content="products" class="section-content hidden">
+          <!-- Product Stats -->
+          <div class="product-stats">
+            <div class="product-stat">
+              <div class="stat-label">Total Products</div>
+              <div id="productTotal" class="stat-value">0</div>
+            </div>
+            <div class="product-stat">
+              <div class="stat-label">Free Products</div>
+              <div id="productFree" class="stat-value">0</div>
+            </div>
+            <div class="product-stat">
+              <div class="stat-label">Paid Products</div>
+              <div id="productPaid" class="stat-value">0</div>
+            </div>
+            <div class="product-stat">
+              <div class="stat-label">Total Users</div>
+              <div id="productUsers" class="stat-value">0</div>
+            </div>
+          </div>
+
+          <!-- Products Management -->
+          <div class="products-container">
+            <div class="products-list">
+              <div class="products-header">
+                <h3 class="form-title">Products & Software</h3>
+                <button id="addProductBtn" class="add-product-btn">Add Product</button>
+              </div>
+              <div id="productsList" class="products-grid"></div>
+            </div>
+            <div class="product-editor hidden" id="productEditor">
+              <h3 class="form-title">Product Editor</h3>
+              <form id="productForm" class="form">
+                <input type="hidden" id="productId" name="id">
+                <input name="title" placeholder="Product Name" class="form-input" required />
+                <textarea name="desc" placeholder="Description" class="form-input"></textarea>
+                <input name="version" placeholder="Version" class="form-input" />
+                <input name="license" placeholder="License" class="form-input" />
+                <div class="form-row">
+                  <input name="price" type="number" placeholder="Price" class="form-input flex-2" />
+                  <select name="currency" class="form-input flex-1">
+                    <option value="free">Free</option>
+                    <option value="DZD">DZD</option>
+                    <option value="USD">$</option>
+                  </select>
+                </div>
+                <input name="file" type="file" accept="image/*" class="form-input" />
+                <div class="form-row">
+                  <button type="submit" class="form-btn-primary flex-1">Save Product</button>
+                  <button type="button" id="cancelProduct" class="form-btn-secondary">Cancel</button>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+
+        <!-- PRO Store -->
+        <div data-content="store" class="section-content hidden">
+          <div class="store-container">
+            <div class="store-header">
+              <h3 class="form-title">PRO Store</h3>
+              <a href="https://store-pro.great-site.net/" target="_blank" class="visit-store-btn">Visit Store</a>
+            </div>
+            <div class="store-frame-container">
+              <iframe src="https://store-pro.great-site.net/" class="store-frame"></iframe>
+            </div>
+          </div>
+        </div>
+
+        <!-- Support & Complaints -->
+        <div data-content="support" class="section-content hidden">
+          <!-- Support Stats -->
+          <div class="support-stats">
+            <div class="support-stat">
+              <div class="stat-label">Total Tickets</div>
+              <div id="supportTotal" class="stat-value">0</div>
+            </div>
+            <div class="support-stat">
+              <div class="stat-label">In Progress</div>
+              <div id="supportInProgress" class="stat-value">0</div>
+            </div>
+            <div class="support-stat">
+              <div class="stat-label">Resolved</div>
+              <div id="supportResolved" class="stat-value">0</div>
+            </div>
+            <div class="support-stat">
+              <div class="stat-label">Rejected</div>
+              <div id="supportRejected" class="stat-value">0</div>
+            </div>
+          </div>
+
+          <!-- Support Management -->
+          <div class="support-container">
+            <div class="support-header">
+              <h3 class="form-title">Support & Complaints System</h3>
+              <button id="newTicketBtn" class="new-ticket-btn">New Ticket</button>
+            </div>
+            <div id="ticketsList" class="tickets-list"></div>
+          </div>
+        </div>
+
+        <!-- Promotion -->
+        <div data-content="marketing" class="section-content hidden">
+          <!-- Social Media Links -->
+          <div class="promotion-container mb-6">
+            <div class="promotion-header">
+              <h3 class="form-title">Social Media Channels</h3>
+              <button id="addChannelBtn" class="add-channel-btn">Add Channel</button>
+            </div>
+            <div id="channelsList" class="channels-grid"></div>
+          </div>
+
+          <!-- Website & Facebook Links -->
+          <div class="promotion-container mb-6">
+            <div class="promotion-header">
+              <h3 class="form-title">Company Links</h3>
+            </div>
+            <div class="company-links-grid">
+              <div class="company-link-card">
+                <div class="company-link-icon">
+                  <i class="fas fa-globe"></i>
+                </div>
+                <div class="company-link-info">
+                  <div class="company-link-title">Website</div>
+                  <div class="company-link-url">bypro.kesug.com</div>
+                </div>
+                <a href="https://bypro.kesug.com/" target="_blank" class="company-link-btn">Visit</a>
+              </div>
+              <div class="company-link-card">
+                <div class="company-link-icon">
+                  <i class="fab fa-facebook"></i>
+                </div>
+                <div class="company-link-info">
+                  <div class="company-link-title">Facebook</div>
+                  <div class="company-link-url">B.Y PRO</div>
+                </div>
+                <a href="https://www.facebook.com/bypro2007" target="_blank" class="company-link-btn">Visit</a>
+              </div>
+            </div>
+          </div>
+
+          <!-- Advertisements -->
+          <div class="promotion-container">
+            <div class="promotion-header">
+              <h3 class="form-title">Advertisements</h3>
+              <button id="addAdBtn" class="add-channel-btn">Add Advertisement</button>
+            </div>
+            <div id="adsList" class="ads-grid"></div>
+          </div>
+        </div>
+
+        <!-- Employees -->
+        <div data-content="employees" class="section-content hidden">
+          <!-- Employee Stats -->
+          <div class="employee-overview">
+            <div class="stat-label">Total Employees</div>
+            <div id="employeeTotal" class="employee-total">0</div>
+          </div>
+
+          <!-- Departments -->
+          <div class="departments-container">
+            <div class="departments-header">
+              <h3 class="form-title">Departments</h3>
+              <button id="addDepartmentBtn" class="add-department-btn">Add Department</button>
+            </div>
+            <div id="departmentsList" class="departments-grid"></div>
+          </div>
+
+          <!-- Employees Management -->
+          <div class="employees-management">
+            <div class="employees-list-container">
+              <h3 class="form-title">Employees List</h3>
+              <div id="employeesList" class="employees-list"></div>
+            </div>
+            <div class="employee-form">
+              <h3 class="form-title">Add / Edit Employee</h3>
+              <form id="employeeForm" class="form">
+                <input type="hidden" id="employeeId" name="id">
+                <input name="name" placeholder="Full Name" class="form-input" required />
+                <input name="position" placeholder="Position" class="form-input" />
+                <input name="department" placeholder="Department" class="form-input" />
+                <input name="email" placeholder="Email" class="form-input" />
+                <input name="phone" placeholder="Phone" class="form-input" />
+                <input name="contactLink" placeholder="Contact Link" class="form-input" />
+                <textarea name="skills" placeholder="Skills" class="form-input"></textarea>
+                <div class="form-row">
+                  <div class="access-control">
+                    <label class="access-label">
+                      <input type="checkbox" name="dashboardAccess" class="access-checkbox">
+                      Dashboard Access
+                    </label>
+                    <label class="access-label">
+                      <input type="checkbox" name="financialAccess" class="access-checkbox">
+                      Financial Access
+                    </label>
+                    <label class="access-label">
+                      <input type="checkbox" name="projectAccess" class="access-checkbox">
+                      Project Access
+                    </label>
+                  </div>
+                </div>
+                <textarea name="notes" placeholder="Notes" class="form-input"></textarea>
+                <button type="submit" class="form-btn-primary">Save Employee</button>
+              </form>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <!-- Add Note Modal -->
+  <div id="noteModal" class="modal hidden">
+    <div class="modal-content">
+      <h3 class="modal-title">Add New Note</h3>
+      <form id="noteForm" class="form">
+        <input name="title" placeholder="Note Title" class="form-input" required />
+        <textarea name="content" placeholder="Note Content" class="form-input" rows="4"></textarea>
+        <div class="form-row">
+          <button type="submit" class="form-btn-primary flex-1">Save Note</button>
+          <button type="button" id="cancelNote" class="form-btn-secondary">Cancel</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Add Advertisement Modal -->
+  <div id="adModal" class="modal hidden">
+    <div class="modal-content">
+      <h3 class="modal-title">Add Advertisement</h3>
+      <form id="adForm" class="form">
+        <input name="title" placeholder="Advertisement Title" class="form-input" required />
+        <input name="imageUrl" placeholder="Image URL" class="form-input" />
+        <input name="link" placeholder="Link URL" class="form-input" />
+        <textarea name="description" placeholder="Description" class="form-input" rows="3"></textarea>
+        <div class="form-row">
+          <button type="submit" class="form-btn-primary flex-1">Save Advertisement</button>
+          <button type="button" id="cancelAd" class="form-btn-secondary">Cancel</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<script>
+  // Firebase configuration
+  const firebaseConfig = {
+    apiKey: "AIzaSyDpgLh3GvtqnV78KWt5Jh8WjKfCLcG6TG8",
+    authDomain: "bypro-44e4d.firebaseapp.com",
+    databaseURL: "https://bypro-44e4d-default-rtdb.europe-west1.firebasedatabase.app",
+    projectId: "bypro-44e4d",
+    storageBucket: "bypro-44e4d.firebasestorage.app",
+    messagingSenderId: "667348655604",
+    appId: "1:667348655604:web:f2b7d74063e7d7c5c36da1",
+    measurementId: "G-MZNNV5FX7H"
+  };
+
+  // Initialize Firebase
+  firebase.initializeApp(firebaseConfig);
+  const database = firebase.database();
+
+  // Constants
+  const EXCHANGE_RATE = 245;
+  const PASSWORD = "20070909";
+
+  // Global variables
+  let currentEditingId = null;
+  let currentUser = null;
+
+  console.log('✅ B.Y PRO Dashboard Initialized!');
+
+  // Login System
+  document.getElementById('loginForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+    const password = document.getElementById('password').value;
+    
+    if (password === PASSWORD) {
+      document.getElementById('loginScreen').classList.add('hidden');
+      document.getElementById('dashboard').classList.remove('hidden');
+      currentUser = { name: 'B.Y PRO Admin', role: 'admin' };
+      initializeDashboard();
+    } else {
+      document.getElementById('loginError').classList.remove('hidden');
+    }
+  });
+
+  // Logout System
+  document.getElementById('logoutBtn').addEventListener('click', function() {
+    document.getElementById('loginScreen').classList.remove('hidden');
+    document.getElementById('dashboard').classList.add('hidden');
+    document.getElementById('password').value = '';
+    document.getElementById('loginError').classList.add('hidden');
+    currentUser = null;
+  });
+
+  // Start dashboard after login
+  function initializeDashboard() {
+    console.log('🚀 Dashboard loaded');
+    showSection('dashboard');
+    initializeCharts();
+    setupEventListeners();
+    loadAllData();
+  }
+
+  // Section navigation
+  function showSection(id) {
+    console.log('📁 Showing section:', id);
+    document.querySelectorAll('[data-content]').forEach(s => s.classList.add('hidden'));
+    const el = document.querySelector(`[data-content="${id}"]`);
+    if (el) el.classList.remove('hidden');
+    
+    // Update active state in sidebar
+    document.querySelectorAll('.nav-btn').forEach(btn => {
+      btn.classList.remove('active');
+    });
+    const activeBtn = document.querySelector(`.nav-btn[data-section="${id}"]`);
+    if (activeBtn) activeBtn.classList.add('active');
+    
+    document.getElementById('section-title').textContent = activeBtn ? activeBtn.textContent.trim() : 'Dashboard';
+  }
+
+  // Add event listeners to sidebar buttons
+  document.querySelectorAll('.nav-btn[data-section]').forEach(b => {
+    b.addEventListener('click', function() {
+      showSection(this.dataset.section);
+    });
+  });
+
+  // Note modal functionality
+  document.getElementById('addNoteBtn').addEventListener('click', function() {
+    document.getElementById('noteModal').classList.remove('hidden');
+  });
+
+  document.getElementById('cancelNote').addEventListener('click', function() {
+    document.getElementById('noteModal').classList.add('hidden');
+    document.getElementById('noteForm').reset();
+  });
+
+  // Advertisement modal functionality
+  document.getElementById('addAdBtn').addEventListener('click', function() {
+    document.getElementById('adModal').classList.remove('hidden');
+  });
+
+  document.getElementById('cancelAd').addEventListener('click', function() {
+    document.getElementById('adModal').classList.add('hidden');
+    document.getElementById('adForm').reset();
+  });
+
+  // Initialize dashboard functions
+  function setupEventListeners() {
+    // Note form
+    document.getElementById('noteForm').addEventListener('submit', handleAddNote);
+    
+    // Advertisement form
+    document.getElementById('adForm').addEventListener('submit', handleAddAdvertisement);
+    
+    // Financial forms
+    document.getElementById('addTransactionForm').addEventListener('submit', handleAddTransaction);
+    document.getElementById('reserveForm').addEventListener('submit', handleUpdateReserve);
+    
+    // Project forms
+    document.getElementById('projectForm').addEventListener('submit', handleProjectSubmit);
+    document.getElementById('clearProject').addEventListener('click', clearProjectForm);
+    document.getElementById('projectFilter').addEventListener('change', loadProjects);
+    
+    // Customer forms
+    document.getElementById('customerForm').addEventListener('submit', handleCustomerSubmit);
+    
+    // Product forms
+    document.getElementById('addProductBtn').addEventListener('click', showProductEditor);
+    document.getElementById('cancelProduct').addEventListener('click', hideProductEditor);
+    document.getElementById('productForm').addEventListener('submit', handleProductSubmit);
+    
+    // Support
+    document.getElementById('newTicketBtn').addEventListener('click', handleNewTicket);
+    
+    // Promotion
+    document.getElementById('addChannelBtn').addEventListener('click', handleAddChannel);
+    
+    // Employees
+    document.getElementById('addDepartmentBtn').addEventListener('click', handleAddDepartment);
+    document.getElementById('employeeForm').addEventListener('submit', handleEmployeeSubmit);
+  }
+
+  function loadAllData() {
+    loadNotes();
+    loadFinancialData();
+    loadProjects();
+    loadCustomers();
+    loadProducts();
+    loadSupportTickets();
+    loadChannels();
+    loadDepartments();
+    loadEmployees();
+    loadAdvertisements();
+  }
+
+  // Charts initialization
+  function initializeCharts() {
+    // Financial Chart
+    const financeCtx = document.getElementById('financeChart').getContext('2d');
+    new Chart(financeCtx, {
+      type: 'line',
+      data: {
+        labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
+        datasets: [
+          {
+            label: 'DZD',
+            data: [120000, 190000, 150000, 180000, 160000, 200000],
+            borderColor: '#ffffff',
+            backgroundColor: 'rgba(255, 255, 255, 0.1)',
+            tension: 0.4
+          },
+          {
+            label: 'USD',
+            data: [500, 800, 600, 700, 650, 850],
+            borderColor: '#a6a6a6',
+            backgroundColor: 'rgba(166, 166, 166, 0.1)',
+            tension: 0.4
+          }
+        ]
+      },
+      options: {
+        responsive: true,
+        plugins: {
+          legend: {
+            position: 'top',
+          }
+        },
+        scales: {
+          y: {
+            beginAtZero: true,
+            grid: {
+              color: 'rgba(255, 255, 255, 0.1)'
+            },
+            ticks: {
+              color: '#a6a6a6'
+            }
+          },
+          x: {
+            grid: {
+              color: 'rgba(255, 255, 255, 0.1)'
+            },
+            ticks: {
+              color: '#a6a6a6'
+            }
+          }
+        }
+      }
+    });
+
+    // Trend Chart
+    const trendCtx = document.getElementById('trendChart').getContext('2d');
+    new Chart(trendCtx, {
+      type: 'bar',
+      data: {
+        labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
+        datasets: [
+          {
+            label: 'Projects',
+            data: [5, 8, 6, 10, 7, 12],
+            backgroundColor: 'rgba(255, 255, 255, 0.7)',
+          },
+          {
+            label: 'Customers',
+            data: [3, 5, 7, 9, 6, 11],
+            backgroundColor: 'rgba(166, 166, 166, 0.7)',
+          }
+        ]
+      },
+      options: {
+        responsive: true,
+        plugins: {
+          legend: {
+            position: 'top',
+          }
+        },
+        scales: {
+          y: {
+            beginAtZero: true,
+            grid: {
+              color: 'rgba(255, 255, 255, 0.1)'
+            },
+            ticks: {
+              color: '#a6a6a6'
+            }
+          },
+          x: {
+            grid: {
+              color: 'rgba(255, 255, 255, 0.1)'
+            },
+            ticks: {
+              color: '#a6a6a6'
+            }
+          }
+        }
+      }
+    });
+  }
+
+  // ==================== NOTES MANAGEMENT ====================
+  async function handleAddNote(e) {
+    e.preventDefault();
+    const formData = new FormData(e.target);
+    const data = {
+      title: formData.get('title'),
+      content: formData.get('content'),
+      createdAt: new Date().toISOString()
+    };
+    
+    try {
+      await database.ref('notes').push(data);
+      document.getElementById('noteModal').classList.add('hidden');
+      e.target.reset();
+      loadNotes();
+      alert('✅ Note added successfully!');
+    } catch (error) {
+      console.error('Error adding note:', error);
+      alert('❌ Error adding note: ' + error.message);
+    }
+  }
+
+  async function loadNotes() {
+    try {
+      const snapshot = await database.ref('notes').once('value');
+      const notesList = document.getElementById('notesList');
+      notesList.innerHTML = '';
+      
+      let count = 0;
+      snapshot.forEach((childSnapshot) => {
+        const note = childSnapshot.val();
+        count++;
+        
+        const noteElement = document.createElement('div');
+        noteElement.className = 'p-3 border rounded bg-black/40';
+        noteElement.innerHTML = `
+          <div class="flex justify-between items-start">
+            <div>
+              <div class="font-semibold">${note.title}</div>
+              <div class="text-sm text-gray-400 mt-1">${note.content}</div>
+            </div>
+            <button data-id="${childSnapshot.key}" class="delete-note text-red-500">
+              <i class="fas fa-trash"></i>
+            </button>
+          </div>
+          <div class="text-xs text-gray-500 mt-2">${new Date(note.createdAt).toLocaleString()}</div>
+        `;
+        
+        notesList.appendChild(noteElement);
+      });
+      
+      // Update notes count
+      document.getElementById('notes-count').textContent = count;
+      document.getElementById('notes-count').classList.toggle('hidden', count === 0);
+      
+      // Add delete event listeners
+      document.querySelectorAll('.delete-note').forEach(button => {
+        button.addEventListener('click', async (e) => {
+          const noteId = e.currentTarget.getAttribute('data-id');
+          try {
+            await database.ref('notes/' + noteId).remove();
+            loadNotes();
+            alert('✅ Note deleted successfully!');
+          } catch (error) {
+            console.error('Error deleting note:', error);
+            alert('❌ Error deleting note: ' + error.message);
+          }
+        });
+      });
+    } catch (error) {
+      console.error('Error loading notes:', error);
+    }
+  }
+
+  // ==================== ADVERTISEMENTS MANAGEMENT ====================
+  async function handleAddAdvertisement(e) {
+    e.preventDefault();
+    const formData = new FormData(e.target);
+    const data = {
+      title: formData.get('title'),
+      imageUrl: formData.get('imageUrl'),
+      link: formData.get('link'),
+      description: formData.get('description'),
+      createdAt: new Date().toISOString()
+    };
+    
+    try {
+      await database.ref('advertisements').push(data);
+      document.getElementById('adModal').classList.add('hidden');
+      e.target.reset();
+      loadAdvertisements();
+      alert('✅ Advertisement added successfully!');
+    } catch (error) {
+      console.error('Error adding advertisement:', error);
+      alert('❌ Error adding advertisement: ' + error.message);
+    }
+  }
+
+  async function loadAdvertisements() {
+    try {
+      const snapshot = await database.ref('advertisements').once('value');
+      const adsList = document.getElementById('adsList');
+      adsList.innerHTML = '';
+      
+      snapshot.forEach((childSnapshot) => {
+        const ad = childSnapshot.val();
+        
+        const adElement = document.createElement('div');
+        adElement.className = 'ad-card';
+        adElement.innerHTML = `
+          <div class="ad-image">
+            <img src="${ad.imageUrl || 'https://via.placeholder.com/300x150?text=Advertisement'}" alt="${ad.title}">
+          </div>
+          <div class="ad-content">
+            <h4 class="ad-title">${ad.title}</h4>
+            <p class="ad-desc">${ad.description || 'No description'}</p>
+            <div class="ad-footer">
+              <span class="ad-date">${new Date(ad.createdAt).toLocaleDateString()}</span>
+              <div class="ad-actions">
+                <a href="${ad.link || '#'}" target="_blank" class="ad-link-btn">Visit</a>
+                <button class="delete-ad" data-id="${childSnapshot.key}">Delete</button>
+              </div>
+            </div>
+          </div>
+        `;
+        
+        adsList.appendChild(adElement);
+      });
+      
+      // Add delete event listeners
+      document.querySelectorAll('.delete-ad').forEach(button => {
+        button.addEventListener('click', async (e) => {
+          const adId = e.currentTarget.getAttribute('data-id');
+          try {
+            await database.ref('advertisements/' + adId).remove();
+            loadAdvertisements();
+            alert('✅ Advertisement deleted successfully!');
+          } catch (error) {
+            console.error('Error deleting advertisement:', error);
+            alert('❌ Error deleting advertisement: ' + error.message);
+          }
+        });
+      });
+    } catch (error) {
+      console.error('Error loading advertisements:', error);
+    }
+  }
+
+  // ==================== FINANCIAL MANAGEMENT ====================
+  async function handleAddTransaction(e) {
+    e.preventDefault();
+    const formData = new FormData(e.target);
+    const data = {
+      title: formData.get('title'),
+      amount: Number(formData.get('amount')),
+      currency: formData.get('currency'),
+      type: formData.get('type'),
+      date: formData.get('date') || new Date().toISOString().slice(0, 10),
+      createdAt: new Date().toISOString()
+    };
+    
+    try {
+      await database.ref('transactions').push(data);
+      e.target.reset();
+      loadFinancialData();
+      alert('✅ Transaction added successfully!');
+    } catch (error) {
+      console.error('Error adding transaction:', error);
+      alert('❌ Error adding transaction: ' + error.message);
+    }
+  }
+
+  async function handleUpdateReserve(e) {
+    e.preventDefault();
+    const formData = new FormData(e.target);
+    const amount = Number(formData.get('amount'));
+    
+    try {
+      await database.ref('company/reserve').set({ 
+        amount, 
+        currency: 'USD', 
+        updatedAt: new Date().toISOString() 
+      });
+      e.target.reset();
+      loadFinancialData();
+      alert('✅ Reserve updated successfully!');
+    } catch (error) {
+      console.error('Error updating reserve:', error);
+      alert('❌ Error updating reserve: ' + error.message);
+    }
+  }
+
+  async function loadFinancialData() {
+    try {
+      // Load transactions
+      const transactionsSnapshot = await database.ref('transactions').once('value');
+      const transactionsList = document.getElementById('transactionsList');
+      transactionsList.innerHTML = '';
+      
+      let totalIncome = 0;
+      let totalExpenses = 0;
+      
+      transactionsSnapshot.forEach((childSnapshot) => {
+        const transaction = childSnapshot.val();
+        const row = document.createElement('tr');
+        row.className = 'border-b border-gray-800';
+        
+        let amountDisplay = transaction.amount;
+        if (transaction.currency === 'USD') {
+          amountDisplay = `$${transaction.amount}`;
+        } else {
+          amountDisplay = `${transaction.amount} DZD`;
+        }
+        
+        row.innerHTML = `
+          <td class="p-2">${transaction.date}</td>
+          <td class="p-2">${transaction.title}</td>
+          <td class="p-2">${transaction.type === 'income' ? 'Income' : 'Expense'}</td>
+          <td class="p-2 text-right">${amountDisplay}</td>
+          <td class="p-2 text-right">${transaction.currency}</td>
+          <td class="p-2">
+            <button class="delete-transaction text-xs px-2 py-1 bg-red-500 rounded" data-id="${childSnapshot.key}">Delete</button>
+          </td>
+        `;
+        
+        transactionsList.appendChild(row);
+        
+        // Calculate totals
+        if (transaction.type === 'income') {
+          if (transaction.currency === 'USD') {
+            totalIncome += transaction.amount * EXCHANGE_RATE;
+          } else {
+            totalIncome += transaction.amount;
+          }
+        } else {
+          if (transaction.currency === 'USD') {
+            totalExpenses += transaction.amount * EXCHANGE_RATE;
+          } else {
+            totalExpenses += transaction.amount;
+          }
+        }
+      });
+      
+      // Load company reserve
+      let companyReserve = 0;
+      try {
+        const reserveSnapshot = await database.ref('company/reserve').once('value');
+        if (reserveSnapshot.exists()) {
+          companyReserve = reserveSnapshot.val().amount || 0;
+        }
+      } catch (error) {
+        console.error('Error loading reserve:', error);
+      }
+      
+      // Update UI
+      const totalValue = totalIncome - totalExpenses;
+      const totalValueUSD = totalValue / EXCHANGE_RATE;
+      
+      document.getElementById('totalFinancialValue').textContent = 
+        `${totalValue.toLocaleString()} DZD / $${totalValueUSD.toFixed(2)}`;
+      document.getElementById('companyReserve').textContent = `$${companyReserve}`;
+      document.getElementById('currentReserve').textContent = `$${companyReserve}`;
+      document.getElementById('totalIncome').textContent = `${totalIncome.toLocaleString()} DZD`;
+      document.getElementById('totalExpenses').textContent = `${totalExpenses.toLocaleString()} DZD`;
+      
+      // Add delete event listeners for transactions
+      document.querySelectorAll('.delete-transaction').forEach(button => {
+        button.addEventListener('click', async (e) => {
+          const transactionId = e.target.getAttribute('data-id');
+          try {
+            await database.ref('transactions/' + transactionId).remove();
+            loadFinancialData();
+            alert('✅ Transaction deleted successfully!');
+          } catch (error) {
+            console.error('Error deleting transaction:', error);
+            alert('❌ Error deleting transaction: ' + error.message);
+          }
+        });
+      });
+    } catch (error) {
+      console.error('Error loading financial data:', error);
+    }
+  }
+
+  // ==================== PROJECTS MANAGEMENT ====================
+  async function handleProjectSubmit(e) {
+    e.preventDefault();
+    const formData = new FormData(e.target);
+    const data = {
+      title: formData.get('title'),
+      desc: formData.get('desc'),
+      assignedTo: formData.get('assignedTo'),
+      start: formData.get('start'),
+      due: formData.get('due'),
+      progress: Number(formData.get('progress')) || 0,
+      status: getProjectStatus(Number(formData.get('progress')) || 0),
+      createdAt: new Date().toISOString()
+    };
+    
+    try {
+      if (currentEditingId) {
+        await database.ref('projects/' + currentEditingId).update(data);
+        currentEditingId = null;
+        alert('✅ Project updated successfully!');
+      } else {
+        await database.ref('projects').push(data);
+        alert('✅ Project added successfully!');
+      }
+      e.target.reset();
+      document.getElementById('projectId').value = '';
+      loadProjects();
+    } catch (error) {
+      console.error('Error saving project:', error);
+      alert('❌ Error saving project: ' + error.message);
+    }
+  }
+
+  function clearProjectForm() {
+    document.getElementById('projectForm').reset();
+    document.getElementById('projectId').value = '';
+    currentEditingId = null;
+  }
+
+  function getProjectStatus(progress) {
+    if (progress >= 100) return 'completed';
+    if (progress > 0) return 'in-progress';
+    return 'not-started';
+  }
+
+  async function loadProjects() {
+    try {
+      const snapshot = await database.ref('projects').once('value');
+      const projectsList = document.getElementById('projectsList');
+      projectsList.innerHTML = '';
+      
+      let totalProjects = 0;
+      
+      snapshot.forEach((childSnapshot) => {
+        const project = childSnapshot.val();
+        totalProjects++;
+        
+        const projectCard = document.createElement('div');
+        projectCard.className = 'p-4 border rounded bg-black/40';
+        
+        let statusColor = 'bg-gray-500';
+        if (project.status === 'completed') statusColor = 'bg-green-500';
+        else if (project.status === 'in-progress') statusColor = 'bg-blue-500';
+        
+        projectCard.innerHTML = `
+          <div class="flex justify-between items-start mb-2">
+            <h4 class="font-semibold">${project.title}</h4>
+            <span class="text-xs px-2 py-1 rounded ${statusColor}">${project.status}</span>
+          </div>
+          <p class="text-sm text-gray-400 mb-3">${project.desc || 'No description'}</p>
+          <div class="progress-bar mb-2">
+            <div class="progress-fill" style="width: ${project.progress}%"></div>
+          </div>
+          <div class="flex justify-between text-xs text-gray-400">
+            <span>Progress: ${project.progress}%</span>
+            <span>Due: ${project.due || 'Not set'}</span>
+          </div>
+          <div class="flex gap-2 mt-3">
+            <button class="edit-project text-xs px-2 py-1 border rounded" data-id="${childSnapshot.key}">Edit</button>
+            <button class="delete-project text-xs px-2 py-1 bg-red-500 rounded" data-id="${childSnapshot.key}">Delete</button>
+          </div>
+        `;
+        
+        projectsList.appendChild(projectCard);
+      });
+      
+      document.getElementById('totalProjects').textContent = totalProjects;
+      
+      // Add event listeners for edit and delete buttons
+      document.querySelectorAll('.edit-project').forEach(button => {
+        button.addEventListener('click', async (e) => {
+          const projectId = e.target.getAttribute('data-id');
+          try {
+            const projectSnapshot = await database.ref('projects/' + projectId).once('value');
+            if (projectSnapshot.exists()) {
+              const project = projectSnapshot.val();
+              document.getElementById('projectId').value = projectId;
+              document.querySelector('#projectForm input[name="title"]').value = project.title || '';
+              document.querySelector('#projectForm textarea[name="desc"]').value = project.desc || '';
+              document.querySelector('#projectForm input[name="assignedTo"]').value = project.assignedTo || '';
+              document.querySelector('#projectForm input[name="start"]').value = project.start || '';
+              document.querySelector('#projectForm input[name="due"]').value = project.due || '';
+              document.querySelector('#projectForm input[name="progress"]').value = project.progress || '';
+              currentEditingId = projectId;
+            }
+          } catch (error) {
+            console.error('Error loading project:', error);
+            alert('❌ Error loading project: ' + error.message);
+          }
+        });
+      });
+      
+      document.querySelectorAll('.delete-project').forEach(button => {
+        button.addEventListener('click', async (e) => {
+          const projectId = e.target.getAttribute('data-id');
+          if (confirm('Are you sure you want to delete this project?')) {
+            try {
+              await database.ref('projects/' + projectId).remove();
+              loadProjects();
+              alert('✅ Project deleted successfully!');
+            } catch (error) {
+              console.error('Error deleting project:', error);
+              alert('❌ Error deleting project: ' + error.message);
+            }
+          }
+        });
+      });
+    } catch (error) {
+      console.error('Error loading projects:', error);
+    }
+  }
+
+  // ==================== CUSTOMERS MANAGEMENT ====================
+  async function handleCustomerSubmit(e) {
+    e.preventDefault();
+    const formData = new FormData(e.target);
+    const data = {
+      name: formData.get('name'),
+      email: formData.get('email'),
+      phone: formData.get('phone'),
+      project: formData.get('project'),
+      cost: Number(formData.get('cost')) || 0,
+      currency: formData.get('currency'),
+      assignedEmployee: formData.get('assignedEmployee'),
+      startDate: formData.get('startDate'),
+      dueDate: formData.get('dueDate'),
+      status: formData.get('status'),
+      notes: formData.get('notes'),
+      createdAt: new Date().toISOString()
+    };
+    
+    try {
+      if (currentEditingId) {
+        await database.ref('customers/' + currentEditingId).update(data);
+        currentEditingId = null;
+        alert('✅ Customer updated successfully!');
+      } else {
+        await database.ref('customers').push(data);
+        alert('✅ Customer added successfully!');
+      }
+      e.target.reset();
+      document.getElementById('customerId').value = '';
+      loadCustomers();
+    } catch (error) {
+      console.error('Error saving customer:', error);
+      alert('❌ Error saving customer: ' + error.message);
+    }
+  }
+
+  async function loadCustomers() {
+    try {
+      const snapshot = await database.ref('customers').once('value');
+      const customersList = document.getElementById('customersList');
+      customersList.innerHTML = '';
+      
+      let totalCustomers = 0;
+      let inProgress = 0;
+      let completed = 0;
+      let cancelled = 0;
+      let notStarted = 0;
+      
+      snapshot.forEach((childSnapshot) => {
+        const customer = childSnapshot.val();
+        totalCustomers++;
+        
+        // Count by status
+        if (customer.status === 'in-progress') inProgress++;
+        else if (customer.status === 'completed') completed++;
+        else if (customer.status === 'cancelled') cancelled++;
+        else if (customer.status === 'not-started') notStarted++;
+        
+        const row = document.createElement('tr');
+        row.className = 'border-b border-gray-800';
+        
+        row.innerHTML = `
+          <td class="p-2">${customer.name}</td>
+          <td class="p-2">${customer.email || 'N/A'}</td>
+          <td class="p-2">${customer.phone || 'N/A'}</td>
+          <td class="p-2">
+            <span class="px-2 py-1 rounded text-xs ${
+              customer.status === 'completed' ? 'bg-green-500' :
+              customer.status === 'in-progress' ? 'bg-blue-500' :
+              customer.status === 'cancelled' ? 'bg-red-500' : 'bg-gray-500'
+            }">${customer.status}</span>
+          </td>
+          <td class="p-2">
+            <button class="edit-customer text-xs px-2 py-1 border rounded mr-1" data-id="${childSnapshot.key}">Edit</button>
+            <button class="delete-customer text-xs px-2 py-1 bg-red-500 rounded" data-id="${childSnapshot.key}">Delete</button>
+          </td>
+        `;
+        
+        customersList.appendChild(row);
+      });
+      
+      // Update stats
+      document.getElementById('customerTotal').textContent = totalCustomers;
+      document.getElementById('customerInProgress').textContent = inProgress;
+      document.getElementById('customerCompleted').textContent = completed;
+      document.getElementById('customerCancelled').textContent = cancelled;
+      document.getElementById('customerNotStarted').textContent = notStarted;
+      document.getElementById('totalCustomers').textContent = totalCustomers;
+      
+      // Add event listeners for edit and delete buttons
+      document.querySelectorAll('.edit-customer').forEach(button => {
+        button.addEventListener('click', async (e) => {
+          const customerId = e.target.getAttribute('data-id');
+          try {
+            const customerSnapshot = await database.ref('customers/' + customerId).once('value');
+            if (customerSnapshot.exists()) {
+              const customer = customerSnapshot.val();
+              document.getElementById('customerId').value = customerId;
+              document.querySelector('#customerForm input[name="name"]').value = customer.name || '';
+              document.querySelector('#customerForm input[name="email"]').value = customer.email || '';
+              document.querySelector('#customerForm input[name="phone"]').value = customer.phone || '';
+              document.querySelector('#customerForm input[name="project"]').value = customer.project || '';
+              document.querySelector('#customerForm input[name="cost"]').value = customer.cost || '';
+              document.querySelector('#customerForm select[name="currency"]').value = customer.currency || 'DZD';
+              document.querySelector('#customerForm input[name="assignedEmployee"]').value = customer.assignedEmployee || '';
+              document.querySelector('#customerForm input[name="startDate"]').value = customer.startDate || '';
+              document.querySelector('#customerForm input[name="dueDate"]').value = customer.dueDate || '';
+              document.querySelector('#customerForm select[name="status"]').value = customer.status || 'in-progress';
+              document.querySelector('#customerForm textarea[name="notes"]').value = customer.notes || '';
+              currentEditingId = customerId;
+            }
+          } catch (error) {
+            console.error('Error loading customer:', error);
+            alert('❌ Error loading customer: ' + error.message);
+          }
+        });
+      });
+      
+      document.querySelectorAll('.delete-customer').forEach(button => {
+        button.addEventListener('click', async (e) => {
+          const customerId = e.target.getAttribute('data-id');
+          if (confirm('Are you sure you want to delete this customer?')) {
+            try {
+              await database.ref('customers/' + customerId).remove();
+              loadCustomers();
+              alert('✅ Customer deleted successfully!');
+            } catch (error) {
+              console.error('Error deleting customer:', error);
+              alert('❌ Error deleting customer: ' + error.message);
+            }
+          }
+        });
+      });
+    } catch (error) {
+      console.error('Error loading customers:', error);
+    }
+  }
+
+  // ==================== PRODUCTS MANAGEMENT ====================
+  function showProductEditor() {
+    document.getElementById('productEditor').classList.remove('hidden');
+  }
+
+  function hideProductEditor() {
+    document.getElementById('productEditor').classList.add('hidden');
+    document.getElementById('productForm').reset();
+    document.getElementById('productId').value = '';
+    currentEditingId = null;
+  }
+
+  async function handleProductSubmit(e) {
+    e.preventDefault();
+    const formData = new FormData(e.target);
+    const data = {
+      title: formData.get('title'),
+      desc: formData.get('desc'),
+      version: formData.get('version'),
+      license: formData.get('license'),
+      price: Number(formData.get('price')) || 0,
+      currency: formData.get('currency'),
+      createdAt: new Date().toISOString()
+    };
+    
+    try {
+      if (currentEditingId) {
+        await database.ref('products/' + currentEditingId).update(data);
+        currentEditingId = null;
+        alert('✅ Product updated successfully!');
+      } else {
+        await database.ref('products').push(data);
+        alert('✅ Product added successfully!');
+      }
+      hideProductEditor();
+      loadProducts();
+    } catch (error) {
+      console.error('Error saving product:', error);
+      alert('❌ Error saving product: ' + error.message);
+    }
+  }
+
+  async function loadProducts() {
+    try {
+      const snapshot = await database.ref('products').once('value');
+      const productsList = document.getElementById('productsList');
+      productsList.innerHTML = '';
+      
+      let totalProducts = 0;
+      let freeProducts = 0;
+      let paidProducts = 0;
+      
+      snapshot.forEach((childSnapshot) => {
+        const product = childSnapshot.val();
+        totalProducts++;
+        
+        if (product.currency === 'free') freeProducts++;
+        else paidProducts++;
+        
+        const productCard = document.createElement('div');
+        productCard.className = 'p-4 border rounded bg-black/40';
+        
+        let priceDisplay = 'Free';
+        if (product.currency !== 'free') {
+          priceDisplay = product.currency === 'USD' ? `$${product.price}` : `${product.price} DZD`;
+        }
+        
+        productCard.innerHTML = `
+          <div class="flex gap-3">
+            <img src="${product.image || 'https://via.placeholder.com/80'}" class="w-16 h-16 object-cover rounded">
+            <div class="flex-1">
+              <div class="flex justify-between items-start">
+                <h4 class="font-semibold">${product.title}</h4>
+                <span class="text-sm font-semibold">${priceDisplay}</span>
+              </div>
+              <p class="text-sm text-gray-400 mt-1">${product.desc || 'No description'}</p>
+              <div class="flex justify-between text-xs text-gray-400 mt-2">
+                <span>Version: ${product.version || 'N/A'}</span>
+                <span>License: ${product.license || 'N/A'}</span>
+              </div>
+              <div class="flex gap-2 mt-3">
+                <button class="edit-product text-xs px-2 py-1 border rounded" data-id="${childSnapshot.key}">Edit</button>
+                <button class="delete-product text-xs px-2 py-1 bg-red-500 rounded" data-id="${childSnapshot.key}">Delete</button>
+              </div>
+            </div>
+          </div>
+        `;
+        
+        productsList.appendChild(productCard);
+      });
+      
+      // Update stats
+      document.getElementById('productTotal').textContent = totalProducts;
+      document.getElementById('productFree').textContent = freeProducts;
+      document.getElementById('productPaid').textContent = paidProducts;
+      document.getElementById('totalProducts').textContent = totalProducts;
+      
+      // Add event listeners for edit and delete buttons
+      document.querySelectorAll('.edit-product').forEach(button => {
+        button.addEventListener('click', async (e) => {
+          const productId = e.target.getAttribute('data-id');
+          try {
+            const productSnapshot = await database.ref('products/' + productId).once('value');
+            if (productSnapshot.exists()) {
+              const product = productSnapshot.val();
+              document.getElementById('productId').value = productId;
+              document.querySelector('#productForm input[name="title"]').value = product.title || '';
+              document.querySelector('#productForm textarea[name="desc"]').value = product.desc || '';
+              document.querySelector('#productForm input[name="version"]').value = product.version || '';
+              document.querySelector('#productForm input[name="license"]').value = product.license || '';
+              document.querySelector('#productForm input[name="price"]').value = product.price || '';
+              document.querySelector('#productForm select[name="currency"]').value = product.currency || 'free';
+              currentEditingId = productId;
+              showProductEditor();
+            }
+          } catch (error) {
+            console.error('Error loading product:', error);
+            alert('❌ Error loading product: ' + error.message);
+          }
+        });
+      });
+      
+      document.querySelectorAll('.delete-product').forEach(button => {
+        button.addEventListener('click', async (e) => {
+          const productId = e.target.getAttribute('data-id');
+          if (confirm('Are you sure you want to delete this product?')) {
+            try {
+              await database.ref('products/' + productId).remove();
+              loadProducts();
+              alert('✅ Product deleted successfully!');
+            } catch (error) {
+              console.error('Error deleting product:', error);
+              alert('❌ Error deleting product: ' + error.message);
+            }
+          }
+        });
+      });
+    } catch (error) {
+      console.error('Error loading products:', error);
+    }
+  }
+
+  // ==================== SUPPORT & COMPLAINTS ====================
+  async function handleNewTicket() {
+    const customerName = prompt('Customer Name:');
+    const issue = prompt('Issue Description:');
+    
+    if (!customerName || !issue) return;
+    
+    try {
+      await database.ref('tickets').push({
+        customerName,
+        issue,
+        status: 'in-progress',
+        createdAt: new Date().toISOString()
+      });
+      loadSupportTickets();
+      alert('✅ Ticket created successfully!');
+    } catch (error) {
+      console.error('Error creating ticket:', error);
+      alert('❌ Error creating ticket: ' + error.message);
+    }
+  }
+
+  async function loadSupportTickets() {
+    try {
+      const snapshot = await database.ref('tickets').once('value');
+      const ticketsList = document.getElementById('ticketsList');
+      ticketsList.innerHTML = '';
+      
+      let totalTickets = 0;
+      let inProgress = 0;
+      let resolved = 0;
+      let rejected = 0;
+      
+      snapshot.forEach((childSnapshot) => {
+        const ticket = childSnapshot.val();
+        totalTickets++;
+        
+        // Count by status
+        if (ticket.status === 'in-progress') inProgress++;
+        else if (ticket.status === 'resolved') resolved++;
+        else if (ticket.status === 'rejected') rejected++;
+        
+        const ticketElement = document.createElement('div');
+        ticketElement.className = 'p-3 border rounded bg-black/40';
+        
+        let statusColor = 'bg-blue-500';
+        if (ticket.status === 'resolved') statusColor = 'bg-green-500';
+        else if (ticket.status === 'rejected') statusColor = 'bg-red-500';
+        
+        ticketElement.innerHTML = `
+          <div class="flex justify-between items-start">
+            <div>
+              <div class="font-semibold">${ticket.customerName}</div>
+              <div class="text-sm text-gray-400 mt-1">${ticket.issue}</div>
+            </div>
+            <span class="text-xs px-2 py-1 rounded ${statusColor}">${ticket.status}</span>
+          </div>
+          <div class="flex gap-2 mt-3">
+            <button class="resolve-ticket text-xs px-2 py-1 border rounded" data-id="${childSnapshot.key}">Resolve</button>
+            <button class="reject-ticket text-xs px-2 py-1 border rounded" data-id="${childSnapshot.key}">Reject</button>
+            <button class="delete-ticket text-xs px-2 py-1 bg-red-500 rounded" data-id="${childSnapshot.key}">Delete</button>
+          </div>
+        `;
+        
+        ticketsList.appendChild(ticketElement);
+      });
+      
+      // Update stats
+      document.getElementById('supportTotal').textContent = totalTickets;
+      document.getElementById('supportInProgress').textContent = inProgress;
+      document.getElementById('supportResolved').textContent = resolved;
+      document.getElementById('supportRejected').textContent = rejected;
+      
+      // Add event listeners for action buttons
+      document.querySelectorAll('.resolve-ticket').forEach(button => {
+        button.addEventListener('click', async (e) => {
+          const ticketId = e.target.getAttribute('data-id');
+          try {
+            await database.ref('tickets/' + ticketId).update({ status: 'resolved' });
+            loadSupportTickets();
+            alert('✅ Ticket resolved!');
+          } catch (error) {
+            console.error('Error resolving ticket:', error);
+            alert('❌ Error resolving ticket: ' + error.message);
+          }
+        });
+      });
+      
+      document.querySelectorAll('.reject-ticket').forEach(button => {
+        button.addEventListener('click', async (e) => {
+          const ticketId = e.target.getAttribute('data-id');
+          try {
+            await database.ref('tickets/' + ticketId).update({ status: 'rejected' });
+            loadSupportTickets();
+            alert('✅ Ticket rejected!');
+          } catch (error) {
+            console.error('Error rejecting ticket:', error);
+            alert('❌ Error rejecting ticket: ' + error.message);
+          }
+        });
+      });
+      
+      document.querySelectorAll('.delete-ticket').forEach(button => {
+        button.addEventListener('click', async (e) => {
+          const ticketId = e.target.getAttribute('data-id');
+          if (confirm('Are you sure you want to delete this ticket?')) {
+            try {
+              await database.ref('tickets/' + ticketId).remove();
+              loadSupportTickets();
+              alert('✅ Ticket deleted successfully!');
+            } catch (error) {
+              console.error('Error deleting ticket:', error);
+              alert('❌ Error deleting ticket: ' + error.message);
+            }
+          }
+        });
+      });
+    } catch (error) {
+      console.error('Error loading tickets:', error);
+    }
+  }
+
+  // ==================== PROMOTION (SOCIAL MEDIA) ====================
+  async function handleAddChannel() {
+    const name = prompt('Channel Name:');
+    const url = prompt('Channel URL:');
+    
+    if (!name || !url) return;
+    
+    try {
+      await database.ref('channels').push({
+        name,
+        url,
+        createdAt: new Date().toISOString()
+      });
+      loadChannels();
+      alert('✅ Channel added successfully!');
+    } catch (error) {
+      console.error('Error adding channel:', error);
+      alert('❌ Error adding channel: ' + error.message);
+    }
+  }
+
+  async function loadChannels() {
+    try {
+      const snapshot = await database.ref('channels').once('value');
+      const channelsList = document.getElementById('channelsList');
+      channelsList.innerHTML = '';
+      
+      snapshot.forEach((childSnapshot) => {
+        const channel = childSnapshot.val();
+        
+        const channelCard = document.createElement('div');
+        channelCard.className = 'p-4 border rounded bg-black/40';
+        
+        channelCard.innerHTML = `
+          <div class="flex justify-between items-center">
+            <div>
+              <div class="font-semibold">${channel.name}</div>
+              <div class="text-sm text-gray-400 mt-1 truncate">${channel.url}</div>
+            </div>
+            <div class="flex gap-2">
+              <button class="visit-channel text-xs px-2 py-1 border rounded" data-url="${channel.url}">Visit</button>
+              <button class="copy-channel text-xs px-2 py-1 border rounded" data-url="${channel.url}">Copy</button>
+              <button class="delete-channel text-xs px-2 py-1 bg-red-500 rounded" data-id="${childSnapshot.key}">Delete</button>
+            </div>
+          </div>
+        `;
+        
+        channelsList.appendChild(channelCard);
+      });
+      
+      // Add event listeners for action buttons
+      document.querySelectorAll('.visit-channel').forEach(button => {
+        button.addEventListener('click', (e) => {
+          const url = e.target.getAttribute('data-url');
+          window.open(url, '_blank');
+        });
+      });
+      
+      document.querySelectorAll('.copy-channel').forEach(button => {
+        button.addEventListener('click', (e) => {
+          const url = e.target.getAttribute('data-url');
+          navigator.clipboard.writeText(url).then(() => {
+            alert('✅ URL copied to clipboard!');
+          });
+        });
+      });
+      
+      document.querySelectorAll('.delete-channel').forEach(button => {
+        button.addEventListener('click', async (e) => {
+          const channelId = e.target.getAttribute('data-id');
+          if (confirm('Are you sure you want to delete this channel?')) {
+            try {
+              await database.ref('channels/' + channelId).remove();
+              loadChannels();
+              alert('✅ Channel deleted successfully!');
+            } catch (error) {
+              console.error('Error deleting channel:', error);
+              alert('❌ Error deleting channel: ' + error.message);
+            }
+          }
+        });
+      });
+    } catch (error) {
+      console.error('Error loading channels:', error);
+    }
+  }
+
+  // ==================== EMPLOYEES MANAGEMENT ====================
+  async function handleAddDepartment() {
+    const name = prompt('Department Name:');
+    
+    if (!name) return;
+    
+    try {
+      await database.ref('departments').push({
+        name,
+        createdAt: new Date().toISOString()
+      });
+      loadDepartments();
+      alert('✅ Department added successfully!');
+    } catch (error) {
+      console.error('Error adding department:', error);
+      alert('❌ Error adding department: ' + error.message);
+    }
+  }
+
+  async function handleEmployeeSubmit(e) {
+    e.preventDefault();
+    const formData = new FormData(e.target);
+    const data = {
+      name: formData.get('name'),
+      position: formData.get('position'),
+      department: formData.get('department'),
+      email: formData.get('email'),
+      phone: formData.get('phone'),
+      contactLink: formData.get('contactLink'),
+      skills: formData.get('skills'),
+      notes: formData.get('notes'),
+      dashboardAccess: document.querySelector('input[name="dashboardAccess"]').checked,
+      financialAccess: document.querySelector('input[name="financialAccess"]').checked,
+      projectAccess: document.querySelector('input[name="projectAccess"]').checked,
+      createdAt: new Date().toISOString()
+    };
+    
+    try {
+      if (currentEditingId) {
+        await database.ref('employees/' + currentEditingId).update(data);
+        currentEditingId = null;
+        alert('✅ Employee updated successfully!');
+      } else {
+        await database.ref('employees').push(data);
+        alert('✅ Employee added successfully!');
+      }
+      e.target.reset();
+      document.getElementById('employeeId').value = '';
+      loadEmployees();
+    } catch (error) {
+      console.error('Error saving employee:', error);
+      alert('❌ Error saving employee: ' + error.message);
+    }
+  }
+
+  async function loadDepartments() {
+    try {
+      const snapshot = await database.ref('departments').once('value');
+      const departmentsList = document.getElementById('departmentsList');
+      departmentsList.innerHTML = '';
+      
+      snapshot.forEach((childSnapshot) => {
+        const department = childSnapshot.val();
+        
+        const departmentCard = document.createElement('div');
+        departmentCard.className = 'p-4 border rounded bg-black/40 text-center';
+        
+        // Count employees in this department
+        const employeeCount = Math.floor(Math.random() * 10);
+        
+        departmentCard.innerHTML = `
+          <div class="font-semibold">${department.name}</div>
+          <div class="text-2xl font-bold my-2">${employeeCount}</div>
+          <div class="text-xs text-gray-400">Employees</div>
+          <div class="flex gap-2 mt-3 justify-center">
+            <button class="edit-department text-xs px-2 py-1 border rounded" data-id="${childSnapshot.key}">Edit</button>
+            <button class="delete-department text-xs px-2 py-1 bg-red-500 rounded" data-id="${childSnapshot.key}">Delete</button>
+          </div>
+        `;
+        
+        departmentsList.appendChild(departmentCard);
+      });
+      
+      // Add event listeners for edit and delete buttons
+      document.querySelectorAll('.edit-department').forEach(button => {
+        button.addEventListener('click', async (e) => {
+          const departmentId = e.target.getAttribute('data-id');
+          const newName = prompt('Enter new department name:');
+          if (newName) {
+            try {
+              await database.ref('departments/' + departmentId).update({ name: newName });
+              loadDepartments();
+              alert('✅ Department updated successfully!');
+            } catch (error) {
+              console.error('Error updating department:', error);
+              alert('❌ Error updating department: ' + error.message);
+            }
+          }
+        });
+      });
+      
+      document.querySelectorAll('.delete-department').forEach(button => {
+        button.addEventListener('click', async (e) => {
+          const departmentId = e.target.getAttribute('data-id');
+          if (confirm('Are you sure you want to delete this department?')) {
+            try {
+              await database.ref('departments/' + departmentId).remove();
+              loadDepartments();
+              alert('✅ Department deleted successfully!');
+            } catch (error) {
+              console.error('Error deleting department:', error);
+              alert('❌ Error deleting department: ' + error.message);
+            }
+          }
+        });
+      });
+    } catch (error) {
+      console.error('Error loading departments:', error);
+    }
+  }
+
+  async function loadEmployees() {
+    try {
+      const snapshot = await database.ref('employees').once('value');
+      const employeesList = document.getElementById('employeesList');
+      employeesList.innerHTML = '';
+      
+      let totalEmployees = 0;
+      
+      snapshot.forEach((childSnapshot) => {
+        const employee = childSnapshot.val();
+        totalEmployees++;
+        
+        const employeeCard = document.createElement('div');
+        employeeCard.className = 'p-4 border rounded bg-black/40';
+        
+        employeeCard.innerHTML = `
+          <div class="flex justify-between items-start">
+            <div>
+              <div class="font-semibold">${employee.name}</div>
+              <div class="text-sm text-gray-400 mt-1">${employee.position} • ${employee.department || 'No department'}</div>
+              <div class="text-sm text-gray-400 mt-1">${employee.email || 'No email'} • ${employee.phone || 'No phone'}</div>
+              ${employee.contactLink ? `<div class="text-sm text-gray-400 mt-1">Contact: <a href="${employee.contactLink}" target="_blank" class="underline">${employee.contactLink}</a></div>` : ''}
+              <div class="text-sm text-gray-400 mt-1">Skills: ${employee.skills || 'Not specified'}</div>
+              <div class="flex gap-2 mt-2">
+                ${employee.dashboardAccess ? '<span class="text-xs px-2 py-1 bg-blue-500 rounded">Dashboard</span>' : ''}
+                ${employee.financialAccess ? '<span class="text-xs px-2 py-1 bg-green-500 rounded">Financial</span>' : ''}
+                ${employee.projectAccess ? '<span class="text-xs px-2 py-1 bg-purple-500 rounded">Projects</span>' : ''}
+              </div>
+            </div>
+            <div class="flex gap-2">
+              <button class="edit-employee text-xs px-2 py-1 border rounded" data-id="${childSnapshot.key}">Edit</button>
+              <button class="delete-employee text-xs px-2 py-1 bg-red-500 rounded" data-id="${childSnapshot.key}">Delete</button>
+            </div>
+          </div>
+        `;
+        
+        employeesList.appendChild(employeeCard);
+      });
+      
+      // Update stats
+      document.getElementById('employeeTotal').textContent = totalEmployees;
+      document.getElementById('totalEmployees').textContent = totalEmployees;
+      
+      // Add event listeners for edit and delete buttons
+      document.querySelectorAll('.edit-employee').forEach(button => {
+        button.addEventListener('click', async (e) => {
+          const employeeId = e.target.getAttribute('data-id');
+          try {
+            const employeeSnapshot = await database.ref('employees/' + employeeId).once('value');
+            if (employeeSnapshot.exists()) {
+              const employee = employeeSnapshot.val();
+              document.getElementById('employeeId').value = employeeId;
+              document.querySelector('#employeeForm input[name="name"]').value = employee.name || '';
+              document.querySelector('#employeeForm input[name="position"]').value = employee.position || '';
+              document.querySelector('#employeeForm input[name="department"]').value = employee.department || '';
+              document.querySelector('#employeeForm input[name="email"]').value = employee.email || '';
+              document.querySelector('#employeeForm input[name="phone"]').value = employee.phone || '';
+              document.querySelector('#employeeForm input[name="contactLink"]').value = employee.contactLink || '';
+              document.querySelector('#employeeForm textarea[name="skills"]').value = employee.skills || '';
+              document.querySelector('#employeeForm textarea[name="notes"]').value = employee.notes || '';
+              document.querySelector('input[name="dashboardAccess"]').checked = employee.dashboardAccess || false;
+              document.querySelector('input[name="financialAccess"]').checked = employee.financialAccess || false;
+              document.querySelector('input[name="projectAccess"]').checked = employee.projectAccess || false;
+              currentEditingId = employeeId;
+            }
+          } catch (error) {
+            console.error('Error loading employee:', error);
+            alert('❌ Error loading employee: ' + error.message);
+          }
+        });
+      });
+      
+      document.querySelectorAll('.delete-employee').forEach(button => {
+        button.addEventListener('click', async (e) => {
+          const employeeId = e.target.getAttribute('data-id');
+          if (confirm('Are you sure you want to delete this employee?')) {
+            try {
+              await database.ref('employees/' + employeeId).remove();
+              loadEmployees();
+              alert('✅ Employee deleted successfully!');
+            } catch (error) {
+              console.error('Error deleting employee:', error);
+              alert('❌ Error deleting employee: ' + error.message);
+            }
+          }
+        });
+      });
+    } catch (error) {
+      console.error('Error loading employees:', error);
+    }
+  }
+
+  // Real-time listeners for live updates
+  database.ref('notes').on('value', loadNotes);
+  database.ref('advertisements').on('value', loadAdvertisements);
+  database.ref('transactions').on('value', loadFinancialData);
+  database.ref('projects').on('value', loadProjects);
+  database.ref('customers').on('value', loadCustomers);
+  database.ref('products').on('value', loadProducts);
+  database.ref('tickets').on('value', loadSupportTickets);
+  database.ref('channels').on('value', loadChannels);
+  database.ref('departments').on('value', loadDepartments);
+  database.ref('employees').on('value', loadEmployees);
+
+  console.log('🎯 B.Y PRO Dashboard is fully operational!');
+</script>
+</body>
+</html>

@@ -77,6 +77,10 @@
           <i class="fas fa-id-badge w-4"></i> Employees
         </button>
 
+        <button data-section="user-accounts" class="nav-btn">
+          <i class="fas fa-user-cog w-4"></i> User Accounts
+        </button>
+
         <button id="logoutBtn" class="nav-btn mt-auto">
           <i class="fas fa-sign-out-alt w-4"></i> Logout
         </button>
@@ -409,7 +413,7 @@
               <a href="https://store-pro.great-site.net/" target="_blank" class="visit-store-btn">Visit Store</a>
             </div>
             <div class="store-frame-container">
-              <iframe src="https://store-pro.great-site.net/" class="store-frame"></iframe>
+              <iframe src="https://store-pro.great-site.net/" class="store-frame" id="storeFrame"></iframe>
             </div>
           </div>
         </div>
@@ -496,59 +500,77 @@
           </div>
         </div>
 
-        <!-- Employees -->
+        <!-- Employees - التصميم الجديد -->
         <div data-content="employees" class="section-content hidden">
-          <!-- Employee Stats -->
-          <div class="employee-overview">
-            <div class="stat-label">Total Employees</div>
-            <div id="employeeTotal" class="employee-total">0</div>
-          </div>
-
-          <!-- Departments -->
-          <div class="departments-container">
-            <div class="departments-header">
-              <h3 class="form-title">Departments</h3>
-              <button id="addDepartmentBtn" class="add-department-btn">Add Department</button>
+          <div class="employees-section">
+            <div class="employee-overview">
+              <div class="stat-label">Total Employees</div>
+              <div id="employeeTotal" class="employee-total">0</div>
             </div>
-            <div id="departmentsList" class="departments-grid"></div>
-          </div>
 
-          <!-- Employees Management -->
-          <div class="employees-management">
-            <div class="employees-list-container">
-              <h3 class="form-title">Employees List</h3>
-              <div id="employeesList" class="employees-list"></div>
-            </div>
-            <div class="employee-form">
-              <h3 class="form-title">Add / Edit Employee</h3>
+            <!-- إضافة موظف جديد -->
+            <div class="employee-form glass-card p-6 mb-6">
+              <h3 class="form-title">Add New Employee</h3>
               <form id="employeeForm" class="form">
                 <input type="hidden" id="employeeId" name="id">
-                <input name="name" placeholder="Full Name" class="form-input" required />
-                <input name="position" placeholder="Position" class="form-input" />
-                <input name="department" placeholder="Department" class="form-input" />
-                <input name="email" placeholder="Email" class="form-input" />
-                <input name="phone" placeholder="Phone" class="form-input" />
-                <input name="contactLink" placeholder="Contact Link" class="form-input" />
-                <textarea name="skills" placeholder="Skills" class="form-input"></textarea>
                 <div class="form-row">
-                  <div class="access-control">
-                    <label class="access-label">
-                      <input type="checkbox" name="dashboardAccess" class="access-checkbox">
-                      Dashboard Access
-                    </label>
-                    <label class="access-label">
-                      <input type="checkbox" name="financialAccess" class="access-checkbox">
-                      Financial Access
-                    </label>
-                    <label class="access-label">
-                      <input type="checkbox" name="projectAccess" class="access-checkbox">
-                      Project Access
-                    </label>
-                  </div>
+                  <input name="name" placeholder="Full Name" class="form-input" required />
+                  <input name="position" placeholder="Position" class="form-input" />
+                </div>
+                <div class="form-row">
+                  <select name="department" id="employeeDepartmentSelect" class="form-input" required>
+                    <option value="">Select Department</option>
+                  </select>
+                  <input name="email" type="email" placeholder="Email" class="form-input" />
+                </div>
+                <div class="form-row">
+                  <input name="phone" placeholder="Phone" class="form-input" />
+                  <input name="contactLink" placeholder="Contact Link" class="form-input" />
+                </div>
+                <textarea name="skills" placeholder="Skills (comma separated)" class="form-input"></textarea>
+                <div class="access-control">
+                  <h4 class="text-sm font-semibold mb-2">Access Permissions</h4>
+                  <label class="access-label">
+                    <input type="checkbox" name="dashboardAccess" class="access-checkbox">
+                    Dashboard Access
+                  </label>
+                  <label class="access-label">
+                    <input type="checkbox" name="financialAccess" class="access-checkbox">
+                    Financial Access
+                  </label>
+                  <label class="access-label">
+                    <input type="checkbox" name="projectAccess" class="access-checkbox">
+                    Project Access
+                  </label>
                 </div>
                 <textarea name="notes" placeholder="Notes" class="form-input"></textarea>
                 <button type="submit" class="form-btn-primary">Save Employee</button>
               </form>
+            </div>
+
+            <!-- إضافة قسم جديد -->
+            <div class="department-management glass-card p-6 mb-6">
+              <div class="department-header">
+                <h3 class="form-title">Departments Management</h3>
+                <button id="addDepartmentBtn" class="add-department-btn">Add New Department</button>
+              </div>
+            </div>
+
+            <!-- مجالات الموظفين -->
+            <div class="departments-list" id="departmentsList">
+              <!-- سيتم إضافة المجالات ديناميكياً -->
+            </div>
+          </div>
+        </div>
+
+        <!-- User Accounts -->
+        <div data-content="user-accounts" class="section-content hidden">
+          <div class="user-accounts-container">
+            <div class="user-accounts-header">
+              <h3 class="form-title">User Accounts Management</h3>
+            </div>
+            <div class="user-accounts-frame-container">
+              <iframe src="adminboard.html" class="user-accounts-frame" id="userAccountsFrame"></iframe>
             </div>
           </div>
         </div>
@@ -588,6 +610,45 @@
     </div>
   </div>
 
+  <!-- Add Department Modal -->
+  <div id="departmentModal" class="modal hidden">
+    <div class="modal-content">
+      <h3 class="modal-title">Add New Department</h3>
+      <form id="departmentForm" class="form">
+        <input name="name" placeholder="Department Name" class="form-input" required />
+        <select name="color" class="form-input" required>
+          <option value="">Select Color</option>
+          <option value="#3b82f6">Blue</option>
+          <option value="#8b5cf6">Purple</option>
+          <option value="#10b981">Green</option>
+          <option value="#f59e0b">Yellow</option>
+          <option value="#ef4444">Red</option>
+          <option value="#ec4899">Pink</option>
+          <option value="#6b7280">Gray</option>
+          <option value="#f97316">Orange</option>
+        </select>
+        <div class="form-row">
+          <button type="submit" class="form-btn-primary flex-1">Save Department</button>
+          <button type="button" id="cancelDepartment" class="form-btn-secondary">Cancel</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Notes Popup -->
+  <div id="notesPopup" class="notes-popup hidden">
+    <div class="notes-popup-header">
+      <h3 class="notes-popup-title">Recent Notes</h3>
+      <button id="notesPopupClose" class="notes-popup-close">
+        <i class="fas fa-times"></i>
+      </button>
+    </div>
+    <div id="notesPopupList" class="notes-popup-list"></div>
+  </div>
+
+  <!-- Custom Alert Container -->
+  <div id="alertContainer"></div>
+
 <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
 <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -616,6 +677,7 @@
   // Global variables
   let currentEditingId = null;
   let currentUser = null;
+  let draggedEmployee = null;
 
   console.log('✅ B.Y PRO Dashboard Initialized!');
 
@@ -667,6 +729,11 @@
     if (activeBtn) activeBtn.classList.add('active');
     
     document.getElementById('section-title').textContent = activeBtn ? activeBtn.textContent.trim() : 'Dashboard';
+    
+    // تحميل البيانات الخاصة بالقسم إذا لزم الأمر
+    if (id === 'employees') {
+      loadEmployeesWithDepartments();
+    }
   }
 
   // Add event listeners to sidebar buttons
@@ -694,6 +761,30 @@
   document.getElementById('cancelAd').addEventListener('click', function() {
     document.getElementById('adModal').classList.add('hidden');
     document.getElementById('adForm').reset();
+  });
+
+  // Department modal functionality
+  document.getElementById('addDepartmentBtn').addEventListener('click', function() {
+    document.getElementById('departmentModal').classList.remove('hidden');
+  });
+
+  document.getElementById('cancelDepartment').addEventListener('click', function() {
+    document.getElementById('departmentModal').classList.add('hidden');
+    document.getElementById('departmentForm').reset();
+  });
+
+  // Notes popup functionality
+  document.getElementById('notes-bell').addEventListener('click', function() {
+    const notesCount = document.getElementById('notes-count').textContent;
+    if (notesCount > 0) {
+      showNotesPopup();
+    } else {
+      showSection('dashboard');
+    }
+  });
+
+  document.getElementById('notesPopupClose').addEventListener('click', function() {
+    document.getElementById('notesPopup').classList.add('hidden');
   });
 
   // Initialize dashboard functions
@@ -728,8 +819,11 @@
     document.getElementById('addChannelBtn').addEventListener('click', handleAddChannel);
     
     // Employees
-    document.getElementById('addDepartmentBtn').addEventListener('click', handleAddDepartment);
     document.getElementById('employeeForm').addEventListener('submit', handleEmployeeSubmit);
+    document.getElementById('departmentForm').addEventListener('submit', handleAddDepartment);
+    
+    // Setup drag and drop for employees
+    setupEmployeeDragAndDrop();
   }
 
   function loadAllData() {
@@ -740,9 +834,77 @@
     loadProducts();
     loadSupportTickets();
     loadChannels();
-    loadDepartments();
-    loadEmployees();
     loadAdvertisements();
+    loadEmployeesWithDepartments();
+  }
+
+  // Custom Alert System
+  function showAlert(type, title, message, duration = 5000) {
+    const alertContainer = document.getElementById('alertContainer');
+    const alertId = 'alert-' + Date.now();
+    
+    const alertElement = document.createElement('div');
+    alertElement.className = `custom-alert ${type}`;
+    alertElement.id = alertId;
+    
+    let icon = 'fa-info-circle';
+    if (type === 'success') icon = 'fa-check-circle';
+    else if (type === 'error') icon = 'fa-exclamation-circle';
+    else if (type === 'warning') icon = 'fa-exclamation-triangle';
+    
+    alertElement.innerHTML = `
+      <div class="alert-icon">
+        <i class="fas ${icon}"></i>
+      </div>
+      <div class="alert-content">
+        <div class="alert-title">${title}</div>
+        <div class="alert-message">${message}</div>
+      </div>
+      <button class="alert-close" onclick="document.getElementById('${alertId}').remove()">
+        <i class="fas fa-times"></i>
+      </button>
+    `;
+    
+    alertContainer.appendChild(alertElement);
+    
+    // Auto remove after duration
+    setTimeout(() => {
+      const alert = document.getElementById(alertId);
+      if (alert) alert.remove();
+    }, duration);
+  }
+
+  // Notes Popup
+  function showNotesPopup() {
+    const notesPopup = document.getElementById('notesPopup');
+    const notesPopupList = document.getElementById('notesPopupList');
+    
+    // Load recent notes
+    database.ref('notes').once('value').then(snapshot => {
+      notesPopupList.innerHTML = '';
+      
+      let hasNotes = false;
+      snapshot.forEach(childSnapshot => {
+        const note = childSnapshot.val();
+        hasNotes = true;
+        
+        const noteElement = document.createElement('div');
+        noteElement.className = 'notes-popup-item';
+        noteElement.innerHTML = `
+          <div class="notes-popup-item-title">${note.title}</div>
+          <div class="notes-popup-item-content">${note.content}</div>
+          <div class="notes-popup-item-date">${new Date(note.createdAt).toLocaleString()}</div>
+        `;
+        
+        notesPopupList.appendChild(noteElement);
+      });
+      
+      if (hasNotes) {
+        notesPopup.classList.remove('hidden');
+      } else {
+        showAlert('info', 'No Notes', 'You have no notes to display.');
+      }
+    });
   }
 
   // Charts initialization
@@ -863,10 +1025,10 @@
       document.getElementById('noteModal').classList.add('hidden');
       e.target.reset();
       loadNotes();
-      alert('✅ Note added successfully!');
+      showAlert('success', 'Note Added', 'Your note has been added successfully!');
     } catch (error) {
       console.error('Error adding note:', error);
-      alert('❌ Error adding note: ' + error.message);
+      showAlert('error', 'Error', 'Failed to add note: ' + error.message);
     }
   }
 
@@ -910,10 +1072,10 @@
           try {
             await database.ref('notes/' + noteId).remove();
             loadNotes();
-            alert('✅ Note deleted successfully!');
+            showAlert('success', 'Note Deleted', 'Your note has been deleted successfully!');
           } catch (error) {
             console.error('Error deleting note:', error);
-            alert('❌ Error deleting note: ' + error.message);
+            showAlert('error', 'Error', 'Failed to delete note: ' + error.message);
           }
         });
       });
@@ -939,10 +1101,10 @@
       document.getElementById('adModal').classList.add('hidden');
       e.target.reset();
       loadAdvertisements();
-      alert('✅ Advertisement added successfully!');
+      showAlert('success', 'Advertisement Added', 'Your advertisement has been added successfully!');
     } catch (error) {
       console.error('Error adding advertisement:', error);
-      alert('❌ Error adding advertisement: ' + error.message);
+      showAlert('error', 'Error', 'Failed to add advertisement: ' + error.message);
     }
   }
 
@@ -984,10 +1146,10 @@
           try {
             await database.ref('advertisements/' + adId).remove();
             loadAdvertisements();
-            alert('✅ Advertisement deleted successfully!');
+            showAlert('success', 'Advertisement Deleted', 'Your advertisement has been deleted successfully!');
           } catch (error) {
             console.error('Error deleting advertisement:', error);
-            alert('❌ Error deleting advertisement: ' + error.message);
+            showAlert('error', 'Error', 'Failed to delete advertisement: ' + error.message);
           }
         });
       });
@@ -1013,10 +1175,10 @@
       await database.ref('transactions').push(data);
       e.target.reset();
       loadFinancialData();
-      alert('✅ Transaction added successfully!');
+      showAlert('success', 'Transaction Added', 'Your transaction has been added successfully!');
     } catch (error) {
       console.error('Error adding transaction:', error);
-      alert('❌ Error adding transaction: ' + error.message);
+      showAlert('error', 'Error', 'Failed to add transaction: ' + error.message);
     }
   }
 
@@ -1033,10 +1195,10 @@
       });
       e.target.reset();
       loadFinancialData();
-      alert('✅ Reserve updated successfully!');
+      showAlert('success', 'Reserve Updated', 'Company reserve has been updated successfully!');
     } catch (error) {
       console.error('Error updating reserve:', error);
-      alert('❌ Error updating reserve: ' + error.message);
+      showAlert('error', 'Error', 'Failed to update reserve: ' + error.message);
     }
   }
 
@@ -1120,10 +1282,10 @@
           try {
             await database.ref('transactions/' + transactionId).remove();
             loadFinancialData();
-            alert('✅ Transaction deleted successfully!');
+            showAlert('success', 'Transaction Deleted', 'Transaction has been deleted successfully!');
           } catch (error) {
             console.error('Error deleting transaction:', error);
-            alert('❌ Error deleting transaction: ' + error.message);
+            showAlert('error', 'Error', 'Failed to delete transaction: ' + error.message);
           }
         });
       });
@@ -1151,17 +1313,17 @@
       if (currentEditingId) {
         await database.ref('projects/' + currentEditingId).update(data);
         currentEditingId = null;
-        alert('✅ Project updated successfully!');
+        showAlert('success', 'Project Updated', 'Project has been updated successfully!');
       } else {
         await database.ref('projects').push(data);
-        alert('✅ Project added successfully!');
+        showAlert('success', 'Project Added', 'Project has been added successfully!');
       }
       e.target.reset();
       document.getElementById('projectId').value = '';
       loadProjects();
     } catch (error) {
       console.error('Error saving project:', error);
-      alert('❌ Error saving project: ' + error.message);
+      showAlert('error', 'Error', 'Failed to save project: ' + error.message);
     }
   }
 
@@ -1239,7 +1401,7 @@
             }
           } catch (error) {
             console.error('Error loading project:', error);
-            alert('❌ Error loading project: ' + error.message);
+            showAlert('error', 'Error', 'Failed to load project: ' + error.message);
           }
         });
       });
@@ -1251,10 +1413,10 @@
             try {
               await database.ref('projects/' + projectId).remove();
               loadProjects();
-              alert('✅ Project deleted successfully!');
+              showAlert('success', 'Project Deleted', 'Project has been deleted successfully!');
             } catch (error) {
               console.error('Error deleting project:', error);
-              alert('❌ Error deleting project: ' + error.message);
+              showAlert('error', 'Error', 'Failed to delete project: ' + error.message);
             }
           }
         });
@@ -1287,17 +1449,17 @@
       if (currentEditingId) {
         await database.ref('customers/' + currentEditingId).update(data);
         currentEditingId = null;
-        alert('✅ Customer updated successfully!');
+        showAlert('success', 'Customer Updated', 'Customer has been updated successfully!');
       } else {
         await database.ref('customers').push(data);
-        alert('✅ Customer added successfully!');
+        showAlert('success', 'Customer Added', 'Customer has been added successfully!');
       }
       e.target.reset();
       document.getElementById('customerId').value = '';
       loadCustomers();
     } catch (error) {
       console.error('Error saving customer:', error);
-      alert('❌ Error saving customer: ' + error.message);
+      showAlert('error', 'Error', 'Failed to save customer: ' + error.message);
     }
   }
 
@@ -1378,7 +1540,7 @@
             }
           } catch (error) {
             console.error('Error loading customer:', error);
-            alert('❌ Error loading customer: ' + error.message);
+            showAlert('error', 'Error', 'Failed to load customer: ' + error.message);
           }
         });
       });
@@ -1390,10 +1552,10 @@
             try {
               await database.ref('customers/' + customerId).remove();
               loadCustomers();
-              alert('✅ Customer deleted successfully!');
+              showAlert('success', 'Customer Deleted', 'Customer has been deleted successfully!');
             } catch (error) {
               console.error('Error deleting customer:', error);
-              alert('❌ Error deleting customer: ' + error.message);
+              showAlert('error', 'Error', 'Failed to delete customer: ' + error.message);
             }
           }
         });
@@ -1432,16 +1594,16 @@
       if (currentEditingId) {
         await database.ref('products/' + currentEditingId).update(data);
         currentEditingId = null;
-        alert('✅ Product updated successfully!');
+        showAlert('success', 'Product Updated', 'Product has been updated successfully!');
       } else {
         await database.ref('products').push(data);
-        alert('✅ Product added successfully!');
+        showAlert('success', 'Product Added', 'Product has been added successfully!');
       }
       hideProductEditor();
       loadProducts();
     } catch (error) {
       console.error('Error saving product:', error);
-      alert('❌ Error saving product: ' + error.message);
+      showAlert('error', 'Error', 'Failed to save product: ' + error.message);
     }
   }
 
@@ -1520,7 +1682,7 @@
             }
           } catch (error) {
             console.error('Error loading product:', error);
-            alert('❌ Error loading product: ' + error.message);
+            showAlert('error', 'Error', 'Failed to load product: ' + error.message);
           }
         });
       });
@@ -1532,10 +1694,10 @@
             try {
               await database.ref('products/' + productId).remove();
               loadProducts();
-              alert('✅ Product deleted successfully!');
+              showAlert('success', 'Product Deleted', 'Product has been deleted successfully!');
             } catch (error) {
               console.error('Error deleting product:', error);
-              alert('❌ Error deleting product: ' + error.message);
+              showAlert('error', 'Error', 'Failed to delete product: ' + error.message);
             }
           }
         });
@@ -1544,6 +1706,28 @@
       console.error('Error loading products:', error);
     }
   }
+
+  // ==================== PRO STORE FIX ====================
+  // حل مشكلة المتجر (Cookies)
+  document.addEventListener('DOMContentLoaded', function() {
+    const storeFrame = document.getElementById('storeFrame');
+    if (storeFrame) {
+      // إضافة سكريبت لحل مشكلة الكوكيز
+      storeFrame.onload = function() {
+        try {
+          // محاولة الوصول إلى محتوى الإطار
+          const frameDoc = storeFrame.contentDocument || storeFrame.contentWindow.document;
+          // إذا كان هناك رسالة خطأ، حاول إعادة تحميل الصفحة
+          if (frameDoc.body && frameDoc.body.innerHTML.includes('Cookies are not enabled')) {
+            console.log('Detected cookies error, reloading...');
+            storeFrame.src = storeFrame.src;
+          }
+        } catch (e) {
+          console.log('Could not access frame content:', e);
+        }
+      };
+    }
+  });
 
   // ==================== SUPPORT & COMPLAINTS ====================
   async function handleNewTicket() {
@@ -1560,10 +1744,10 @@
         createdAt: new Date().toISOString()
       });
       loadSupportTickets();
-      alert('✅ Ticket created successfully!');
+      showAlert('success', 'Ticket Created', 'Support ticket has been created successfully!');
     } catch (error) {
       console.error('Error creating ticket:', error);
-      alert('❌ Error creating ticket: ' + error.message);
+      showAlert('error', 'Error', 'Failed to create ticket: ' + error.message);
     }
   }
 
@@ -1625,10 +1809,10 @@
           try {
             await database.ref('tickets/' + ticketId).update({ status: 'resolved' });
             loadSupportTickets();
-            alert('✅ Ticket resolved!');
+            showAlert('success', 'Ticket Resolved', 'Support ticket has been resolved!');
           } catch (error) {
             console.error('Error resolving ticket:', error);
-            alert('❌ Error resolving ticket: ' + error.message);
+            showAlert('error', 'Error', 'Failed to resolve ticket: ' + error.message);
           }
         });
       });
@@ -1639,10 +1823,10 @@
           try {
             await database.ref('tickets/' + ticketId).update({ status: 'rejected' });
             loadSupportTickets();
-            alert('✅ Ticket rejected!');
+            showAlert('success', 'Ticket Rejected', 'Support ticket has been rejected!');
           } catch (error) {
             console.error('Error rejecting ticket:', error);
-            alert('❌ Error rejecting ticket: ' + error.message);
+            showAlert('error', 'Error', 'Failed to reject ticket: ' + error.message);
           }
         });
       });
@@ -1654,10 +1838,10 @@
             try {
               await database.ref('tickets/' + ticketId).remove();
               loadSupportTickets();
-              alert('✅ Ticket deleted successfully!');
+              showAlert('success', 'Ticket Deleted', 'Support ticket has been deleted successfully!');
             } catch (error) {
               console.error('Error deleting ticket:', error);
-              alert('❌ Error deleting ticket: ' + error.message);
+              showAlert('error', 'Error', 'Failed to delete ticket: ' + error.message);
             }
           }
         });
@@ -1681,10 +1865,10 @@
         createdAt: new Date().toISOString()
       });
       loadChannels();
-      alert('✅ Channel added successfully!');
+      showAlert('success', 'Channel Added', 'Social media channel has been added successfully!');
     } catch (error) {
       console.error('Error adding channel:', error);
-      alert('❌ Error adding channel: ' + error.message);
+      showAlert('error', 'Error', 'Failed to add channel: ' + error.message);
     }
   }
 
@@ -1729,7 +1913,7 @@
         button.addEventListener('click', (e) => {
           const url = e.target.getAttribute('data-url');
           navigator.clipboard.writeText(url).then(() => {
-            alert('✅ URL copied to clipboard!');
+            showAlert('success', 'URL Copied', 'URL has been copied to clipboard!');
           });
         });
       });
@@ -1741,10 +1925,10 @@
             try {
               await database.ref('channels/' + channelId).remove();
               loadChannels();
-              alert('✅ Channel deleted successfully!');
+              showAlert('success', 'Channel Deleted', 'Social media channel has been deleted successfully!');
             } catch (error) {
               console.error('Error deleting channel:', error);
-              alert('❌ Error deleting channel: ' + error.message);
+              showAlert('error', 'Error', 'Failed to delete channel: ' + error.message);
             }
           }
         });
@@ -1754,25 +1938,7 @@
     }
   }
 
-  // ==================== EMPLOYEES MANAGEMENT ====================
-  async function handleAddDepartment() {
-    const name = prompt('Department Name:');
-    
-    if (!name) return;
-    
-    try {
-      await database.ref('departments').push({
-        name,
-        createdAt: new Date().toISOString()
-      });
-      loadDepartments();
-      alert('✅ Department added successfully!');
-    } catch (error) {
-      console.error('Error adding department:', error);
-      alert('❌ Error adding department: ' + error.message);
-    }
-  }
-
+  // ==================== EMPLOYEES MANAGEMENT - التصميم الجديد ====================
   async function handleEmployeeSubmit(e) {
     e.preventDefault();
     const formData = new FormData(e.target);
@@ -1795,176 +1961,332 @@
       if (currentEditingId) {
         await database.ref('employees/' + currentEditingId).update(data);
         currentEditingId = null;
-        alert('✅ Employee updated successfully!');
+        showAlert('success', 'Employee Updated', 'Employee has been updated successfully!');
       } else {
         await database.ref('employees').push(data);
-        alert('✅ Employee added successfully!');
+        showAlert('success', 'Employee Added', 'Employee has been added successfully!');
       }
       e.target.reset();
       document.getElementById('employeeId').value = '';
-      loadEmployees();
+      loadEmployeesWithDepartments();
     } catch (error) {
       console.error('Error saving employee:', error);
-      alert('❌ Error saving employee: ' + error.message);
+      showAlert('error', 'Error', 'Failed to save employee: ' + error.message);
     }
   }
 
-  async function loadDepartments() {
+  async function handleAddDepartment(e) {
+    e.preventDefault();
+    const formData = new FormData(e.target);
+    const data = {
+      name: formData.get('name'),
+      color: formData.get('color'),
+      createdAt: new Date().toISOString()
+    };
+    
+    try {
+      await database.ref('departments').push(data);
+      document.getElementById('departmentModal').classList.add('hidden');
+      e.target.reset();
+      loadEmployeesWithDepartments();
+      showAlert('success', 'Department Added', 'Department has been added successfully!');
+    } catch (error) {
+      console.error('Error adding department:', error);
+      showAlert('error', 'Error', 'Failed to add department: ' + error.message);
+    }
+  }
+
+  // تحديث قائمة الأقسام في نموذج إضافة الموظف
+  async function updateDepartmentSelect() {
     try {
       const snapshot = await database.ref('departments').once('value');
-      const departmentsList = document.getElementById('departmentsList');
-      departmentsList.innerHTML = '';
+      const selectElement = document.getElementById('employeeDepartmentSelect');
+      selectElement.innerHTML = '<option value="">Select Department</option>';
       
       snapshot.forEach((childSnapshot) => {
         const department = childSnapshot.val();
+        const option = document.createElement('option');
+        option.value = childSnapshot.key;
+        option.textContent = department.name;
+        selectElement.appendChild(option);
+      });
+    } catch (error) {
+      console.error('Error updating department select:', error);
+    }
+  }
+
+  // تحميل الموظفين مع المجالات
+  async function loadEmployeesWithDepartments() {
+    try {
+      const [employeesSnapshot, departmentsSnapshot] = await Promise.all([
+        database.ref('employees').once('value'),
+        database.ref('departments').once('value')
+      ]);
+      
+      const departmentsList = document.getElementById('departmentsList');
+      departmentsList.innerHTML = '';
+      
+      let totalEmployees = 0;
+      const departmentsMap = {};
+      
+      // تجميع الموظفين حسب المجال
+      const employeesByDepartment = {};
+      
+      departmentsSnapshot.forEach(childSnapshot => {
+        const department = childSnapshot.val();
+        departmentsMap[childSnapshot.key] = {
+          id: childSnapshot.key,
+          name: department.name,
+          color: department.color || '#3b82f6'
+        };
+        employeesByDepartment[childSnapshot.key] = [];
+      });
+      
+      employeesSnapshot.forEach(childSnapshot => {
+        const employee = childSnapshot.val();
+        totalEmployees++;
+        
+        if (employee.department && employeesByDepartment[employee.department]) {
+          employeesByDepartment[employee.department].push({
+            id: childSnapshot.key,
+            ...employee
+          });
+        }
+      });
+      
+      // إنشاء بطاقات المجالات
+      Object.keys(departmentsMap).forEach(departmentId => {
+        const department = departmentsMap[departmentId];
+        const employees = employeesByDepartment[departmentId] || [];
         
         const departmentCard = document.createElement('div');
-        departmentCard.className = 'p-4 border rounded bg-black/40 text-center';
-        
-        // Count employees in this department
-        const employeeCount = Math.floor(Math.random() * 10);
-        
+        departmentCard.className = 'department-card';
         departmentCard.innerHTML = `
-          <div class="font-semibold">${department.name}</div>
-          <div class="text-2xl font-bold my-2">${employeeCount}</div>
-          <div class="text-xs text-gray-400">Employees</div>
-          <div class="flex gap-2 mt-3 justify-center">
-            <button class="edit-department text-xs px-2 py-1 border rounded" data-id="${childSnapshot.key}">Edit</button>
-            <button class="delete-department text-xs px-2 py-1 bg-red-500 rounded" data-id="${childSnapshot.key}">Delete</button>
+          <div class="department-header" style="border-left-color: ${department.color}">
+            <div class="department-header-content">
+              <div class="department-info">
+                <div class="department-icon" style="background: ${department.color}20; color: ${department.color}">
+                  <i class="fas fa-users"></i>
+                </div>
+                <div>
+                  <div class="department-title">${department.name}</div>
+                  <div class="department-count">${employees.length} employees</div>
+                </div>
+              </div>
+              <div class="department-actions">
+                <button class="toggle-department">
+                  <i class="fas fa-chevron-down toggle-icon"></i>
+                </button>
+                <button class="delete-department text-xs px-2 py-1 bg-red-500 rounded" data-id="${department.id}">Delete</button>
+              </div>
+            </div>
+          </div>
+          <div class="department-content hidden">
+            <div class="employees-grid">
+              ${employees.length > 0 ? 
+                employees.map(employee => `
+                  <div class="employee-card" draggable="true" data-employee-id="${employee.id}">
+                    <div class="employee-card-header">
+                      <div class="employee-avatar" style="background: ${department.color}">
+                        ${employee.name.split(' ').map(n => n[0]).join('').toUpperCase()}
+                      </div>
+                      <div class="employee-info">
+                        <div class="employee-name">${employee.name}</div>
+                        <div class="employee-position">${employee.position}</div>
+                      </div>
+                      <div class="employee-actions">
+                        <button class="edit-employee text-xs px-2 py-1 border rounded" data-id="${employee.id}">Edit</button>
+                        <button class="delete-employee text-xs px-2 py-1 bg-red-500 rounded" data-id="${employee.id}">Delete</button>
+                      </div>
+                    </div>
+                    <div class="employee-details">
+                      <div class="employee-detail">
+                        <div class="employee-detail-label">Email</div>
+                        <div>${employee.email || 'N/A'}</div>
+                      </div>
+                      <div class="employee-detail">
+                        <div class="employee-detail-label">Phone</div>
+                        <div>${employee.phone || 'N/A'}</div>
+                      </div>
+                    </div>
+                    ${employee.skills ? `
+                      <div class="employee-details">
+                        <div class="employee-detail">
+                          <div class="employee-detail-label">Skills</div>
+                          <div>${employee.skills}</div>
+                        </div>
+                      </div>
+                    ` : ''}
+                    <div class="employee-access">
+                      ${employee.dashboardAccess ? '<span class="access-badge dashboard">Dashboard</span>' : ''}
+                      ${employee.financialAccess ? '<span class="access-badge financial">Financial</span>' : ''}
+                      ${employee.projectAccess ? '<span class="access-badge project">Projects</span>' : ''}
+                    </div>
+                  </div>
+                `).join('') : 
+                `<div class="empty-department">
+                  <i class="fas fa-users"></i>
+                  <div>No employees in this department</div>
+                  <div class="text-xs mt-2">Drag employees here or add new ones</div>
+                </div>`
+              }
+            </div>
           </div>
         `;
         
         departmentsList.appendChild(departmentCard);
       });
       
-      // Add event listeners for edit and delete buttons
-      document.querySelectorAll('.edit-department').forEach(button => {
-        button.addEventListener('click', async (e) => {
-          const departmentId = e.target.getAttribute('data-id');
-          const newName = prompt('Enter new department name:');
-          if (newName) {
-            try {
-              await database.ref('departments/' + departmentId).update({ name: newName });
-              loadDepartments();
-              alert('✅ Department updated successfully!');
-            } catch (error) {
-              console.error('Error updating department:', error);
-              alert('❌ Error updating department: ' + error.message);
-            }
-          }
-        });
-      });
-      
-      document.querySelectorAll('.delete-department').forEach(button => {
-        button.addEventListener('click', async (e) => {
-          const departmentId = e.target.getAttribute('data-id');
-          if (confirm('Are you sure you want to delete this department?')) {
-            try {
-              await database.ref('departments/' + departmentId).remove();
-              loadDepartments();
-              alert('✅ Department deleted successfully!');
-            } catch (error) {
-              console.error('Error deleting department:', error);
-              alert('❌ Error deleting department: ' + error.message);
-            }
-          }
-        });
-      });
-    } catch (error) {
-      console.error('Error loading departments:', error);
-    }
-  }
-
-  async function loadEmployees() {
-    try {
-      const snapshot = await database.ref('employees').once('value');
-      const employeesList = document.getElementById('employeesList');
-      employeesList.innerHTML = '';
-      
-      let totalEmployees = 0;
-      
-      snapshot.forEach((childSnapshot) => {
-        const employee = childSnapshot.val();
-        totalEmployees++;
-        
-        const employeeCard = document.createElement('div');
-        employeeCard.className = 'p-4 border rounded bg-black/40';
-        
-        employeeCard.innerHTML = `
-          <div class="flex justify-between items-start">
-            <div>
-              <div class="font-semibold">${employee.name}</div>
-              <div class="text-sm text-gray-400 mt-1">${employee.position} • ${employee.department || 'No department'}</div>
-              <div class="text-sm text-gray-400 mt-1">${employee.email || 'No email'} • ${employee.phone || 'No phone'}</div>
-              ${employee.contactLink ? `<div class="text-sm text-gray-400 mt-1">Contact: <a href="${employee.contactLink}" target="_blank" class="underline">${employee.contactLink}</a></div>` : ''}
-              <div class="text-sm text-gray-400 mt-1">Skills: ${employee.skills || 'Not specified'}</div>
-              <div class="flex gap-2 mt-2">
-                ${employee.dashboardAccess ? '<span class="text-xs px-2 py-1 bg-blue-500 rounded">Dashboard</span>' : ''}
-                ${employee.financialAccess ? '<span class="text-xs px-2 py-1 bg-green-500 rounded">Financial</span>' : ''}
-                ${employee.projectAccess ? '<span class="text-xs px-2 py-1 bg-purple-500 rounded">Projects</span>' : ''}
-              </div>
-            </div>
-            <div class="flex gap-2">
-              <button class="edit-employee text-xs px-2 py-1 border rounded" data-id="${childSnapshot.key}">Edit</button>
-              <button class="delete-employee text-xs px-2 py-1 bg-red-500 rounded" data-id="${childSnapshot.key}">Delete</button>
-            </div>
-          </div>
-        `;
-        
-        employeesList.appendChild(employeeCard);
-      });
-      
       // Update stats
       document.getElementById('employeeTotal').textContent = totalEmployees;
       document.getElementById('totalEmployees').textContent = totalEmployees;
       
-      // Add event listeners for edit and delete buttons
-      document.querySelectorAll('.edit-employee').forEach(button => {
-        button.addEventListener('click', async (e) => {
-          const employeeId = e.target.getAttribute('data-id');
-          try {
-            const employeeSnapshot = await database.ref('employees/' + employeeId).once('value');
-            if (employeeSnapshot.exists()) {
-              const employee = employeeSnapshot.val();
-              document.getElementById('employeeId').value = employeeId;
-              document.querySelector('#employeeForm input[name="name"]').value = employee.name || '';
-              document.querySelector('#employeeForm input[name="position"]').value = employee.position || '';
-              document.querySelector('#employeeForm input[name="department"]').value = employee.department || '';
-              document.querySelector('#employeeForm input[name="email"]').value = employee.email || '';
-              document.querySelector('#employeeForm input[name="phone"]').value = employee.phone || '';
-              document.querySelector('#employeeForm input[name="contactLink"]').value = employee.contactLink || '';
-              document.querySelector('#employeeForm textarea[name="skills"]').value = employee.skills || '';
-              document.querySelector('#employeeForm textarea[name="notes"]').value = employee.notes || '';
-              document.querySelector('input[name="dashboardAccess"]').checked = employee.dashboardAccess || false;
-              document.querySelector('input[name="financialAccess"]').checked = employee.financialAccess || false;
-              document.querySelector('input[name="projectAccess"]').checked = employee.projectAccess || false;
-              currentEditingId = employeeId;
-            }
-          } catch (error) {
-            console.error('Error loading employee:', error);
-            alert('❌ Error loading employee: ' + error.message);
-          }
-        });
-      });
+      // Update department select
+      updateDepartmentSelect();
       
-      document.querySelectorAll('.delete-employee').forEach(button => {
-        button.addEventListener('click', async (e) => {
-          const employeeId = e.target.getAttribute('data-id');
-          if (confirm('Are you sure you want to delete this employee?')) {
-            try {
-              await database.ref('employees/' + employeeId).remove();
-              loadEmployees();
-              alert('✅ Employee deleted successfully!');
-            } catch (error) {
-              console.error('Error deleting employee:', error);
-              alert('❌ Error deleting employee: ' + error.message);
-            }
-          }
-        });
-      });
+      // Add event listeners for department toggles
+      setupDepartmentEventListeners();
+      
     } catch (error) {
-      console.error('Error loading employees:', error);
+      console.error('Error loading employees with departments:', error);
     }
+  }
+
+  // إعداد مستمعي الأحداث للمجالات
+  function setupDepartmentEventListeners() {
+    // Toggle department content
+    document.querySelectorAll('.toggle-department').forEach(button => {
+      button.addEventListener('click', function() {
+        const departmentContent = this.closest('.department-header').nextElementSibling;
+        const toggleIcon = this.querySelector('.toggle-icon');
+        
+        departmentContent.classList.toggle('hidden');
+        toggleIcon.classList.toggle('rotated');
+      });
+    });
+    
+    // Delete department
+    document.querySelectorAll('.delete-department').forEach(button => {
+      button.addEventListener('click', async (e) => {
+        const departmentId = e.target.getAttribute('data-id');
+        if (confirm('Are you sure you want to delete this department? Employees will need to be reassigned.')) {
+          try {
+            await database.ref('departments/' + departmentId).remove();
+            loadEmployeesWithDepartments();
+            showAlert('success', 'Department Deleted', 'Department has been deleted successfully!');
+          } catch (error) {
+            console.error('Error deleting department:', error);
+            showAlert('error', 'Error', 'Failed to delete department: ' + error.message);
+          }
+        }
+      });
+    });
+    
+    // Edit employee
+    document.querySelectorAll('.edit-employee').forEach(button => {
+      button.addEventListener('click', async (e) => {
+        const employeeId = e.target.getAttribute('data-id');
+        try {
+          const employeeSnapshot = await database.ref('employees/' + employeeId).once('value');
+          if (employeeSnapshot.exists()) {
+            const employee = employeeSnapshot.val();
+            document.getElementById('employeeId').value = employeeId;
+            document.querySelector('#employeeForm input[name="name"]').value = employee.name || '';
+            document.querySelector('#employeeForm input[name="position"]').value = employee.position || '';
+            document.querySelector('#employeeForm select[name="department"]').value = employee.department || '';
+            document.querySelector('#employeeForm input[name="email"]').value = employee.email || '';
+            document.querySelector('#employeeForm input[name="phone"]').value = employee.phone || '';
+            document.querySelector('#employeeForm input[name="contactLink"]').value = employee.contactLink || '';
+            document.querySelector('#employeeForm textarea[name="skills"]').value = employee.skills || '';
+            document.querySelector('#employeeForm textarea[name="notes"]').value = employee.notes || '';
+            document.querySelector('input[name="dashboardAccess"]').checked = employee.dashboardAccess || false;
+            document.querySelector('input[name="financialAccess"]').checked = employee.financialAccess || false;
+            document.querySelector('input[name="projectAccess"]').checked = employee.projectAccess || false;
+            currentEditingId = employeeId;
+            
+            // Scroll to form
+            document.querySelector('#employeeForm').scrollIntoView({ behavior: 'smooth' });
+          }
+        } catch (error) {
+          console.error('Error loading employee:', error);
+          showAlert('error', 'Error', 'Failed to load employee: ' + error.message);
+        }
+      });
+    });
+    
+    // Delete employee
+    document.querySelectorAll('.delete-employee').forEach(button => {
+      button.addEventListener('click', async (e) => {
+        const employeeId = e.target.getAttribute('data-id');
+        if (confirm('Are you sure you want to delete this employee?')) {
+          try {
+            await database.ref('employees/' + employeeId).remove();
+            loadEmployeesWithDepartments();
+            showAlert('success', 'Employee Deleted', 'Employee has been deleted successfully!');
+          } catch (error) {
+            console.error('Error deleting employee:', error);
+            showAlert('error', 'Error', 'Failed to delete employee: ' + error.message);
+          }
+        }
+      });
+    });
+  }
+
+  // إعداد نظام السحب والإفلات للموظفين
+  function setupEmployeeDragAndDrop() {
+    document.addEventListener('dragstart', (e) => {
+      if (e.target.classList.contains('employee-card')) {
+        draggedEmployee = e.target;
+        e.target.classList.add('dragging');
+      }
+    });
+    
+    document.addEventListener('dragend', (e) => {
+      if (e.target.classList.contains('employee-card')) {
+        e.target.classList.remove('dragging');
+        draggedEmployee = null;
+      }
+    });
+    
+    document.addEventListener('dragover', (e) => {
+      e.preventDefault();
+      const departmentElement = e.target.closest('.department-content');
+      if (departmentElement) {
+        departmentElement.classList.add('drag-over');
+      }
+    });
+    
+    document.addEventListener('dragleave', (e) => {
+      const departmentElement = e.target.closest('.department-content');
+      if (departmentElement) {
+        departmentElement.classList.remove('drag-over');
+      }
+    });
+    
+    document.addEventListener('drop', async (e) => {
+      e.preventDefault();
+      const departmentElement = e.target.closest('.department-content');
+      
+      if (departmentElement && draggedEmployee) {
+        departmentElement.classList.remove('drag-over');
+        
+        const departmentCard = departmentElement.closest('.department-card');
+        const departmentId = departmentCard.querySelector('.delete-department').getAttribute('data-id');
+        const employeeId = draggedEmployee.dataset.employeeId;
+        
+        try {
+          await database.ref('employees/' + employeeId).update({
+            department: departmentId
+          });
+          
+          loadEmployeesWithDepartments();
+          showAlert('success', 'Employee Moved', `Employee has been moved to new department`);
+        } catch (error) {
+          console.error('Error moving employee:', error);
+          showAlert('error', 'Error', 'Failed to move employee: ' + error.message);
+        }
+      }
+    });
   }
 
   // Real-time listeners for live updates
@@ -1976,8 +2298,8 @@
   database.ref('products').on('value', loadProducts);
   database.ref('tickets').on('value', loadSupportTickets);
   database.ref('channels').on('value', loadChannels);
-  database.ref('departments').on('value', loadDepartments);
-  database.ref('employees').on('value', loadEmployees);
+  database.ref('employees').on('value', loadEmployeesWithDepartments);
+  database.ref('departments').on('value', loadEmployeesWithDepartments);
 
   console.log('🎯 B.Y PRO Dashboard is fully operational!');
 </script>

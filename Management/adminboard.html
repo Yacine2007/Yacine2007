@@ -1,0 +1,1520 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>B.Y PRO - Account Management Dashboard</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary-color: #3498db;
+            --primary-dark: #2980b9;
+            --bg-color: #000000;
+            --card-bg: #111111;
+            --text-color: #ffffff;
+            --text-muted: #bdc3c7;
+            --border-color: #2c3e50;
+            --danger-color: #e74c3c;
+            --warning-color: #f39c12;
+            --success-color: #2ecc71;
+            --border-radius: 8px;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            padding: 20px;
+        }
+
+        .password-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.95);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+
+        .password-box {
+            background-color: var(--card-bg);
+            padding: 30px;
+            border-radius: var(--border-radius);
+            width: 90%;
+            max-width: 400px;
+            border: 1px solid var(--border-color);
+            text-align: center;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
+        }
+
+        .password-box h2 {
+            margin-bottom: 20px;
+            color: var(--primary-color);
+        }
+
+        .password-box input {
+            width: 100%;
+            padding: 12px 15px;
+            margin-bottom: 20px;
+            border: 1px solid var(--border-color);
+            border-radius: var(--border-radius);
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            font-size: 16px;
+            transition: all 0.3s ease;
+        }
+
+        .password-box input:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 10px rgba(52, 152, 219, 0.3);
+        }
+
+        .password-box button {
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: var(--border-radius);
+            cursor: pointer;
+            font-size: 16px;
+            transition: all 0.3s ease;
+            width: 100%;
+        }
+
+        .password-box button:hover {
+            background-color: var(--primary-dark);
+            transform: translateY(-2px);
+        }
+
+        .error-message {
+            color: var(--danger-color);
+            margin-top: 10px;
+            display: none;
+        }
+
+        .dashboard {
+            display: none;
+            width: 100%;
+            flex: 1;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+            gap: 15px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .header h1 {
+            color: var(--primary-color);
+            font-size: 24px;
+        }
+
+        .stats {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+
+        .stat-box {
+            background-color: var(--card-bg);
+            padding: 15px 20px;
+            border-radius: var(--border-radius);
+            min-width: 150px;
+            text-align: center;
+            border: 1px solid var(--border-color);
+            transition: all 0.3s ease;
+        }
+
+        .stat-box:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(52, 152, 219, 0.2);
+        }
+
+        .stat-box h3 {
+            font-size: 14px;
+            color: var(--text-muted);
+            margin-bottom: 5px;
+        }
+
+        .stat-box p {
+            font-size: 24px;
+            font-weight: bold;
+            color: var(--primary-color);
+        }
+
+        .table-container {
+            background-color: var(--card-bg);
+            border-radius: var(--border-radius);
+            padding: 20px;
+            overflow-x: auto;
+            border: 1px solid var(--border-color);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        thead {
+            background: linear-gradient(135deg, var(--primary-color), var(--primary-dark));
+        }
+
+        th {
+            padding: 15px;
+            text-align: left;
+            color: white;
+            font-weight: 500;
+        }
+
+        tbody tr {
+            transition: all 0.2s ease;
+        }
+
+        tbody tr:nth-child(even) {
+            background-color: rgba(255, 255, 255, 0.03);
+        }
+
+        tbody tr:hover {
+            background-color: rgba(52, 152, 219, 0.1);
+            transform: scale(1.01);
+        }
+
+        td {
+            padding: 12px 15px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .user-avatar {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            object-fit: cover;
+            background-color: var(--border-color);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-muted);
+            overflow: hidden;
+            cursor: pointer;
+            border: 2px solid transparent;
+            transition: all 0.3s ease;
+        }
+
+        .user-avatar:hover {
+            border-color: var(--primary-color);
+            transform: scale(1.1);
+        }
+
+        .user-avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .user-avatar.has-image {
+            background-color: transparent;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            padding: 6px 10px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            white-space: nowrap;
+        }
+
+        .btn i {
+            margin-right: 5px;
+        }
+
+        .btn-edit {
+            background-color: transparent;
+            color: var(--primary-color);
+            border: 1px solid var(--primary-color);
+        }
+
+        .btn-edit:hover {
+            background-color: var(--primary-color);
+            color: white;
+        }
+
+        .btn-delete {
+            background-color: transparent;
+            color: var(--danger-color);
+            border: 1px solid var(--danger-color);
+        }
+
+        .btn-delete:hover {
+            background-color: var(--danger-color);
+            color: white;
+        }
+
+        .btn-save {
+            background-color: var(--success-color);
+            color: white;
+            border: 1px solid var(--success-color);
+        }
+
+        .btn-save:hover {
+            background-color: #27ae60;
+            transform: translateY(-1px);
+        }
+
+        .btn-cancel {
+            background-color: transparent;
+            color: var(--warning-color);
+            border: 1px solid var(--warning-color);
+        }
+
+        .btn-cancel:hover {
+            background-color: var(--warning-color);
+            color: white;
+        }
+
+        .btn-refresh {
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: var(--border-radius);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-left: 10px;
+            font-size: 14px;
+            transition: all 0.3s ease;
+        }
+
+        .btn-refresh:hover {
+            background-color: var(--primary-dark);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(52, 152, 219, 0.3);
+        }
+
+        .btn-refresh:disabled {
+            background-color: var(--text-muted);
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+
+        .refreshing {
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .editable {
+            background-color: transparent;
+            border: 1px solid var(--primary-color);
+            color: var(--text-color);
+            padding: 5px;
+            border-radius: 4px;
+            width: 100%;
+            transition: all 0.3s ease;
+        }
+
+        .editable:focus {
+            outline: none;
+            border-color: var(--success-color);
+            box-shadow: 0 0 5px rgba(46, 204, 113, 0.5);
+        }
+
+        .no-accounts {
+            text-align: center;
+            padding: 40px;
+            color: var(--text-muted);
+        }
+
+        .add-account-btn {
+            background: linear-gradient(135deg, var(--primary-color), var(--primary-dark));
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: var(--border-radius);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 20px;
+            font-size: 14px;
+            transition: all 0.3s ease;
+        }
+
+        .add-account-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(52, 152, 219, 0.3);
+        }
+
+        .image-upload-input {
+            display: none;
+        }
+
+        .status-message {
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 4px;
+            text-align: center;
+            display: none;
+            animation: slideIn 0.3s ease;
+        }
+
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateX(-20px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+
+        .status-success {
+            background-color: rgba(46, 204, 113, 0.2);
+            color: var(--success-color);
+            border: 1px solid var(--success-color);
+        }
+
+        .status-error {
+            background-color: rgba(231, 76, 60, 0.2);
+            color: var(--danger-color);
+            border: 1px solid var(--danger-color);
+        }
+
+        .status-warning {
+            background-color: rgba(243, 156, 18, 0.2);
+            color: var(--warning-color);
+            border: 1px solid var(--warning-color);
+        }
+
+        .id-input {
+            background-color: transparent;
+            border: 1px solid var(--primary-color);
+            color: var(--text-color);
+            padding: 5px;
+            border-radius: 4px;
+            width: 80px;
+            font-weight: bold;
+        }
+
+        .upload-progress {
+            width: 100%;
+            height: 4px;
+            background-color: var(--border-color);
+            border-radius: 2px;
+            margin: 5px 0;
+            overflow: hidden;
+            display: none;
+        }
+
+        .upload-progress-bar {
+            height: 100%;
+            background-color: var(--primary-color);
+            width: 0%;
+            transition: width 0.3s ease;
+        }
+
+        .delete-confirmation {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.9);
+            z-index: 2000;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .confirmation-box {
+            background-color: var(--card-bg);
+            padding: 30px;
+            border-radius: var(--border-radius);
+            width: 90%;
+            max-width: 400px;
+            border: 1px solid var(--danger-color);
+            text-align: center;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
+        }
+
+        .confirmation-box h3 {
+            color: var(--danger-color);
+            margin-bottom: 15px;
+        }
+
+        .confirmation-buttons {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            margin-top: 20px;
+        }
+
+        .btn-confirm {
+            background-color: var(--danger-color);
+            color: white;
+            border: 1px solid var(--danger-color);
+            padding: 10px 20px;
+            border-radius: var(--border-radius);
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .btn-confirm:hover {
+            background-color: #c0392b;
+            transform: translateY(-2px);
+        }
+
+        .auto-save-indicator {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background-color: var(--success-color);
+            color: white;
+            padding: 10px 15px;
+            border-radius: var(--border-radius);
+            display: none;
+            z-index: 1000;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+            animation: slideIn 0.3s ease;
+        }
+
+        .connection-status {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 8px 12px;
+            border-radius: var(--border-radius);
+            font-size: 12px;
+            z-index: 1000;
+            display: none;
+        }
+
+        .connection-online {
+            background-color: var(--success-color);
+            color: white;
+        }
+
+        .connection-offline {
+            background-color: var(--danger-color);
+            color: white;
+        }
+
+        .save-manual-btn {
+            background: linear-gradient(135deg, var(--success-color), #27ae60);
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: var(--border-radius);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-left: 10px;
+            font-size: 14px;
+            transition: all 0.3s ease;
+        }
+
+        .save-manual-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(46, 204, 113, 0.3);
+        }
+
+        .save-manual-btn:disabled {
+            background-color: var(--text-muted);
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+
+        .loading-spinner {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 2px solid #ffffff;
+            border-radius: 50%;
+            border-top-color: transparent;
+            animation: spin 1s ease-in-out infinite;
+        }
+
+        .system-status {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 20px;
+            padding: 10px;
+            background: rgba(52, 152, 219, 0.1);
+            border-radius: var(--border-radius);
+            border: 1px solid var(--primary-color);
+        }
+
+        .status-indicator {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            animation: pulse 2s infinite;
+        }
+
+        .status-online {
+            background-color: var(--success-color);
+        }
+
+        .status-offline {
+            background-color: var(--danger-color);
+        }
+
+        @keyframes pulse {
+            0% { opacity: 1; }
+            50% { opacity: 0.5; }
+            100% { opacity: 1; }
+        }
+
+        @media (max-width: 768px) {
+            th, td {
+                padding: 10px 8px;
+                font-size: 14px;
+            }
+
+            .action-buttons {
+                flex-direction: column;
+                gap: 5px;
+            }
+
+            .btn {
+                width: 100%;
+                padding: 5px;
+                font-size: 11px;
+            }
+
+            .stat-box {
+                min-width: 120px;
+                padding: 10px 15px;
+            }
+
+            .stat-box p {
+                font-size: 20px;
+            }
+
+            .header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+        }
+
+        @media (max-width: 480px) {
+            body {
+                padding: 10px;
+            }
+
+            .table-container {
+                padding: 10px;
+            }
+
+            .stats {
+                flex-direction: column;
+                width: 100%;
+            }
+
+            .stat-box {
+                min-width: auto;
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Password Modal -->
+    <div class="password-modal" id="passwordModal">
+        <div class="password-box">
+            <h2><i class="fas fa-lock"></i> Admin Dashboard</h2>
+            <p style="color: var(--text-muted); margin-bottom: 20px; font-size: 14px;">
+                Enter admin password to access the management system
+            </p>
+            <input type="password" id="passwordInput" placeholder="Enter admin password" autocomplete="current-password">
+            <button id="submitPassword"><i class="fas fa-unlock"></i> Access Dashboard</button>
+            <div class="error-message" id="errorMessage">
+                <i class="fas fa-exclamation-triangle"></i> Incorrect password. Please try again.
+            </div>
+        </div>
+    </div>
+
+    <!-- Connection Status -->
+    <div class="connection-status" id="connectionStatus">
+        <i class="fas fa-wifi"></i> <span id="connectionText">Connected</span>
+    </div>
+
+    <!-- Delete Confirmation Modal -->
+    <div class="delete-confirmation" id="deleteConfirmation">
+        <div class="confirmation-box">
+            <h3><i class="fas fa-exclamation-triangle"></i> Confirm Deletion</h3>
+            <p>Are you sure you want to delete account <strong id="deleteAccountId"></strong>?</p>
+            <p style="color: var(--danger-color); font-size: 14px; margin-top: 10px;">
+                <i class="fas fa-warning"></i> This action cannot be undone!
+            </p>
+            <div class="confirmation-buttons">
+                <button class="btn-confirm" id="confirmDeleteBtn"><i class="fas fa-trash"></i> Delete Account</button>
+                <button class="btn-cancel" id="cancelDeleteBtn"><i class="fas fa-times"></i> Cancel</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Auto Save Indicator -->
+    <div class="auto-save-indicator" id="autoSaveIndicator">
+        <i class="fas fa-check-circle"></i> Changes saved successfully
+    </div>
+
+    <!-- Dashboard Content -->
+    <div class="dashboard" id="dashboard">
+        <div class="header">
+            <div>
+                <h1><i class="fas fa-users-cog"></i> B.Y PRO Account Management</h1>
+                <p style="color: var(--text-muted); font-size: 14px; margin-top: 5px;">
+                    Complete control over user accounts and system data
+                </p>
+            </div>
+            <div style="display: flex; align-items: center; gap: 15px;">
+                <div class="stats">
+                    <div class="stat-box">
+                        <h3>Total Accounts</h3>
+                        <p id="totalAccounts">0</p>
+                    </div>
+                    <div class="stat-box">
+                        <h3>With Images</h3>
+                        <p id="accountsWithImages">0</p>
+                    </div>
+                    <div class="stat-box">
+                        <h3>System Status</h3>
+                        <p id="serverStatus">✅ Online</p>
+                    </div>
+                </div>
+                <button class="btn-refresh" id="refreshBtn">
+                    <i class="fas fa-sync-alt"></i> Refresh
+                </button>
+                <button class="save-manual-btn" id="manualSaveBtn" disabled>
+                    <i class="fas fa-save"></i> Save Changes
+                </button>
+            </div>
+        </div>
+
+        <!-- System Status -->
+        <div class="system-status" id="systemStatus">
+            <div class="status-indicator status-online" id="statusIndicator"></div>
+            <div>
+                <strong>System Status:</strong> 
+                <span id="systemStatusText">Connected to B.Y PRO Unified System</span>
+                <div style="font-size: 12px; color: var(--text-muted);" id="lastUpdate">
+                    Last update: Just now
+                </div>
+            </div>
+        </div>
+
+        <button class="add-account-btn" id="addAccountBtn">
+            <i class="fas fa-plus"></i> Add New Account
+        </button>
+
+        <div id="statusMessage" class="status-message"></div>
+
+        <div class="table-container">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Profile</th>
+                        <th>ID</th>
+                        <th>Name</th>
+                        <th>Email</th>
+                        <th>Password</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="accountsTableBody">
+                    <tr>
+                        <td colspan="6" class="no-accounts">
+                            <i class="fas fa-spinner refreshing"></i> Loading accounts data...
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <script>
+        // ==================== CONFIGURATION ====================
+        const API_BASE = window.location.hostname === 'localhost' 
+            ? 'http://localhost:10000' 
+            : 'https://b-y-pro-acounts-login.onrender.com';
+
+        const CORRECT_PASSWORD = "20070909";
+
+        // ==================== DOM ELEMENTS ====================
+        const passwordModal = document.getElementById('passwordModal');
+        const passwordInput = document.getElementById('passwordInput');
+        const submitPassword = document.getElementById('submitPassword');
+        const errorMessage = document.getElementById('errorMessage');
+        const dashboard = document.getElementById('dashboard');
+        const accountsTableBody = document.getElementById('accountsTableBody');
+        const totalAccountsElement = document.getElementById('totalAccounts');
+        const accountsWithImagesElement = document.getElementById('accountsWithImages');
+        const serverStatusElement = document.getElementById('serverStatus');
+        const addAccountBtn = document.getElementById('addAccountBtn');
+        const statusMessage = document.getElementById('statusMessage');
+        const deleteConfirmation = document.getElementById('deleteConfirmation');
+        const confirmDeleteBtn = document.getElementById('confirmDeleteBtn');
+        const cancelDeleteBtn = document.getElementById('cancelDeleteBtn');
+        const deleteAccountId = document.getElementById('deleteAccountId');
+        const autoSaveIndicator = document.getElementById('autoSaveIndicator');
+        const connectionStatus = document.getElementById('connectionStatus');
+        const connectionText = document.getElementById('connectionText');
+        const manualSaveBtn = document.getElementById('manualSaveBtn');
+        const refreshBtn = document.getElementById('refreshBtn');
+        const systemStatus = document.getElementById('systemStatus');
+        const systemStatusText = document.getElementById('systemStatusText');
+        const statusIndicator = document.getElementById('statusIndicator');
+        const lastUpdate = document.getElementById('lastUpdate');
+
+        // ==================== STATE MANAGEMENT ====================
+        let accounts = [];
+        let nextId = 1;
+        let usedIds = new Set();
+        let usedEmails = new Set();
+        let accountToDelete = null;
+        let isOnline = true;
+        let hasUnsavedChanges = false;
+        let currentEditingAccount = null;
+
+        // ==================== UTILITY FUNCTIONS ====================
+        function updateConnectionStatus(online) {
+            isOnline = online;
+            if (online) {
+                connectionStatus.className = 'connection-status connection-online';
+                connectionText.textContent = 'Connected';
+                connectionStatus.style.display = 'block';
+                statusIndicator.className = 'status-indicator status-online';
+                systemStatusText.textContent = 'Connected to B.Y PRO Unified System';
+                systemStatus.style.borderColor = 'var(--success-color)';
+            } else {
+                connectionStatus.className = 'connection-status connection-offline';
+                connectionText.textContent = 'Offline - Check Connection';
+                connectionStatus.style.display = 'block';
+                statusIndicator.className = 'status-indicator status-offline';
+                systemStatusText.textContent = 'Connection lost - Working offline';
+                systemStatus.style.borderColor = 'var(--danger-color)';
+            }
+        }
+
+        function updateSaveButton() {
+            manualSaveBtn.disabled = !hasUnsavedChanges || !isOnline;
+            if (hasUnsavedChanges) {
+                manualSaveBtn.innerHTML = '<i class="fas fa-save"></i> Save Changes •';
+            } else {
+                manualSaveBtn.innerHTML = '<i class="fas fa-save"></i> Save Changes';
+            }
+        }
+
+        function markUnsavedChanges() {
+            hasUnsavedChanges = true;
+            updateSaveButton();
+        }
+
+        function markSavedChanges() {
+            hasUnsavedChanges = false;
+            updateSaveButton();
+        }
+
+        function showStatus(message, type) {
+            statusMessage.textContent = message;
+            statusMessage.className = `status-message status-${type}`;
+            statusMessage.style.display = 'block';
+            
+            setTimeout(() => {
+                statusMessage.style.display = 'none';
+            }, 5000);
+        }
+
+        function showAutoSaveIndicator() {
+            autoSaveIndicator.style.display = 'block';
+            setTimeout(() => {
+                autoSaveIndicator.style.display = 'none';
+            }, 3000);
+        }
+
+        function updateLastUpdateTime() {
+            lastUpdate.textContent = `Last update: ${new Date().toLocaleTimeString()}`;
+        }
+
+        // ==================== API FUNCTIONS ====================
+        async function apiCall(url, options = {}) {
+            const controller = new AbortController();
+            const timeoutId = setTimeout(() => controller.abort(), 30000);
+            
+            try {
+                const response = await fetch(url, {
+                    signal: controller.signal,
+                    ...options
+                });
+                
+                clearTimeout(timeoutId);
+                
+                if (!response.ok) {
+                    throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+                }
+                
+                return await response.json();
+            } catch (error) {
+                console.error(`API call failed to ${url}:`, error);
+                updateConnectionStatus(false);
+                throw error;
+            }
+        }
+
+        async function checkServerHealth() {
+            try {
+                const data = await apiCall(`${API_BASE}/api/health`);
+                serverStatusElement.textContent = '✅ Online';
+                serverStatusElement.style.color = 'var(--success-color)';
+                updateConnectionStatus(true);
+                return true;
+            } catch (error) {
+                serverStatusElement.textContent = '❌ Offline';
+                serverStatusElement.style.color = 'var(--danger-color)';
+                updateConnectionStatus(false);
+                return false;
+            }
+        }
+
+        async function loadAccountsFromServer(showLoading = true) {
+            if (showLoading) {
+                showStatus('Loading accounts from database...', 'success');
+            }
+            
+            refreshBtn.disabled = true;
+            refreshBtn.innerHTML = '<i class="fas fa-sync-alt refreshing"></i> Loading...';
+            
+            try {
+                const data = await apiCall(`${API_BASE}/api/accounts`);
+                
+                if (!Array.isArray(data)) {
+                    throw new Error('Invalid response format from server');
+                }
+                
+                accounts = data;
+                usedIds.clear();
+                usedEmails.clear();
+                
+                if (accounts.length > 0) {
+                    accounts.forEach(account => {
+                        usedIds.add(account.id);
+                        if (account.email) usedEmails.add(account.email);
+                    });
+                    const maxId = Math.max(...accounts.map(acc => parseInt(acc.id) || 0));
+                    nextId = maxId + 1;
+                } else {
+                    nextId = 1;
+                }
+                
+                loadAccounts();
+                updateStats();
+                
+                if (showLoading) {
+                    showStatus(`Successfully loaded ${accounts.length} accounts`, 'success');
+                }
+                updateConnectionStatus(true);
+                markSavedChanges();
+                updateLastUpdateTime();
+                
+            } catch (error) {
+                console.error('Error loading accounts:', error);
+                if (showLoading) {
+                    showStatus('Error loading accounts: ' + error.message, 'error');
+                }
+                accountsTableBody.innerHTML = `
+                    <tr>
+                        <td colspan="6" class="no-accounts">
+                            <i class="fas fa-exclamation-triangle"></i> 
+                            Error loading data. Please check connection and refresh.
+                        </td>
+                    </tr>
+                `;
+                updateConnectionStatus(false);
+            } finally {
+                refreshBtn.disabled = false;
+                refreshBtn.innerHTML = '<i class="fas fa-sync-alt"></i> Refresh';
+            }
+        }
+
+        async function saveAccountChanges(accountId, updatedData) {
+            if (!isOnline) {
+                showStatus('Cannot save - you are offline', 'error');
+                return false;
+            }
+
+            try {
+                const response = await apiCall(`${API_BASE}/api/accounts/${accountId}`, {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(updatedData)
+                });
+
+                if (response.success) {
+                    console.log(`✅ Account ${accountId} updated successfully`);
+                    showAutoSaveIndicator();
+                    updateConnectionStatus(true);
+                    markSavedChanges();
+                    showStatus(`Account ${accountId} updated successfully!`, 'success');
+                    updateLastUpdateTime();
+                    return true;
+                } else {
+                    throw new Error(response.error || 'Unknown error');
+                }
+            } catch (error) {
+                console.error('❌ Error updating account:', error);
+                showStatus('Error updating account: ' + error.message, 'error');
+                updateConnectionStatus(false);
+                return false;
+            }
+        }
+
+        async function updateAccountIdOnServer(oldId, newId) {
+            if (!isOnline) {
+                showStatus('Cannot save - you are offline', 'error');
+                return false;
+            }
+
+            try {
+                const response = await apiCall(`${API_BASE}/api/accounts/${oldId}/update-id`, {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ newId })
+                });
+
+                if (response.success) {
+                    console.log(`✅ Account ID updated from ${oldId} to ${newId}`);
+                    showAutoSaveIndicator();
+                    updateConnectionStatus(true);
+                    markSavedChanges();
+                    showStatus(`Account ID updated to ${newId}!`, 'success');
+                    updateLastUpdateTime();
+                    return true;
+                } else {
+                    throw new Error(response.error || 'Unknown error');
+                }
+            } catch (error) {
+                console.error('❌ Error updating account ID:', error);
+                showStatus('Error updating account ID: ' + error.message, 'error');
+                updateConnectionStatus(false);
+                return false;
+            }
+        }
+
+        async function deleteAccountOnServer(accountId) {
+            if (!isOnline) {
+                showStatus('Cannot delete - you are offline', 'error');
+                return false;
+            }
+
+            try {
+                const response = await apiCall(`${API_BASE}/api/accounts/${accountId}`, {
+                    method: 'DELETE'
+                });
+
+                if (response.success) {
+                    console.log(`✅ Account ${accountId} deleted successfully`);
+                    showAutoSaveIndicator();
+                    updateConnectionStatus(true);
+                    markSavedChanges();
+                    showStatus(`Account ${accountId} deleted successfully!`, 'success');
+                    updateLastUpdateTime();
+                    return true;
+                } else {
+                    throw new Error(response.error || 'Unknown error');
+                }
+            } catch (error) {
+                console.error('❌ Error deleting account:', error);
+                showStatus('Error deleting account: ' + error.message, 'error');
+                updateConnectionStatus(false);
+                return false;
+            }
+        }
+
+        // ==================== ACCOUNT MANAGEMENT ====================
+        function loadAccounts() {
+            accountsTableBody.innerHTML = '';
+            currentEditingAccount = null;
+            
+            if (accounts.length === 0) {
+                accountsTableBody.innerHTML = `
+                    <tr>
+                        <td colspan="6" class="no-accounts">
+                            <i class="fas fa-users"></i> 
+                            No accounts found. Add your first account to get started.
+                        </td>
+                    </tr>
+                `;
+                updateStats();
+                return;
+            }
+            
+            accounts.forEach(account => {
+                const row = document.createElement('tr');
+                row.setAttribute('data-id', account.id);
+                
+                // استخدام timestamp لمنع التخزين المؤقت للصور
+                const imageUrl = account.image ? `${account.image}?t=${Date.now()}` : '';
+                
+                row.innerHTML = `
+                    <td>
+                        <div class="user-avatar ${account.image ? 'has-image' : ''}" onclick="changeImage('${account.id}')">
+                            ${account.image ? 
+                                `<img src="${imageUrl}" alt="User Avatar" onerror="handleImageError(this)">` : 
+                                `<i class="fas fa-user"></i>`
+                            }
+                        </div>
+                        <input type="file" accept="image/*" class="image-upload-input" id="imageInput_${account.id}" onchange="uploadImage('${account.id}')">
+                        <div class="upload-progress" id="progress_${account.id}">
+                            <div class="upload-progress-bar" id="progressBar_${account.id}"></div>
+                        </div>
+                    </td>
+                    <td>${account.id}</td>
+                    <td>${account.name}</td>
+                    <td>${account.email}</td>
+                    <td>${'•'.repeat(8)}</td>
+                    <td>
+                        <div class="action-buttons">
+                            <button class="btn btn-edit" onclick="editAccount('${account.id}')">
+                                <i class="fas fa-edit"></i> Edit
+                            </button>
+                            <button class="btn btn-delete" onclick="confirmDelete('${account.id}')">
+                                <i class="fas fa-trash"></i> Delete
+                            </button>
+                        </div>
+                    </td>
+                `;
+                
+                accountsTableBody.appendChild(row);
+            });
+            
+            updateStats();
+        }
+
+        function updateStats() {
+            totalAccountsElement.textContent = accounts.length;
+            const withImages = accounts.filter(acc => acc.image).length;
+            accountsWithImagesElement.textContent = withImages;
+        }
+
+        function handleImageError(img) {
+            console.log('Image loading error, using default avatar');
+            const parent = img.parentElement;
+            parent.classList.remove('has-image');
+            parent.innerHTML = '<i class="fas fa-user"></i>';
+        }
+
+        function addNewAccount() {
+            let newId = nextId.toString();
+            while (usedIds.has(newId)) {
+                nextId++;
+                newId = nextId.toString();
+            }
+
+            const newAccount = {
+                id: newId,
+                name: "New User",
+                password: "password123",
+                email: `user${newId}@bypro.com`,
+                image: ""
+            };
+            
+            accounts.push(newAccount);
+            usedIds.add(newId);
+            usedEmails.add(newAccount.email);
+            nextId++;
+            
+            loadAccounts();
+            markUnsavedChanges();
+            showStatus('New account added - remember to save changes', 'warning');
+        }
+
+        function editAccount(accountId) {
+            if (currentEditingAccount && currentEditingAccount !== accountId) {
+                cancelEdit(currentEditingAccount);
+            }
+            
+            const account = accounts.find(acc => acc.id === accountId);
+            if (!account) return;
+            
+            const row = document.querySelector(`tr[data-id="${accountId}"]`);
+            if (!row) return;
+            
+            currentEditingAccount = accountId;
+            
+            row.cells[1].innerHTML = `<input type="text" value="${account.id}" class="id-input" id="editId_${accountId}" onblur="updateAccountId('${accountId}', this.value)">`;
+            row.cells[2].innerHTML = `<input type="text" value="${account.name}" class="editable" id="editName_${accountId}" oninput="markUnsavedChanges()">`;
+            row.cells[3].innerHTML = `<input type="text" value="${account.email}" class="editable" id="editEmail_${accountId}" oninput="markUnsavedChanges()">`;
+            row.cells[4].innerHTML = `<input type="text" value="${account.password}" class="editable" id="editPassword_${accountId}" oninput="markUnsavedChanges()">`;
+            
+            row.cells[5].innerHTML = `
+                <div class="action-buttons">
+                    <button class="btn btn-save" onclick="saveAccount('${accountId}')">
+                        <i class="fas fa-save"></i> Save
+                    </button>
+                    <button class="btn btn-cancel" onclick="cancelEdit('${accountId}')">
+                        <i class="fas fa-times"></i> Cancel
+                    </button>
+                </div>
+            `;
+        }
+
+        async function saveAccount(accountId) {
+            const account = accounts.find(acc => acc.id === accountId);
+            if (!account) return;
+            
+            const newId = document.getElementById(`editId_${accountId}`)?.value;
+            const name = document.getElementById(`editName_${accountId}`)?.value;
+            const email = document.getElementById(`editEmail_${accountId}`)?.value;
+            const password = document.getElementById(`editPassword_${accountId}`)?.value;
+            
+            if (!name || !email || !password) {
+                showStatus('All fields are required', 'error');
+                return;
+            }
+
+            // التحقق من البريد الإلكتروني إذا تغير
+            if (email !== account.email && usedEmails.has(email)) {
+                showStatus('Email already exists', 'error');
+                return;
+            }
+
+            try {
+                showStatus('Saving account changes...', 'success');
+                
+                // إذا تغير الـ ID، نحتاج إلى معاملة خاصة
+                if (newId !== account.id) {
+                    if (usedIds.has(newId)) {
+                        showStatus('ID already exists. Please choose a different ID.', 'error');
+                        document.getElementById(`editId_${accountId}`).value = account.id;
+                        return;
+                    }
+
+                    const success = await updateAccountIdOnServer(account.id, newId);
+                    if (success) {
+                        // تحديث البيانات المحلية
+                        usedIds.delete(account.id);
+                        account.id = newId;
+                        usedIds.add(newId);
+                        
+                        if (account.image) {
+                            account.image = account.image.replace(account.id, newId);
+                        }
+                    }
+                }
+
+                // تحديث البيانات الأخرى
+                const updatedData = {
+                    name: name,
+                    email: email,
+                    password: password
+                };
+
+                const success = await saveAccountChanges(accountId, updatedData);
+                if (success) {
+                    // تحديث البيانات المحلية
+                    account.name = name;
+                    account.email = email;
+                    account.password = password;
+                    
+                    // تحديث usedEmails إذا تغير البريد الإلكتروني
+                    if (email !== account.email) {
+                        usedEmails.delete(account.email);
+                        usedEmails.add(email);
+                    }
+                    
+                    loadAccounts();
+                }
+                
+            } catch (error) {
+                console.error('Error saving account:', error);
+                showStatus('Error saving account: ' + error.message, 'error');
+            }
+        }
+
+        async function updateAccountId(oldId, newId) {
+            if (oldId === newId) return;
+            
+            const account = accounts.find(acc => acc.id === oldId);
+            if (!account) return;
+
+            if (usedIds.has(newId)) {
+                showStatus('ID already exists. Please choose a different ID.', 'error');
+                document.getElementById(`editId_${oldId}`).value = oldId;
+                return;
+            }
+
+            showStatus('Updating account ID...', 'success');
+
+            try {
+                const success = await updateAccountIdOnServer(oldId, newId);
+                if (success) {
+                    // تحديث البيانات المحلية
+                    usedIds.delete(oldId);
+                    account.id = newId;
+                    usedIds.add(newId);
+
+                    if (account.image) {
+                        account.image = account.image.replace(oldId, newId);
+                    }
+
+                    loadAccounts();
+                } else {
+                    document.getElementById(`editId_${oldId}`).value = oldId;
+                }
+                
+            } catch (error) {
+                console.error('Error updating ID:', error);
+                showStatus('Error updating ID: ' + error.message, 'error');
+                document.getElementById(`editId_${oldId}`).value = oldId;
+            }
+        }
+
+        function cancelEdit(accountId) {
+            currentEditingAccount = null;
+            loadAccounts();
+        }
+
+        function changeImage(accountId) {
+            document.getElementById(`imageInput_${accountId}`).click();
+        }
+
+        async function uploadImage(accountId) {
+            const fileInput = document.getElementById(`imageInput_${accountId}`);
+            const file = fileInput.files[0];
+            
+            if (!file) return;
+
+            if (!file.type.startsWith('image/')) {
+                showStatus('Please select a valid image file', 'error');
+                return;
+            }
+
+            const account = accounts.find(acc => acc.id === accountId);
+            if (!account) return;
+
+            const progressBar = document.getElementById(`progressBar_${accountId}`);
+            const progressContainer = document.getElementById(`progress_${accountId}`);
+            progressContainer.style.display = 'block';
+            progressBar.style.width = '10%';
+
+            showStatus('Uploading profile image...', 'success');
+
+            try {
+                progressBar.style.width = '30%';
+                const base64Content = await fileToBase64(file);
+
+                progressBar.style.width = '50%';
+
+                const response = await apiCall(`${API_BASE}/api/upload-image`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        accountId: accountId,
+                        imageData: base64Content
+                    })
+                });
+
+                progressBar.style.width = '80%';
+
+                if (!response.success) {
+                    throw new Error(response.error || 'Failed to upload image');
+                }
+
+                // تحديث الصورة محلياً
+                account.image = response.imageUrl;
+                progressBar.style.width = '100%';
+
+                markUnsavedChanges();
+
+                const avatar = document.querySelector(`tr[data-id="${accountId}"] .user-avatar`);
+                if (avatar) {
+                    avatar.classList.add('has-image');
+                    avatar.innerHTML = `<img src="${response.imageUrl}?t=${Date.now()}" alt="User Avatar" onerror="handleImageError(this)">`;
+                }
+
+                showStatus('Image uploaded successfully!', 'success');
+                updateConnectionStatus(true);
+
+                setTimeout(() => {
+                    progressContainer.style.display = 'none';
+                    progressBar.style.width = '0%';
+                }, 1000);
+
+            } catch (error) {
+                console.error('Error uploading image:', error);
+                showStatus('Error uploading image: ' + error.message, 'error');
+                progressContainer.style.display = 'none';
+                progressBar.style.width = '0%';
+                updateConnectionStatus(false);
+            }
+        }
+
+        function fileToBase64(file) {
+            return new Promise((resolve, reject) => {
+                const reader = new FileReader();
+                reader.readAsDataURL(file);
+                reader.onload = () => resolve(reader.result);
+                reader.onerror = error => reject(error);
+            });
+        }
+
+        function confirmDelete(accountId) {
+            accountToDelete = accountId;
+            deleteAccountId.textContent = accountId;
+            deleteConfirmation.style.display = 'flex';
+        }
+
+        async function deleteAccount(accountId) {
+            const success = await deleteAccountOnServer(accountId);
+            if (success) {
+                // تحديث البيانات المحلية
+                const index = accounts.findIndex(acc => acc.id === accountId);
+                if (index !== -1) {
+                    const account = accounts[index];
+                    
+                    usedIds.delete(account.id);
+                    usedEmails.delete(account.email);
+                    accounts.splice(index, 1);
+                    
+                    loadAccounts();
+                }
+            }
+        }
+
+        // ==================== EVENT LISTENERS ====================
+        submitPassword.addEventListener('click', () => {
+            if (passwordInput.value === CORRECT_PASSWORD) {
+                passwordModal.style.display = 'none';
+                dashboard.style.display = 'block';
+                checkServerHealth();
+                loadAccountsFromServer();
+            } else {
+                errorMessage.style.display = 'block';
+                passwordInput.value = '';
+                passwordInput.focus();
+            }
+        });
+
+        passwordInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                submitPassword.click();
+            }
+        });
+
+        manualSaveBtn.addEventListener('click', async () => {
+            if (!hasUnsavedChanges) return;
+            
+            showStatus('Saving all changes...', 'success');
+            manualSaveBtn.disabled = true;
+            manualSaveBtn.innerHTML = '<div class="loading-spinner"></div> Saving...';
+            
+            // حفظ كل الحسابات التي تم تعديلها
+            for (const account of accounts) {
+                await saveAccountChanges(account.id, {
+                    name: account.name,
+                    email: account.email,
+                    password: account.password,
+                    image: account.image
+                });
+            }
+            
+            manualSaveBtn.disabled = false;
+            updateSaveButton();
+        });
+
+        refreshBtn.addEventListener('click', () => loadAccountsFromServer(true));
+        addAccountBtn.addEventListener('click', addNewAccount);
+
+        confirmDeleteBtn.addEventListener('click', async () => {
+            if (accountToDelete) {
+                await deleteAccount(accountToDelete);
+            }
+            deleteConfirmation.style.display = 'none';
+        });
+
+        cancelDeleteBtn.addEventListener('click', () => {
+            deleteConfirmation.style.display = 'none';
+            accountToDelete = null;
+        });
+
+        // ==================== INITIALIZATION ====================
+        document.addEventListener('DOMContentLoaded', () => {
+            console.log('🚀 B.Y PRO Dashboard Initialized');
+            console.log('🔗 API Base:', API_BASE);
+            
+            passwordModal.style.display = 'flex';
+            passwordInput.focus();
+            
+            // Check server health every 30 seconds
+            setInterval(checkServerHealth, 30000);
+            
+            // Auto-save reminder every 2 minutes if there are unsaved changes
+            setInterval(() => {
+                if (hasUnsavedChanges && isOnline) {
+                    showStatus('You have unsaved changes - remember to save!', 'warning');
+                }
+            }, 120000);
+        });
+
+        // Warn about unsaved changes
+        window.addEventListener('beforeunload', (e) => {
+            if (hasUnsavedChanges) {
+                e.preventDefault();
+                e.returnValue = 'You have unsaved changes. Are you sure you want to leave?';
+                return e.returnValue;
+            }
+        });
+
+        // Global functions for HTML event handlers
+        window.changeImage = changeImage;
+        window.uploadImage = uploadImage;
+        window.editAccount = editAccount;
+        window.saveAccount = saveAccount;
+        window.cancelEdit = cancelEdit;
+        window.updateAccountId = updateAccountId;
+        window.confirmDelete = confirmDelete;
+        window.handleImageError = handleImageError;
+    </script>
+</body>
+</html>

@@ -9,18 +9,21 @@
         :root {
             --primary: #3498db;
             --dark: #2980b9;
-            --bg: #000000;
-            --card: #111111;
+            --bg: #0a0a0a;
+            --card: #1a1a1a;
             --text: #ffffff;
-            --muted: #bdc3c7;
+            --muted: #8a8a8a;
             --danger: #e74c3c;
             --success: #2ecc71;
-            --radius: 8px;
+            --warning: #f39c12;
+            --radius: 10px;
+            --shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
         }
 
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', sans-serif; }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
         body { background: var(--bg); color: var(--text); padding: 20px; min-height: 100vh; }
 
+        /* Password Modal */
         .password-modal {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             background: rgba(0,0,0,0.95); display: flex; justify-content: center;
@@ -28,95 +31,298 @@
         }
 
         .password-box {
-            background: var(--card); padding: 30px; border-radius: var(--radius);
-            width: 90%; max-width: 400px; border: 1px solid var(--muted);
-            text-align: center; box-shadow: 0 20px 40px rgba(0,0,0,0.5);
+            background: var(--card); padding: 40px; border-radius: var(--radius);
+            width: 90%; max-width: 450px; border: 1px solid var(--primary);
+            text-align: center; box-shadow: var(--shadow);
+            position: relative;
         }
 
+        .password-box::before {
+            content: ''; position: absolute; top: 0; left: 0;
+            width: 100%; height: 4px; background: linear-gradient(90deg, var(--primary), var(--dark));
+            border-radius: var(--radius) var(--radius) 0 0;
+        }
+
+        .password-box h2 { margin-bottom: 10px; color: var(--primary); }
+        .password-box p { color: var(--muted); margin-bottom: 25px; font-size: 15px; }
+
         .password-box input, .password-box button {
-            width: 100%; padding: 12px; margin-bottom: 15px;
-            border-radius: var(--radius); font-size: 16px;
+            width: 100%; padding: 14px; margin-bottom: 15px;
+            border-radius: var(--radius); font-size: 16px; transition: all 0.3s;
         }
 
         .password-box input {
-            background: var(--bg); color: var(--text); border: 1px solid var(--muted);
+            background: rgba(255, 255, 255, 0.05); color: var(--text); 
+            border: 1px solid var(--muted); outline: none;
+        }
+
+        .password-box input:focus {
+            border-color: var(--primary); box-shadow: 0 0 0 2px rgba(52, 152, 219, 0.2);
         }
 
         .password-box button {
-            background: var(--primary); color: white; border: none; cursor: pointer;
+            background: linear-gradient(135deg, var(--primary), var(--dark)); 
+            color: white; border: none; cursor: pointer; font-weight: 600;
+            letter-spacing: 0.5px;
         }
 
-        .error { color: var(--danger); margin-top: 10px; display: none; }
+        .password-box button:hover {
+            transform: translateY(-2px); box-shadow: 0 5px 15px rgba(52, 152, 219, 0.4);
+        }
 
+        .error { 
+            color: var(--danger); margin-top: 10px; display: none; 
+            background: rgba(231, 76, 60, 0.1); padding: 10px; border-radius: 5px;
+        }
+
+        /* Dashboard */
         .dashboard { display: none; }
 
         .header {
             display: flex; justify-content: space-between; align-items: center;
-            margin-bottom: 30px; padding-bottom: 15px; border-bottom: 1px solid var(--muted);
-            flex-wrap: wrap; gap: 15px;
+            margin-bottom: 30px; padding-bottom: 20px; border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            flex-wrap: wrap; gap: 20px;
         }
 
-        .stats { display: flex; gap: 15px; flex-wrap: wrap; }
+        .header-left h1 { 
+            font-size: 28px; margin-bottom: 5px; 
+            background: linear-gradient(90deg, var(--primary), #9b59b6);
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+        }
+
+        .header-left p { color: var(--muted); font-size: 14px; }
+
+        .stats { display: flex; gap: 20px; flex-wrap: wrap; }
         .stat-box {
-            background: var(--card); padding: 15px 20px; border-radius: var(--radius);
-            min-width: 150px; text-align: center; border: 1px solid var(--muted);
+            background: linear-gradient(145deg, var(--card), #151515);
+            padding: 20px; border-radius: var(--radius); min-width: 160px; 
+            text-align: center; border: 1px solid rgba(255, 255, 255, 0.05);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
         }
 
-        .stat-box h3 { font-size: 14px; color: var(--muted); margin-bottom: 5px; }
-        .stat-box p { font-size: 24px; font-weight: bold; color: var(--primary); }
+        .stat-box h3 { font-size: 14px; color: var(--muted); margin-bottom: 8px; }
+        .stat-box p { font-size: 32px; font-weight: 700; }
 
+        #serverStatus { font-size: 16px !important; font-weight: 600; }
+
+        /* Buttons */
+        .btn {
+            padding: 10px 20px; border: none; border-radius: 6px;
+            cursor: pointer; display: inline-flex; align-items: center;
+            gap: 8px; font-size: 14px; font-weight: 600; transition: all 0.3s;
+        }
+
+        .btn-primary { 
+            background: linear-gradient(135deg, var(--primary), var(--dark)); 
+            color: white;
+        }
+
+        .btn-danger { 
+            background: linear-gradient(135deg, var(--danger), #c0392b); 
+            color: white;
+        }
+
+        .btn-success { 
+            background: linear-gradient(135deg, var(--success), #27ae60); 
+            color: white;
+        }
+
+        .btn-warning { 
+            background: linear-gradient(135deg, var(--warning), #e67e22); 
+            color: white;
+        }
+
+        .btn:hover { transform: translateY(-2px); box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3); }
+
+        .refresh-btn, .add-btn {
+            background: linear-gradient(135deg, var(--primary), var(--dark)); 
+            color: white; border: none; padding: 12px 24px; 
+            border-radius: var(--radius); cursor: pointer;
+            display: flex; align-items: center; gap: 10px; font-size: 15px;
+            font-weight: 600; transition: all 0.3s;
+        }
+
+        .refresh-btn:hover, .add-btn:hover {
+            transform: translateY(-3px); box-shadow: 0 8px 20px rgba(52, 152, 219, 0.4);
+        }
+
+        .add-btn { margin-bottom: 25px; }
+
+        /* Table */
         .table-container {
-            background: var(--card); border-radius: var(--radius); padding: 20px;
-            overflow-x: auto; border: 1px solid var(--muted);
+            background: linear-gradient(145deg, var(--card), #151515); 
+            border-radius: var(--radius); padding: 25px;
+            overflow-x: auto; border: 1px solid rgba(255, 255, 255, 0.05);
+            box-shadow: var(--shadow);
         }
 
         table { width: 100%; border-collapse: collapse; }
-        thead { background: linear-gradient(135deg, var(--primary), var(--dark)); }
-        th { padding: 15px; text-align: left; color: white; }
-        td { padding: 12px 15px; border-bottom: 1px solid var(--muted); }
-        tbody tr:hover { background: rgba(255,255,255,0.05); }
-
-        .btn {
-            padding: 8px 15px; border: none; border-radius: 4px;
-            cursor: pointer; display: inline-flex; align-items: center;
-            gap: 5px; font-size: 14px; margin: 2px;
+        thead { 
+            background: linear-gradient(135deg, rgba(52, 152, 219, 0.2), rgba(41, 128, 185, 0.1));
+            backdrop-filter: blur(10px);
+        }
+        
+        th { 
+            padding: 18px 15px; text-align: left; color: var(--primary);
+            font-weight: 600; font-size: 15px;
+        }
+        
+        td { 
+            padding: 16px 15px; border-bottom: 1px solid rgba(255, 255, 255, 0.05); 
+            font-size: 15px;
+        }
+        
+        tbody tr { transition: all 0.3s; }
+        tbody tr:hover { 
+            background: rgba(52, 152, 219, 0.05); 
+            transform: translateX(5px);
         }
 
-        .btn-primary { background: var(--primary); color: white; }
-        .btn-danger { background: var(--danger); color: white; }
-        .btn-success { background: var(--success); color: white; }
-
-        .refresh-btn, .add-btn {
-            background: var(--primary); color: white; border: none;
-            padding: 10px 20px; border-radius: var(--radius); cursor: pointer;
-            display: flex; align-items: center; gap: 8px; font-size: 14px;
+        /* Profile Image */
+        .profile-img {
+            width: 50px; height: 50px; border-radius: 50%;
+            object-fit: cover; border: 2px solid var(--primary);
+            background: #2c3e50;
         }
 
-        .add-btn { margin-bottom: 20px; }
-        .loading { text-align: center; padding: 40px; color: var(--muted); }
+        .image-controls {
+            display: flex; gap: 10px; margin-top: 10px;
+        }
+
+        /* Loading */
+        .loading { 
+            text-align: center; padding: 60px; color: var(--muted); 
+            font-size: 16px;
+        }
+        
         .fa-spin { animation: spin 1s linear infinite; }
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
 
+        /* Status Messages */
         .status {
-            padding: 10px; margin: 10px 0; border-radius: 4px;
-            text-align: center; display: none;
+            padding: 15px 20px; margin: 15px 0; border-radius: var(--radius);
+            text-align: center; display: none; font-weight: 600;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
         }
 
-        .status-success { background: rgba(46, 204, 113, 0.2); color: var(--success); border: 1px solid var(--success); }
-        .status-error { background: rgba(231, 76, 60, 0.2); color: var(--danger); border: 1px solid var(--danger); }
+        .status-success { 
+            background: linear-gradient(135deg, rgba(46, 204, 113, 0.2), rgba(39, 174, 96, 0.1));
+            color: var(--success); border: 1px solid rgba(46, 204, 113, 0.3);
+        }
+        
+        .status-error { 
+            background: linear-gradient(135deg, rgba(231, 76, 60, 0.2), rgba(192, 57, 43, 0.1));
+            color: var(--danger); border: 1px solid rgba(231, 76, 60, 0.3);
+        }
 
+        /* Modals */
         .modal {
             display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.8); z-index: 1001; justify-content: center; align-items: center;
+            background: rgba(0,0,0,0.9); z-index: 1001; 
+            justify-content: center; align-items: center;
+            backdrop-filter: blur(5px);
         }
 
         .modal-content {
-            background: var(--card); padding: 30px; border-radius: var(--radius);
-            width: 90%; max-width: 500px; border: 1px solid var(--muted);
+            background: linear-gradient(145deg, var(--card), #151515); 
+            padding: 35px; border-radius: var(--radius);
+            width: 90%; max-width: 600px; border: 1px solid var(--primary);
+            box-shadow: var(--shadow); position: relative;
+            max-height: 90vh; overflow-y: auto;
+        }
+
+        .modal-content::before {
+            content: ''; position: absolute; top: 0; left: 0;
+            width: 100%; height: 4px; background: linear-gradient(90deg, var(--primary), #9b59b6);
+            border-radius: var(--radius) var(--radius) 0 0;
+        }
+
+        .modal-content h3 { 
+            margin-bottom: 25px; color: var(--primary);
+            font-size: 22px; display: flex; align-items: center; gap: 10px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block; margin-bottom: 8px; color: var(--muted);
+            font-weight: 600; font-size: 14px;
+        }
+
+        .form-group input, .form-group textarea {
+            width: 100%; padding: 12px 15px; background: rgba(255, 255, 255, 0.05);
+            color: var(--text); border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 6px; font-size: 15px; transition: all 0.3s;
+            outline: none;
+        }
+
+        .form-group input:focus, .form-group textarea:focus {
+            border-color: var(--primary); box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.2);
+        }
+
+        .form-group textarea {
+            min-height: 100px; resize: vertical;
+        }
+
+        .file-upload {
+            border: 2px dashed rgba(255, 255, 255, 0.1); padding: 25px;
+            text-align: center; border-radius: 6px; cursor: pointer;
+            transition: all 0.3s; margin-top: 10px;
+        }
+
+        .file-upload:hover {
+            border-color: var(--primary); background: rgba(52, 152, 219, 0.05);
+        }
+
+        .file-upload i { font-size: 40px; color: var(--muted); margin-bottom: 10px; }
+        .file-upload p { color: var(--muted); margin-bottom: 5px; }
+        .file-upload span { font-size: 12px; color: var(--primary); }
+
+        .file-name {
+            margin-top: 10px; padding: 8px 12px; background: rgba(255, 255, 255, 0.05);
+            border-radius: 4px; color: var(--muted); font-size: 14px;
+            display: none;
         }
 
         .modal-actions {
-            display: flex; justify-content: flex-end; gap: 10px; margin-top: 20px;
+            display: flex; justify-content: flex-end; gap: 15px; margin-top: 30px;
+        }
+
+        /* GitHub Image Display */
+        .image-preview {
+            display: flex; align-items: center; gap: 15px; margin-top: 15px;
+        }
+
+        .image-preview img {
+            width: 80px; height: 80px; border-radius: 50%;
+            object-fit: cover; border: 3px solid var(--primary);
+        }
+
+        .image-preview .image-info {
+            color: var(--muted); font-size: 14px;
+        }
+
+        .image-preview .image-info strong {
+            color: var(--primary);
+        }
+
+        /* GitHub Info */
+        .github-info {
+            background: rgba(52, 152, 219, 0.1); border: 1px solid rgba(52, 152, 219, 0.3);
+            padding: 10px; border-radius: 6px; margin-top: 10px;
+            font-size: 13px; color: var(--muted);
+        }
+
+        .github-info i { color: var(--primary); margin-right: 5px; }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .header { flex-direction: column; align-items: flex-start; }
+            .stats { width: 100%; }
+            .stat-box { flex: 1; min-width: auto; }
+            .modal-content { padding: 25px; }
         }
     </style>
 </head>
@@ -125,13 +331,66 @@
     <div class="password-modal" id="passwordModal">
         <div class="password-box">
             <h2><i class="fas fa-lock"></i> Admin Dashboard</h2>
-            <p style="color: var(--muted); margin-bottom: 20px;">
-                Enter admin password to access the system
-            </p>
-            <input type="password" id="passwordInput" placeholder="Enter password">
-            <button id="submitPassword"><i class="fas fa-unlock"></i> Access</button>
+            <p>Enter admin password to access the system</p>
+            <input type="password" id="passwordInput" placeholder="Enter password" autocomplete="off">
+            <button id="submitPassword"><i class="fas fa-unlock"></i> Access Dashboard</button>
             <div class="error" id="errorMessage">
                 <i class="fas fa-exclamation-triangle"></i> Incorrect password
+            </div>
+        </div>
+    </div>
+
+    <!-- Add Account Modal -->
+    <div class="modal" id="addAccountModal">
+        <div class="modal-content">
+            <h3><i class="fas fa-user-plus"></i> Add New Account</h3>
+            <div class="form-group">
+                <label for="addName"><i class="fas fa-user"></i> Full Name</label>
+                <input type="text" id="addName" placeholder="Enter full name">
+            </div>
+            
+            <div class="form-group">
+                <label for="addEmail"><i class="fas fa-envelope"></i> Email Address</label>
+                <input type="email" id="addEmail" placeholder="Enter email address">
+            </div>
+            
+            <div class="form-group">
+                <label for="addPassword"><i class="fas fa-key"></i> Password</label>
+                <input type="text" id="addPassword" placeholder="Enter password">
+            </div>
+            
+            <div class="form-group">
+                <label><i class="fas fa-image"></i> Profile Image (Optional)</label>
+                <div class="file-upload" id="imageUpload">
+                    <i class="fas fa-cloud-upload-alt"></i>
+                    <p>Click to upload profile image</p>
+                    <span>PNG, JPG up to 2MB</span>
+                    <input type="file" id="imageInput" accept="image/*" style="display: none;">
+                </div>
+                <div class="file-name" id="fileName"></div>
+                
+                <div class="github-info">
+                    <i class="fab fa-github"></i>
+                    <strong>Note:</strong> Image will be uploaded to GitHub repository: <br>
+                    <code>Yacine2007/B.Y-PRO-Accounts-pic</code>
+                </div>
+                
+                <div class="image-preview" id="imagePreview" style="display: none;">
+                    <img id="previewImage" src="" alt="Preview">
+                    <div class="image-info">
+                        <p>Image will be saved as:</p>
+                        <p id="imageNamePreview"></p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="modal-actions">
+                <button class="btn btn-danger" id="cancelAdd">
+                    <i class="fas fa-times"></i> Cancel
+                </button>
+                <button class="btn btn-success" id="saveNewAccount">
+                    <i class="fas fa-save"></i> Create Account
+                </button>
             </div>
         </div>
     </div>
@@ -139,24 +398,55 @@
     <!-- Edit Account Modal -->
     <div class="modal" id="editModal">
         <div class="modal-content">
-            <h3><i class="fas fa-edit"></i> Edit Account</h3>
-            <div style="margin: 20px 0;">
-                <div style="margin-bottom: 15px;">
-                    <label style="display: block; margin-bottom: 5px; color: var(--muted);">Name</label>
-                    <input type="text" id="editName" style="width: 100%; padding: 10px; background: var(--bg); color: var(--text); border: 1px solid var(--muted); border-radius: 4px;">
+            <h3><i class="fas fa-user-edit"></i> Edit Account</h3>
+            <div class="form-group">
+                <label for="editName"><i class="fas fa-user"></i> Full Name</label>
+                <input type="text" id="editName" placeholder="Enter full name">
+            </div>
+            
+            <div class="form-group">
+                <label for="editEmail"><i class="fas fa-envelope"></i> Email Address</label>
+                <input type="email" id="editEmail" placeholder="Enter email address">
+            </div>
+            
+            <div class="form-group">
+                <label for="editPassword"><i class="fas fa-key"></i> Password</label>
+                <input type="text" id="editPassword" placeholder="Enter password">
+            </div>
+            
+            <div class="form-group">
+                <label><i class="fas fa-image"></i> Profile Image</label>
+                <div class="image-preview" id="currentImagePreview">
+                    <img id="currentImage" src="" alt="Current Image">
+                    <div class="image-info">
+                        <p>Current image:</p>
+                        <p id="currentImageName"></p>
+                    </div>
                 </div>
-                <div style="margin-bottom: 15px;">
-                    <label style="display: block; margin-bottom: 5px; color: var(--muted);">Email</label>
-                    <input type="email" id="editEmail" style="width: 100%; padding: 10px; background: var(--bg); color: var(--text); border: 1px solid var(--muted); border-radius: 4px;">
+                
+                <div class="github-info">
+                    <i class="fab fa-github"></i>
+                    <strong>Note:</strong> To change image, upload to GitHub repository: <br>
+                    <code>Yacine2007/B.Y-PRO-Accounts-pic/main/{id}.png</code>
                 </div>
-                <div style="margin-bottom: 15px;">
-                    <label style="display: block; margin-bottom: 5px; color: var(--muted);">Password</label>
-                    <input type="text" id="editPassword" style="width: 100%; padding: 10px; background: var(--bg); color: var(--text); border: 1px solid var(--muted); border-radius: 4px;">
+                
+                <div class="image-controls">
+                    <button class="btn btn-primary" id="viewGitHubImage">
+                        <i class="fab fa-github"></i> View on GitHub
+                    </button>
+                    <button class="btn btn-warning" id="updateImageInfo">
+                        <i class="fas fa-sync"></i> Refresh Image
+                    </button>
                 </div>
             </div>
+            
             <div class="modal-actions">
-                <button class="btn btn-danger" id="cancelEdit">Cancel</button>
-                <button class="btn btn-success" id="saveEdit">Save Changes</button>
+                <button class="btn btn-danger" id="cancelEdit">
+                    <i class="fas fa-times"></i> Cancel
+                </button>
+                <button class="btn btn-success" id="saveEdit">
+                    <i class="fas fa-save"></i> Save Changes
+                </button>
             </div>
         </div>
     </div>
@@ -164,13 +454,15 @@
     <!-- Dashboard -->
     <div class="dashboard" id="dashboard">
         <div class="header">
-            <div>
+            <div class="header-left">
                 <h1><i class="fas fa-users-cog"></i> B.Y PRO Account Management</h1>
-                <p style="color: var(--muted); font-size: 14px;">
-                    Google Drive Database - Connected to Render Server
+                <p>Google Drive Database - Connected to Render Server</p>
+                <p style="color: var(--primary); font-size: 13px; margin-top: 5px;">
+                    <i class="fab fa-github"></i> Images stored on: Yacine2007/B.Y-PRO-Accounts-pic
                 </p>
             </div>
-            <div style="display: flex; align-items: center; gap: 15px;">
+            
+            <div style="display: flex; align-items: center; gap: 20px;">
                 <div class="stats">
                     <div class="stat-box">
                         <h3>Total Accounts</h3>
@@ -182,18 +474,29 @@
                     </div>
                     <div class="stat-box">
                         <h3>Server Status</h3>
-                        <p id="serverStatus" style="color: var(--success);">Online</p>
+                        <p id="serverStatus" style="color: var(--success);">
+                            <i class="fas fa-circle" style="font-size: 12px;"></i> Online
+                        </p>
                     </div>
                 </div>
+                
                 <button class="refresh-btn" id="refreshBtn">
                     <i class="fas fa-sync-alt"></i> Refresh
                 </button>
             </div>
         </div>
 
-        <button class="add-btn" id="addAccountBtn">
-            <i class="fas fa-plus"></i> Add New Account
-        </button>
+        <div style="display: flex; gap: 15px; margin-bottom: 25px;">
+            <button class="add-btn" id="addAccountBtn">
+                <i class="fas fa-plus"></i> Add New Account
+            </button>
+            <button class="btn btn-warning" id="syncImagesBtn">
+                <i class="fas fa-image"></i> Check All Images
+            </button>
+            <button class="btn btn-primary" id="openGitHubBtn">
+                <i class="fab fa-github"></i> GitHub Images
+            </button>
+        </div>
 
         <div id="statusMessage" class="status"></div>
 
@@ -202,17 +505,18 @@
                 <thead>
                     <tr>
                         <th>ID</th>
+                        <th>Profile</th>
                         <th>Name</th>
                         <th>Email</th>
                         <th>Password</th>
-                        <th>Image</th>
+                        <th>Image Status</th>
                         <th>Actions</th>
                     </tr>
                 </thead>
                 <tbody id="accountsTableBody">
                     <tr>
-                        <td colspan="6" class="loading">
-                            <i class="fas fa-spinner fa-spin"></i> Loading...
+                        <td colspan="7" class="loading">
+                            <i class="fas fa-spinner fa-spin"></i> Loading accounts...
                         </td>
                     </tr>
                 </tbody>
@@ -225,10 +529,16 @@
         const API_BASE = 'https://b-y-pro-acounts-login.onrender.com/api';
         const API_KEY = 'BYPRO_SECURE_KEY_2007';
         const ADMIN_PASSWORD = '20070909';
+        
+        // GitHub repository configuration (from server.js)
+        const GITHUB_REPO = 'Yacine2007/B.Y-PRO-Accounts-pic';
+        const GITHUB_BRANCH = 'main';
+        const GITHUB_IMAGE_BASE_URL = `https://raw.githubusercontent.com/${GITHUB_REPO}/${GITHUB_BRANCH}/`;
 
         // ==================== STATE MANAGEMENT ====================
         let currentEditId = null;
         let accountsData = [];
+        let newAccountImage = null;
 
         // ==================== DOM ELEMENTS ====================
         const passwordModal = document.getElementById('passwordModal');
@@ -242,13 +552,36 @@
         const serverStatusElement = document.getElementById('serverStatus');
         const refreshBtn = document.getElementById('refreshBtn');
         const addAccountBtn = document.getElementById('addAccountBtn');
+        const syncImagesBtn = document.getElementById('syncImagesBtn');
+        const openGitHubBtn = document.getElementById('openGitHubBtn');
         const statusMessage = document.getElementById('statusMessage');
+        
+        // Add account modal elements
+        const addAccountModal = document.getElementById('addAccountModal');
+        const addName = document.getElementById('addName');
+        const addEmail = document.getElementById('addEmail');
+        const addPassword = document.getElementById('addPassword');
+        const imageUpload = document.getElementById('imageUpload');
+        const imageInput = document.getElementById('imageInput');
+        const fileName = document.getElementById('fileName');
+        const imagePreview = document.getElementById('imagePreview');
+        const previewImage = document.getElementById('previewImage');
+        const imageNamePreview = document.getElementById('imageNamePreview');
+        const cancelAdd = document.getElementById('cancelAdd');
+        const saveNewAccount = document.getElementById('saveNewAccount');
+        
+        // Edit account modal elements
         const editModal = document.getElementById('editModal');
         const editName = document.getElementById('editName');
         const editEmail = document.getElementById('editEmail');
         const editPassword = document.getElementById('editPassword');
+        const currentImagePreview = document.getElementById('currentImagePreview');
+        const currentImage = document.getElementById('currentImage');
+        const currentImageName = document.getElementById('currentImageName');
+        const viewGitHubImage = document.getElementById('viewGitHubImage');
+        const updateImageInfo = document.getElementById('updateImageInfo');
         const cancelEdit = document.getElementById('cancelEdit');
-        const saveEdit = document.getElementById('saveEdit');
+        const saveEditBtn = document.getElementById('saveEdit');
 
         // ==================== UTILITY FUNCTIONS ====================
         function showStatus(message, type = 'success') {
@@ -258,7 +591,7 @@
             
             setTimeout(() => {
                 statusMessage.style.display = 'none';
-            }, 3000);
+            }, 4000);
         }
 
         function hideModal(modal) {
@@ -269,19 +602,56 @@
             modal.style.display = 'flex';
         }
 
+        function resetAddForm() {
+            addName.value = '';
+            addEmail.value = '';
+            addPassword.value = '';
+            imageInput.value = '';
+            fileName.textContent = '';
+            fileName.style.display = 'none';
+            imagePreview.style.display = 'none';
+            newAccountImage = null;
+        }
+
         async function checkServerStatus() {
             try {
                 const response = await fetch(`${API_BASE}/health`);
                 if (response.ok) {
-                    serverStatusElement.textContent = 'Online';
-                    serverStatusElement.style.color = 'var(--success)';
+                    const data = await response.json();
+                    serverStatusElement.innerHTML = `<i class="fas fa-circle" style="font-size: 12px; color: var(--success);"></i> Online (${data.total_accounts} accounts)`;
                     return true;
                 }
             } catch (error) {
-                serverStatusElement.textContent = 'Offline';
-                serverStatusElement.style.color = 'var(--danger)';
+                serverStatusElement.innerHTML = '<i class="fas fa-circle" style="font-size: 12px; color: var(--danger);"></i> Offline';
             }
             return false;
+        }
+
+        // ==================== GITHUB IMAGE FUNCTIONS ====================
+        function getGitHubImageUrl(accountId) {
+            return `${GITHUB_IMAGE_BASE_URL}${accountId}.png`;
+        }
+
+        async function checkImageExists(url) {
+            try {
+                const response = await fetch(url, { method: 'HEAD' });
+                return response.ok;
+            } catch (error) {
+                return false;
+            }
+        }
+
+        async function testAllImages() {
+            const loadingAccounts = await loadAccountsData();
+            let withImages = 0;
+            
+            for (const account of loadingAccounts) {
+                const imageUrl = getGitHubImageUrl(account.id);
+                const exists = await checkImageExists(imageUrl);
+                if (exists) withImages++;
+            }
+            
+            return withImages;
         }
 
         // ==================== API FUNCTIONS ====================
@@ -312,12 +682,25 @@
             }
         }
 
+        async function loadAccountsData() {
+            try {
+                const result = await callAPI('/accounts');
+                if (result.success && result.accounts) {
+                    return result.accounts;
+                }
+                return [];
+            } catch (error) {
+                console.error('Load error:', error);
+                return [];
+            }
+        }
+
         // ==================== ACCOUNT FUNCTIONS ====================
         async function loadAccounts() {
             try {
                 accountsTableBody.innerHTML = `
                     <tr>
-                        <td colspan="6" class="loading">
+                        <td colspan="7" class="loading">
                             <i class="fas fa-spinner fa-spin"></i> Loading accounts...
                         </td>
                     </tr>
@@ -328,22 +711,17 @@
                     throw new Error('Server is offline');
                 }
 
-                const result = await callAPI('/accounts');
+                accountsData = await loadAccountsData();
+                displayAccounts(accountsData);
+                updateStats(accountsData);
                 
-                if (result.success && result.accounts) {
-                    accountsData = result.accounts;
-                    displayAccounts(result.accounts);
-                    updateStats(result.accounts);
-                    showStatus(`Loaded ${result.accounts.length} accounts`, 'success');
-                } else {
-                    throw new Error(result.error || 'Failed to load accounts');
-                }
+                showStatus(`Successfully loaded ${accountsData.length} accounts`, 'success');
                 
             } catch (error) {
                 console.error('Load error:', error);
                 accountsTableBody.innerHTML = `
                     <tr>
-                        <td colspan="6" class="loading">
+                        <td colspan="7" class="loading">
                             <i class="fas fa-exclamation-triangle"></i> 
                             Error: ${error.message}
                         </td>
@@ -359,7 +737,7 @@
             if (!accounts || accounts.length === 0) {
                 accountsTableBody.innerHTML = `
                     <tr>
-                        <td colspan="6" class="loading">
+                        <td colspan="7" class="loading">
                             <i class="fas fa-users"></i> No accounts found
                         </td>
                     </tr>
@@ -369,13 +747,24 @@
             
             accounts.forEach(account => {
                 const row = document.createElement('tr');
+                const imageUrl = getGitHubImageUrl(account.id);
+                const hasImage = account.hasImage || false;
                 
                 row.innerHTML = `
-                    <td><strong>${account.id}</strong></td>
+                    <td><strong style="color: var(--primary);">${account.id}</strong></td>
+                    <td>
+                        <img class="profile-img" src="${imageUrl}" 
+                             onerror="this.src='https://ui-avatars.com/api/?name=${encodeURIComponent(account.name || account.id)}&background=3498db&color=fff&size=50'" 
+                             alt="${account.name}">
+                    </td>
                     <td>${account.name || 'No Name'}</td>
                     <td>${account.email || 'No Email'}</td>
-                    <td>${'•'.repeat(Math.min(8, account.password?.length || 8))}</td>
-                    <td>${account.hasImage ? '<i class="fas fa-check" style="color: var(--success);"></i>' : '<i class="fas fa-times" style="color: var(--danger);"></i>'}</td>
+                    <td><span style="font-family: monospace;">${'•'.repeat(Math.min(10, account.password?.length || 8))}</span></td>
+                    <td>
+                        ${hasImage ? 
+                            '<span style="color: var(--success);"><i class="fas fa-check-circle"></i> Yes</span>' : 
+                            '<span style="color: var(--muted);"><i class="fas fa-times-circle"></i> No</span>'}
+                    </td>
                     <td>
                         <button class="btn btn-primary" onclick="openEditModal('${account.id}')">
                             <i class="fas fa-edit"></i> Edit
@@ -398,30 +787,39 @@
 
         async function addAccount() {
             try {
+                // Validate form
+                if (!addName.value.trim() || !addEmail.value.trim() || !addPassword.value.trim()) {
+                    showStatus('Please fill in all required fields', 'error');
+                    return;
+                }
+
                 // Get next available ID
                 const nextIdResult = await callAPI('/next-id');
                 const newId = nextIdResult.nextId || '1000';
                 
-                // Get account details
-                const name = prompt('Enter name:', 'New User');
-                if (!name) return;
+                // Get image URL (if image was uploaded, it needs to be manually uploaded to GitHub)
+                const imageUrl = newAccountImage ? 
+                    `https://raw.githubusercontent.com/Yacine2007/B.Y-PRO-Accounts-pic/main/${newId}.png` : 
+                    `https://raw.githubusercontent.com/Yacine2007/B.Y-PRO-Accounts-pic/main/${newId}.png`;
                 
-                const email = prompt('Enter email:', `user${newId}@bypro.com`);
-                if (!email) return;
-                
-                const password = prompt('Enter password:', 'password123');
-                if (!password) return;
-                
-                // Create account
+                // Create account in database
                 const result = await callAPI('/accounts', 'POST', {
                     id: newId,
-                    name: name,
-                    email: email,
-                    password: password
+                    name: addName.value.trim(),
+                    email: addEmail.value.trim(),
+                    password: addPassword.value.trim()
                 });
                 
                 if (result.success) {
-                    showStatus('Account added successfully!', 'success');
+                    showStatus(`Account ${newId} created successfully!`, 'success');
+                    
+                    // Show instructions for uploading image
+                    if (newAccountImage) {
+                        showStatus(`Note: Upload image to GitHub as ${newId}.png manually`, 'warning');
+                    }
+                    
+                    hideModal(addAccountModal);
+                    resetAddForm();
                     loadAccounts();
                 } else {
                     showStatus('Error: ' + result.error, 'error');
@@ -432,7 +830,7 @@
             }
         }
 
-        function openEditModal(id) {
+        async function openEditModal(id) {
             const account = accountsData.find(acc => acc.id === id);
             if (!account) return;
             
@@ -440,6 +838,16 @@
             editName.value = account.name || '';
             editEmail.value = account.email || '';
             editPassword.value = account.password || '';
+            
+            // Load current image
+            const imageUrl = getGitHubImageUrl(id);
+            currentImage.src = imageUrl;
+            currentImage.onerror = function() {
+                this.src = `https://ui-avatars.com/api/?name=${encodeURIComponent(account.name || id)}&background=3498db&color=fff&size=80`;
+            };
+            currentImageName.textContent = `${id}.png`;
+            currentImagePreview.style.display = 'flex';
+            
             showModal(editModal);
         }
 
@@ -456,6 +864,7 @@
                     return;
                 }
                 
+                // Update account in database
                 const result = await callAPI(`/accounts/${currentEditId}`, 'PUT', {
                     name: name,
                     email: email,
@@ -463,7 +872,7 @@
                 });
                 
                 if (result.success) {
-                    showStatus('Account updated successfully!', 'success');
+                    showStatus(`Account ${currentEditId} updated successfully!`, 'success');
                     hideModal(editModal);
                     loadAccounts();
                 } else {
@@ -515,12 +924,104 @@
         });
 
         refreshBtn.addEventListener('click', loadAccounts);
-        addAccountBtn.addEventListener('click', addAccount);
-        cancelEdit.addEventListener('click', () => hideModal(editModal));
-        saveEdit.addEventListener('click', saveAccountChanges);
+        
+        addAccountBtn.addEventListener('click', () => {
+            showModal(addAccountModal);
+            addName.focus();
+        });
+        
+        cancelAdd.addEventListener('click', () => {
+            hideModal(addAccountModal);
+            resetAddForm();
+        });
+        
+        saveNewAccount.addEventListener('click', addAccount);
+        
+        // Image upload for new account
+        imageUpload.addEventListener('click', () => {
+            imageInput.click();
+        });
+        
+        imageInput.addEventListener('change', () => {
+            const file = imageInput.files[0];
+            if (!file) return;
+            
+            if (!file.type.match('image.*')) {
+                showStatus('Please select a valid image file (PNG, JPG, JPEG)', 'error');
+                return;
+            }
+            
+            if (file.size > 2 * 1024 * 1024) {
+                showStatus('Image size should be less than 2MB', 'error');
+                return;
+            }
+            
+            // Show file name
+            fileName.textContent = file.name;
+            fileName.style.display = 'block';
+            
+            // Update state variable
+            newAccountImage = file;
+            
+            // Show preview
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                previewImage.src = e.target.result;
+                imagePreview.style.display = 'flex';
+                
+                // Show suggested image name
+                imageNamePreview.textContent = 'NEW_ID.png (Upload manually to GitHub)';
+            };
+            reader.readAsDataURL(file);
+        });
+        
+        // Edit modal events
+        viewGitHubImage.addEventListener('click', () => {
+            if (currentEditId) {
+                const githubUrl = `https://github.com/${GITHUB_REPO}/blob/${GITHUB_BRANCH}/${currentEditId}.png`;
+                window.open(githubUrl, '_blank');
+            }
+        });
+        
+        updateImageInfo.addEventListener('click', async () => {
+            if (currentEditId) {
+                const imageUrl = getGitHubImageUrl(currentEditId);
+                const exists = await checkImageExists(imageUrl);
+                
+                if (exists) {
+                    currentImage.src = imageUrl + '?t=' + new Date().getTime();
+                    showStatus('Image refreshed', 'success');
+                } else {
+                    showStatus('Image not found on GitHub', 'warning');
+                }
+            }
+        });
+        
+        cancelEdit.addEventListener('click', () => {
+            hideModal(editModal);
+        });
+        
+        saveEditBtn.addEventListener('click', saveAccountChanges);
+        
+        // Sync images button
+        syncImagesBtn.addEventListener('click', async () => {
+            showStatus('Checking image status for all accounts...', 'success');
+            const withImages = await testAllImages();
+            accountsWithImagesElement.textContent = withImages;
+            showStatus(`Found ${withImages} accounts with images on GitHub`, 'success');
+        });
+        
+        // Open GitHub button
+        openGitHubBtn.addEventListener('click', () => {
+            window.open(`https://github.com/${GITHUB_REPO}`, '_blank');
+        });
 
-        // Close modal when clicking outside
+        // Close modals when clicking outside
         window.addEventListener('click', (e) => {
+            if (e.target === addAccountModal) {
+                hideModal(addAccountModal);
+                resetAddForm();
+            }
             if (e.target === editModal) {
                 hideModal(editModal);
             }
@@ -531,6 +1032,8 @@
             console.log('🚀 B.Y PRO Dashboard Initialized');
             console.log('🔗 Server URL:', API_BASE);
             console.log('🔐 API Key:', API_KEY ? 'Loaded' : 'Missing');
+            console.log('🖼️ GitHub Repository:', GITHUB_REPO);
+            console.log('🔗 Image Base URL:', GITHUB_IMAGE_BASE_URL);
             
             passwordModal.style.display = 'flex';
             passwordInput.focus();

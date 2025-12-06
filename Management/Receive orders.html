@@ -49,7 +49,7 @@
             min-height: 100vh;
         }
 
-        /* Sidebar */
+        /* Sidebar - تم إزالة الأنماط المتعلقة بالأجزاء المحذوفة */
         .sidebar {
             width: 260px;
             background: var(--secondary-dark);
@@ -59,39 +59,10 @@
             position: fixed;
             height: 100vh;
             z-index: 100;
+            padding-top: 20px; /* إضافة padding بدلاً من الـ header المحذوف */
         }
 
-        .sidebar-header {
-            padding: 25px 20px;
-            border-bottom: 1px solid var(--border-dark);
-        }
-
-        .logo-container {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
-
-        .company-logo {
-            width: 40px;
-            height: 40px;
-            border-radius: 8px;
-            object-fit: contain;
-            background: white;
-            padding: 3px;
-        }
-
-        .company-name {
-            font-size: 1.2rem;
-            font-weight: 700;
-            color: var(--text-primary);
-        }
-
-        .company-subtitle {
-            font-size: 0.8rem;
-            color: var(--text-muted);
-            margin-top: 2px;
-        }
+        /* تم إزالة .sidebar-header بالكامل */
 
         .nav-menu {
             flex: 1;
@@ -159,37 +130,7 @@
             font-weight: 600;
         }
 
-        .sidebar-footer {
-            padding: 20px;
-            border-top: 1px solid var(--border-dark);
-        }
-
-        .user-info {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
-
-        .user-avatar {
-            width: 36px;
-            height: 36px;
-            border-radius: 50%;
-            background: var(--accent-blue);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: 600;
-        }
-
-        .user-details h4 {
-            font-size: 0.9rem;
-            font-weight: 600;
-        }
-
-        .user-details p {
-            font-size: 0.8rem;
-            color: var(--text-muted);
-        }
+        /* تم إزالة .sidebar-footer بالكامل */
 
         /* Main Content */
         .main-content {
@@ -929,16 +870,8 @@
     <div class="dashboard-container">
         <!-- Sidebar -->
         <div class="sidebar" id="sidebar">
-            <div class="sidebar-header">
-                <div class="logo-container">
-                    <img src="https://bypro.kesug.com/B.Y%20PRO.png" alt="B.Y PRO Logo" class="company-logo">
-                    <div>
-                        <div class="company-name">B.Y PRO</div>
-                        <div class="company-subtitle">Orders Dashboard</div>
-                    </div>
-                </div>
-            </div>
-
+            <!-- تم حذف الـ sidebar-header بالكامل -->
+            
             <div class="nav-menu">
                 <div class="nav-section">
                     <div class="nav-title">MAIN</div>
@@ -996,15 +929,7 @@
                 </div>
             </div>
 
-            <div class="sidebar-footer">
-                <div class="user-info">
-                    <div class="user-avatar">AD</div>
-                    <div class="user-details">
-                        <h4>Admin User</h4>
-                        <p>Administrator</p>
-                    </div>
-                </div>
-            </div>
+            <!-- تم حذف الـ sidebar-footer بالكامل -->
         </div>
 
         <!-- Main Content -->
@@ -1177,7 +1102,6 @@
             doc,
             updateDoc,
             deleteDoc,
-            getDocs,
             where,
             Timestamp
         } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-firestore.js";

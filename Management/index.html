@@ -65,6 +65,10 @@
           <i class="fas fa-store w-4"></i> PRO Store
         </button>
 
+        <button data-section="orders" class="nav-btn">
+          <i class="fas fa-shopping-cart w-4"></i> Receive Orders
+        </button>
+
         <button data-section="support" class="nav-btn">
           <i class="fas fa-ticket-alt w-4"></i> Support & Complaints
         </button>
@@ -122,8 +126,8 @@
               <div id="totalProducts" class="stat-value">0</div>
             </div>
             <div class="stat-card">
-              <div class="stat-label">Total Employees</div>
-              <div id="totalEmployees" class="stat-value">0</div>
+              <div class="stat-label">Total Orders</div>
+              <div id="totalOrders" class="stat-value">0</div>
             </div>
           </div>
 
@@ -134,7 +138,7 @@
               <canvas id="financeChart" height="250"></canvas>
             </div>
             <div class="chart-container">
-              <h3 class="chart-title">Projects & Customers Trend</h3>
+              <h3 class="chart-title">Orders & Revenue Trend</h3>
               <canvas id="trendChart" height="250"></canvas>
             </div>
           </div>
@@ -405,18 +409,48 @@
           </div>
         </div>
 
-        <!-- PRO Store -->
-        <div data-content="store" class="section-content hidden">
-          <div class="store-container">
-            <div class="store-header">
-              <h3 class="form-title">PRO Store</h3>
-              <a href="https://store-pro.great-site.net/" target="_blank" class="visit-store-btn">Visit Store</a>
-            </div>
-            <div class="store-frame-container">
-              <iframe src="https://store-pro.great-site.net/" class="store-frame" id="storeFrame"></iframe>
-            </div>
-          </div>
-        </div>
+
+
+
+
+<!-- PRO Store - عرض كامل الشاشة -->
+<div data-content="store" class="section-content hidden">
+  <div class="store-container">
+    <div class="store-frame-container">
+      <iframe src="https://store-pro.great-site.net/" class="store-frame" id="storeFrame" 
+              sandbox="allow-same-origin allow-scripts allow-forms allow-popups allow-modals allow-storage-access-by-user-activation"
+              allow="camera; microphone; geolocation; payment"></iframe>
+    </div>
+  </div>
+</div>
+
+<!-- Receive Orders - عرض كامل الشاشة -->
+<div data-content="orders" class="section-content hidden">
+  <div class="orders-container">
+    <div class="orders-frame-container">
+      <iframe src="Receive orders.html" class="orders-frame" id="ordersFrame"
+              sandbox="allow-same-origin allow-scripts allow-forms allow-popups allow-modals allow-storage-access-by-user-activation"
+              allow="camera; microphone; geolocation; payment"></iframe>
+    </div>
+  </div>
+</div>
+
+<!-- User Accounts - عرض كامل الشاشة -->
+<div data-content="user-accounts" class="section-content hidden">
+  <div class="user-accounts-container">
+    <div class="user-accounts-frame-container">
+      <iframe src="https://bypro-auth-server.onrender.com/" class="user-accounts-frame" id="userAccountsFrame"
+              sandbox="allow-same-origin allow-scripts allow-forms allow-popups allow-modals allow-storage-access-by-user-activation"
+              allow="camera; microphone; geolocation"></iframe>
+    </div>
+  </div>
+</div>
+
+
+
+
+
+
 
         <!-- Support & Complaints -->
         <div data-content="support" class="section-content hidden">
@@ -563,17 +597,6 @@
           </div>
         </div>
 
-        <!-- User Accounts -->
-        <div data-content="user-accounts" class="section-content hidden">
-          <div class="user-accounts-container">
-            <div class="user-accounts-header">
-              <h3 class="form-title">User Accounts Management</h3>
-            </div>
-            <div class="user-accounts-frame-container">
-              <iframe src="adminboard.html" class="user-accounts-frame" id="userAccountsFrame"></iframe>
-            </div>
-          </div>
-        </div>
       </section>
     </main>
   </div>
@@ -734,6 +757,11 @@
     if (id === 'employees') {
       loadEmployeesWithDepartments();
     }
+    
+    // حل مشكلة الكوكيز في الإطارات
+    setTimeout(() => {
+      fixIframeCookies();
+    }, 1000);
   }
 
   // Add event listeners to sidebar buttons
@@ -742,6 +770,33 @@
       showSection(this.dataset.section);
     });
   });
+
+  // حل مشكلة الكوكيز في الإطارات
+  function fixIframeCookies() {
+    const iframes = document.querySelectorAll('iframe');
+    iframes.forEach(iframe => {
+      try {
+        // إعادة تحميل الإطار مع إضافة معلمة عشوائية لتجنب الكاش
+        if (iframe.src && !iframe.src.includes('?')) {
+          iframe.src = iframe.src + '?t=' + Date.now();
+        }
+        
+        // محاولة تفعيل الجلسات في الإطار
+        setTimeout(() => {
+          try {
+            const frameDoc = iframe.contentDocument || iframe.contentWindow.document;
+            if (frameDoc && frameDoc.cookie) {
+              console.log('Cookies enabled in iframe');
+            }
+          } catch (e) {
+            // هذه أخطاء طبيعية بسبب سياسة الأصل المشترك
+          }
+        }, 500);
+      } catch (e) {
+        console.log('Error fixing iframe cookies:', e);
+      }
+    });
+  }
 
   // Note modal functionality
   document.getElementById('addNoteBtn').addEventListener('click', function() {
@@ -832,6 +887,7 @@
     loadProjects();
     loadCustomers();
     loadProducts();
+    loadOrders();
     loadSupportTickets();
     loadChannels();
     loadAdvertisements();
@@ -969,13 +1025,13 @@
         labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
         datasets: [
           {
-            label: 'Projects',
-            data: [5, 8, 6, 10, 7, 12],
+            label: 'Orders',
+            data: [15, 25, 20, 30, 25, 40],
             backgroundColor: 'rgba(255, 255, 255, 0.7)',
           },
           {
-            label: 'Customers',
-            data: [3, 5, 7, 9, 6, 11],
+            label: 'Revenue (DZD)',
+            data: [50000, 80000, 60000, 90000, 75000, 120000],
             backgroundColor: 'rgba(166, 166, 166, 0.7)',
           }
         ]
@@ -1008,6 +1064,22 @@
         }
       }
     });
+  }
+
+  // ==================== ORDERS MANAGEMENT ====================
+  async function loadOrders() {
+    try {
+      const snapshot = await database.ref('orders').once('value');
+      let totalOrders = 0;
+      
+      snapshot.forEach(() => {
+        totalOrders++;
+      });
+      
+      document.getElementById('totalOrders').textContent = totalOrders;
+    } catch (error) {
+      console.error('Error loading orders:', error);
+    }
   }
 
   // ==================== NOTES MANAGEMENT ====================
@@ -1142,7 +1214,7 @@
       // Add delete event listeners
       document.querySelectorAll('.delete-ad').forEach(button => {
         button.addEventListener('click', async (e) => {
-          const adId = e.currentTarget.getAttribute('data-id');
+          const adId = e.target.getAttribute('data-id');
           try {
             await database.ref('advertisements/' + adId).remove();
             loadAdvertisements();
@@ -1708,25 +1780,37 @@
   }
 
   // ==================== PRO STORE FIX ====================
-  // حل مشكلة المتجر (Cookies)
+  // حل مشكلة المتجر (Cookies) بشكل متقدم
   document.addEventListener('DOMContentLoaded', function() {
-    const storeFrame = document.getElementById('storeFrame');
-    if (storeFrame) {
-      // إضافة سكريبت لحل مشكلة الكوكيز
-      storeFrame.onload = function() {
-        try {
-          // محاولة الوصول إلى محتوى الإطار
-          const frameDoc = storeFrame.contentDocument || storeFrame.contentWindow.document;
-          // إذا كان هناك رسالة خطأ، حاول إعادة تحميل الصفحة
-          if (frameDoc.body && frameDoc.body.innerHTML.includes('Cookies are not enabled')) {
-            console.log('Detected cookies error, reloading...');
-            storeFrame.src = storeFrame.src;
+    // إضافة سكريبت لحل مشكلة الكوكيز بشكل متقدم
+    setInterval(() => {
+      try {
+        const storeFrame = document.getElementById('storeFrame');
+        const ordersFrame = document.getElementById('ordersFrame');
+        const userAccountsFrame = document.getElementById('userAccountsFrame');
+        
+        const frames = [storeFrame, ordersFrame, userAccountsFrame];
+        
+        frames.forEach(frame => {
+          if (frame && frame.src) {
+            try {
+              // محاولة إعادة تحميل الإطار كل 30 ثانية للحفاظ على الجلسة
+              if (frame.src.includes('store-pro.great-site.net')) {
+                // إضافة معلمة عشوائية لتجنب الكاش
+                const newSrc = frame.src.split('?')[0] + '?t=' + Date.now();
+                if (frame.src !== newSrc) {
+                  frame.src = newSrc;
+                }
+              }
+            } catch (e) {
+              console.log('Error refreshing frame:', e);
+            }
           }
-        } catch (e) {
-          console.log('Could not access frame content:', e);
-        }
-      };
-    }
+        });
+      } catch (e) {
+        console.log('Error in iframe maintenance:', e);
+      }
+    }, 30000); // كل 30 ثانية
   });
 
   // ==================== SUPPORT & COMPLAINTS ====================
@@ -2296,6 +2380,7 @@
   database.ref('projects').on('value', loadProjects);
   database.ref('customers').on('value', loadCustomers);
   database.ref('products').on('value', loadProducts);
+  database.ref('orders').on('value', loadOrders);
   database.ref('tickets').on('value', loadSupportTickets);
   database.ref('channels').on('value', loadChannels);
   database.ref('employees').on('value', loadEmployeesWithDepartments);

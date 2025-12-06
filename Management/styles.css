@@ -516,6 +516,7 @@ html, body {
   border-bottom: 1px solid var(--card-border);
   height: var(--topbar-height);
   flex-shrink: 0;
+  z-index: 5;
 }
 
 .section-title {
@@ -558,8 +559,8 @@ html, body {
 /* أقسام المحتوى */
 #sections {
   flex: 1;
-  padding: 1.5rem;
   overflow: auto;
+  position: relative;
 }
 
 .section-content {
@@ -570,6 +571,59 @@ html, body {
 @keyframes fadeIn {
   from { opacity: 0; transform: translateY(10px); }
   to { opacity: 1; transform: translateY(0); }
+}
+
+/* التصميم للأقسام العادية (مثل Dashboard، Projects، إلخ) */
+.section-content:not([data-content="store"]):not([data-content="orders"]):not([data-content="user-accounts"]) {
+  padding: 1.5rem;
+}
+
+/* التصميم للأقسام التي تعرض المواقع الخارجية - ملء كامل الشاشة */
+.section-content[data-content="store"],
+.section-content[data-content="orders"],
+.section-content[data-content="user-accounts"] {
+  height: calc(100vh - var(--topbar-height));
+  padding: 0;
+  margin: 0;
+  background: var(--primary-bg);
+}
+
+/* إزالة الحاويات والأسماء من الأقسام الخارجية */
+.section-content[data-content="store"] .store-container,
+.section-content[data-content="orders"] .orders-container,
+.section-content[data-content="user-accounts"] .user-accounts-container {
+  width: 100%;
+  height: 100%;
+  padding: 0;
+  margin: 0;
+  background: transparent;
+  backdrop-filter: none;
+  border: none;
+  border-radius: 0;
+  box-shadow: none;
+}
+
+.section-content[data-content="store"] .store-header,
+.section-content[data-content="orders"] .orders-header,
+.section-content[data-content="user-accounts"] .user-accounts-header {
+  display: none;
+}
+
+.section-content[data-content="store"] .store-frame-container,
+.section-content[data-content="orders"] .orders-frame-container,
+.section-content[data-content="user-accounts"] .user-accounts-frame-container {
+  width: 100%;
+  height: 100%;
+  border-radius: 0;
+  background: var(--primary-bg);
+}
+
+.section-content[data-content="store"] .store-frame,
+.section-content[data-content="orders"] .orders-frame,
+.section-content[data-content="user-accounts"] .user-accounts-frame {
+  width: 100%;
+  height: 100%;
+  border: none;
 }
 
 /* بطاقات الإحصائيات */
@@ -1037,35 +1091,11 @@ html, body {
   color: var(--text-primary);
 }
 
-/* PRO Store Section */
+/* PRO Store Section - التصميم الكامل */
 .store-container {
-  padding: 1.5rem;
-  background: var(--card-bg);
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
-  border: 1px solid var(--card-border);
-  border-radius: var(--border-radius);
-  box-shadow: var(--card-shadow);
-}
-
-.store-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 1.5rem;
-}
-
-.store-frame-container {
-  width: 100%;
-  height: 70vh;
-  border-radius: var(--border-radius);
-  overflow: hidden;
-}
-
-.store-frame {
   width: 100%;
   height: 100%;
-  border: none;
+  background: var(--primary-bg);
 }
 
 /* Company Links */
@@ -1496,34 +1526,9 @@ html, body {
 
 /* قسم حسابات المستخدمين */
 .user-accounts-container {
-  padding: 1.5rem;
-  background: var(--card-bg);
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
-  border: 1px solid var(--card-border);
-  border-radius: var(--border-radius);
-  box-shadow: var(--card-shadow);
-  margin-bottom: 2rem;
-}
-
-.user-accounts-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 1.5rem;
-}
-
-.user-accounts-frame-container {
-  width: 100%;
-  height: 70vh;
-  border-radius: var(--border-radius);
-  overflow: hidden;
-}
-
-.user-accounts-frame {
   width: 100%;
   height: 100%;
-  border: none;
+  background: var(--primary-bg);
 }
 
 /* قسم الموظفين الجديد - تصميم المجالات الطولية */
@@ -1836,6 +1841,13 @@ html, body {
   color: #6b7280;
 }
 
+/* Receive Orders Section - التصميم الكامل */
+.orders-container {
+  width: 100%;
+  height: 100%;
+  background: var(--primary-bg);
+}
+
 /* شريط التمرير المخصص */
 ::-webkit-scrollbar {
   width: 6px;
@@ -1935,10 +1947,6 @@ html, body {
     grid-template-columns: 1fr;
   }
   
-  .store-frame-container, .user-accounts-frame-container {
-    height: 50vh;
-  }
-  
   .employees-grid {
     grid-template-columns: 1fr;
   }
@@ -1966,8 +1974,7 @@ html, body {
   
   .projects-header, .products-header, 
   .support-header, .promotion-header, 
-  .departments-header, .table-header, .store-header,
-  .user-accounts-header {
+  .departments-header, .table-header {
     flex-direction: column;
     align-items: flex-start;
     gap: 1rem;
@@ -1977,7 +1984,7 @@ html, body {
     width: 100%;
   }
   
-  #sections {
+  .section-content:not([data-content="store"]):not([data-content="orders"]):not([data-content="user-accounts"]) {
     padding: 1rem;
   }
   
@@ -1985,8 +1992,7 @@ html, body {
   .financial-overview, .transactions-history,
   .customer-table-container, .support-container,
   .promotion-container, .departments-container,
-  .employees-list-container, .store-container,
-  .user-accounts-container, .department-header {
+  .employees-list-container, .department-header {
     padding: 1rem;
   }
   
@@ -2055,4 +2061,32 @@ html, body {
   .ad-link-btn:hover {
     transform: none;
   }
+}
+
+/* تحسين مظهر الإطارات */
+iframe {
+  background: var(--primary-bg);
+}
+
+/* حل مشكلة الكوكيز في الإطارات */
+iframe[sandbox] {
+  background: white;
+}
+
+iframe[sandbox] body {
+  background: white;
+}
+
+/* تحسين شريط التمرير في الإطارات */
+iframe::-webkit-scrollbar {
+  width: 8px;
+}
+
+iframe::-webkit-scrollbar-track {
+  background: rgba(0, 0, 0, 0.1);
+}
+
+iframe::-webkit-scrollbar-thumb {
+  background: rgba(0, 0, 0, 0.3);
+  border-radius: 4px;
 }

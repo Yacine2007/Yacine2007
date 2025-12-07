@@ -246,6 +246,27 @@
             border-radius: 8px;
             padding: 5px;
         }
+        
+        /* Inactive account style */
+        .inactive-account {
+            opacity: 0.7;
+            background: linear-gradient(135deg, #cccccc, #e6e6e6, #cccccc);
+            border: 2px solid #999999;
+            position: relative;
+        }
+        
+        .inactive-account:hover {
+            opacity: 0.8;
+            transform: translateY(-1px);
+            box-shadow: 0 4px 10px rgba(153, 153, 153, 0.4);
+        }
+        
+        .inactive-note {
+            font-size: 0.75em;
+            color: #ff4444;
+            margin-top: 3px;
+            font-weight: bold;
+        }
     </style>
 </head>
 <body>
@@ -253,6 +274,15 @@
 <!-- Advertisement Section -->
 <div class="ad-section">
     <h2>Latest Updates</h2>
+    
+    <!-- BarmejLi Platform -->
+    <div class="ad-item" onclick="window.open('https://barmejli.kesug.com/','_blank')">
+        <i class="fas fa-laptop-code"></i>
+        <div>
+            <strong>BarmejLi - برمجلي</strong><br>
+            <span class="ad-description">New platform for submitting web project requests and receiving detailed cost estimates</span>
+        </div>
+    </div>
     
     <!-- DZ Dev Freelancers -->
     <div class="ad-item" onclick="window.open('https://dz-dev-freelancers.kesug.com/','_blank')">
@@ -271,7 +301,7 @@
 
 <ul class="link-list">
     <!-- Royal Golden Card - Yacine ben mokrane 1 Facebook (Recovered) -->
-    <li class="link-item royal-golden" onclick="window.open('https://www.facebook.com/yacine.benmokrane.52','_blank')">
+    <li class="link-item royal-golden" onclick="window.open('https://www.facebook.com/profile.php?id=61580260328404','_blank')">
         <i class="fab fa-facebook"></i>
         <div>
             <strong>Yacine Ben Mokrane 1</strong><br>
@@ -279,12 +309,12 @@
         </div>
     </li>
 
-    <!-- Golden Card - Yacine ben mokrane 2 Facebook -->
-    <li class="link-item golden-card" onclick="window.open('https://www.facebook.com/yacineben2007','_blank')">
+    <!-- Inactive Account - Yacine ben mokrane 2 Facebook -->
+    <li class="link-item inactive-account" onclick="window.open('https://www.facebook.com/yacineben2007','_blank')">
         <i class="fab fa-facebook"></i>
         <div>
             <strong>Yacine Ben Mokrane 2</strong><br>
-            <span class="response-note">Secondary Account - Active Now</span>
+            <span class="inactive-note">Currently Inactive - Not Responding</span>
         </div>
     </li>
 
@@ -388,7 +418,7 @@
 </ul>
 
 <p class="contact-text">
-    <em>UltraSpace - New dedicated communication platform now active for better service</em>
+    <em>Use BarmejLi platform for submitting web project requests - Get detailed cost estimates instantly!</em>
 </p>
 
 <script>

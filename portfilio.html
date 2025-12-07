@@ -553,9 +553,9 @@
                 <i class="fas fa-briefcase"></i>
                 <span id="viewProjectsText">View Projects</span>
             </a>
-            <a href="https://yacine2007.github.io/Yacine2007/My%20Services%20Pricing.html" target="_blank" class="btn btn-secondary">
-                <i class="fas fa-tags"></i>
-                <span id="viewPricingText">Services Pricing</span>
+            <a href="https://barmejli.kesug.com/" target="_blank" class="btn btn-secondary">
+                <i class="fas fa-laptop-code"></i>
+                <span id="viewBarmejliText">BarmejLi Platform</span>
             </a>
         </div>
     </div>
@@ -596,6 +596,23 @@
 <section class="section" id="projects">
     <h2 class="section-title"><i class="fas fa-briefcase"></i> Featured Projects</h2>
     <div class="projects-grid">
+        <!-- BarmejLi Platform -->
+        <div class="project-card-simple">
+            <h3 class="project-title">BarmejLi - برمجلي</h3>
+            <p class="project-description" id="barmejliDescriptionEn">
+                A service platform to facilitate receiving and organizing customer project requests. Customers can specify their web project type, fill out data forms, enter details, features, and personal contact information.
+            </p>
+            <div class="barmejli-features" style="text-align: left; margin: 1.5rem 0; color: var(--gray-medium);">
+                <p style="margin-bottom: 0.5rem;"><i class="fas fa-check-circle" style="color: var(--primary-blue);"></i> <span id="feature1">Custom project forms</span></p>
+                <p style="margin-bottom: 0.5rem;"><i class="fas fa-check-circle" style="color: var(--primary-blue);"></i> <span id="feature2">Detailed cost estimates</span></p>
+                <p style="margin-bottom: 0.5rem;"><i class="fas fa-check-circle" style="color: var(--primary-blue);"></i> <span id="feature3">Order management dashboard</span></p>
+            </div>
+            <a href="https://barmejli.kesug.com/" target="_blank" class="btn btn-primary">
+                <i class="fas fa-external-link-alt"></i>
+                <span id="visitBarmejliText">Visit Platform</span>
+            </a>
+        </div>
+        
         <!-- Algerian Freelancers Platform -->
         <div class="project-card-simple">
             <h3 class="project-title">Algerian Freelancers Platform</h3>
@@ -703,10 +720,10 @@
         </div>
         
         <div class="contact-card">
-            <i class="fas fa-tags"></i>
-            <h3>Services & Pricing</h3>
-            <p>View detailed pricing</p>
-            <a href="https://yacine2007.github.io/Yacine2007/My%20Services%20Pricing.html" target="_blank" class="btn btn-primary mt-2">View Pricing</a>
+            <i class="fas fa-laptop-code"></i>
+            <h3 id="barmejliContactTitle">BarmejLi Platform</h3>
+            <p id="barmejliContactDesc">Submit your project request</p>
+            <a href="https://barmejli.kesug.com/" target="_blank" class="btn btn-primary mt-2" id="visitBarmejliBtn">Visit Platform</a>
         </div>
     </div>
 </section>
@@ -725,30 +742,54 @@ const langData = {
         intro: "Web Developer specializing in front-end development, creating responsive and modern websites with focus on user experience.",
         experienceBadge: "3+ Years Experience",
         viewProjectsText: "View Projects",
-        viewPricingText: "Services Pricing",
+        viewBarmejliText: "BarmejLi Platform",
         projectsTitle: "Featured Projects",
         galleryTitle: "Web Design Gallery",
-        contactTitle: "Contact"
+        contactTitle: "Contact",
+        // BarmejLi project description
+        barmejliDescription: "A service platform to facilitate receiving and organizing customer project requests. Customers can specify their web project type, fill out data forms, enter details, features, and personal contact information.",
+        feature1: "Custom project forms",
+        feature2: "Detailed cost estimates",
+        feature3: "Order management dashboard",
+        visitBarmejliText: "Visit Platform",
+        barmejliContactTitle: "BarmejLi Platform",
+        barmejliContactDesc: "Submit your project request"
     },
     ar: {
         logoText: "ياسين-ديف",
         intro: "مطور ويب متخصص في تطوير الواجهات الأمامية، أنشئ مواقع ويب متجاوبة وحديثة مع التركيز على تجربة المستخدم.",
         experienceBadge: "خبرة أكثر من 3 سنوات",
         viewProjectsText: "عرض المشاريع",
-        viewPricingText: "أسعار الخدمات",
+        viewBarmejliText: "منصة برمجلي",
         projectsTitle: "المشاريع المميزة",
         galleryTitle: "معرض تصاميم الويب",
-        contactTitle: "اتصال"
+        contactTitle: "اتصال",
+        // BarmejLi project description
+        barmejliDescription: "منصة خدمية تهدف إلى تسهيل عملية تلقي طلبات العملاء وتنظيمها. تتيح للعملاء تحديد نوع مشروع الويب الخاص بهم، وملء استمارة البيانات حوله، وإدخال التفاصيل والميزات ومعلوماتهم الشخصية للتواصل.",
+        feature1: "استمارات مشاريع مخصصة",
+        feature2: "تقدير تكلفة مفصلة",
+        feature3: "لوحة تحكم لإدارة الطلبات",
+        visitBarmejliText: "زيارة المنصة",
+        barmejliContactTitle: "منصة برمجلي",
+        barmejliContactDesc: "أرسل طلب مشروعك"
     },
     fr: {
         logoText: "Yacine-Dev",
         intro: "Développeur Web spécialisé dans le développement front-end, créant des sites web responsifs et modernes avec un accent sur l'expérience utilisateur.",
         experienceBadge: "3+ Ans d'Expérience",
         viewProjectsText: "Voir les Projets",
-        viewPricingText: "Tarifs des Services",
+        viewBarmejliText: "Plateforme BarmejLi",
         projectsTitle: "Projets en Vedette",
         galleryTitle: "Galerie de Design Web",
-        contactTitle: "Contact"
+        contactTitle: "Contact",
+        // BarmejLi project description
+        barmejliDescription: "Une plateforme de service pour faciliter la réception et l'organisation des demandes de projet des clients. Les clients peuvent spécifier leur type de projet web, remplir des formulaires de données, saisir les détails, les fonctionnalités et leurs informations personnelles de contact.",
+        feature1: "Formulaires de projet personnalisés",
+        feature2: "Estimations de coût détaillées",
+        feature3: "Tableau de bord de gestion des commandes",
+        visitBarmejliText: "Visiter la Plateforme",
+        barmejliContactTitle: "Plateforme BarmejLi",
+        barmejliContactDesc: "Soumettre votre demande de projet"
     }
 };
 
@@ -786,11 +827,24 @@ document.addEventListener('DOMContentLoaded', function() {
         const lang = this.value;
         const data = langData[lang];
         
+        // Update all text elements
         document.getElementById('logoText').textContent = data.logoText;
         document.getElementById('intro').textContent = data.intro;
         document.getElementById('experienceBadge').textContent = data.experienceBadge;
         document.getElementById('viewProjectsText').textContent = data.viewProjectsText;
-        document.getElementById('viewPricingText').textContent = data.viewPricingText;
+        document.getElementById('viewBarmejliText').textContent = data.viewBarmejliText;
+        
+        // Update BarmejLi project card
+        document.getElementById('barmejliDescriptionEn').textContent = data.barmejliDescription;
+        document.getElementById('feature1').textContent = data.feature1;
+        document.getElementById('feature2').textContent = data.feature2;
+        document.getElementById('feature3').textContent = data.feature3;
+        document.getElementById('visitBarmejliText').textContent = data.visitBarmejliText;
+        
+        // Update BarmejLi contact card
+        document.getElementById('barmejliContactTitle').textContent = data.barmejliContactTitle;
+        document.getElementById('barmejliContactDesc').textContent = data.barmejliContactDesc;
+        document.getElementById('visitBarmejliBtn').textContent = data.visitBarmejliText;
         
         // Update section titles
         const titles = document.querySelectorAll('.section-title');

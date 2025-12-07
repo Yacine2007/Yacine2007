@@ -31,69 +31,65 @@
   <!-- Main Dashboard -->
   <div id="dashboard" class="h-screen flex w-full hidden">
     <!-- SIDEBAR -->
+    <aside class="sidebar">
+      <div class="sidebar-logo">
+        <img src="https://bypro.kesug.com/B.Y%20PRO.png" alt="logo" class="w-12 h-12 rounded"/>
+        <div class="sidebar-logo-text">
+          <div class="company-name">B.Y PRO</div>
+          <div class="company-desc">Software technology & programming services</div>
+        </div>
+      </div>
 
-<!-- SIDEBAR -->
-<aside class="sidebar">
-  <div class="sidebar-logo">
-    <img src="https://bypro.kesug.com/B.Y%20PRO.png" alt="logo" class="w-12 h-12 rounded"/>
-    <div class="sidebar-logo-text">
-      <div class="company-name">B.Y PRO</div>
-      <div class="company-desc">Software technology & programming services</div>
-    </div>
-  </div>
+      <nav class="sidebar-nav">
+        <button data-section="dashboard" class="nav-btn active" data-title="Main Dashboard">
+          <i class="fas fa-chart-line"></i> <span>Main Dashboard</span>
+        </button>
 
-  <nav class="sidebar-nav">
-    <button data-section="dashboard" class="nav-btn active" data-title="Main Dashboard">
-      <i class="fas fa-chart-line w-4"></i> <span>Main Dashboard</span>
-    </button>
+        <button data-section="profits" class="nav-btn" data-title="Financial Management">
+          <i class="fas fa-dollar-sign"></i> <span>Financial Management</span>
+        </button>
 
-    <button data-section="profits" class="nav-btn" data-title="Financial Management">
-      <i class="fas fa-dollar-sign w-4"></i> <span>Financial Management</span>
-    </button>
+        <button data-section="projects" class="nav-btn" data-title="Project Management">
+          <i class="fas fa-diagram-project"></i> <span>Project Management</span>
+        </button>
 
-    <button data-section="projects" class="nav-btn" data-title="Project Management">
-      <i class="fas fa-diagram-project w-4"></i> <span>Project Management</span>
-    </button>
+        <button data-section="customers" class="nav-btn" data-title="Customers">
+          <i class="fas fa-users"></i> <span>Customers</span>
+        </button>
 
-    <button data-section="customers" class="nav-btn" data-title="Customers">
-      <i class="fas fa-users w-4"></i> <span>Customers</span>
-    </button>
+        <button data-section="products" class="nav-btn" data-title="Products / Software">
+          <i class="fas fa-box-open"></i> <span>Products / Software</span>
+        </button>
 
-    <button data-section="products" class="nav-btn" data-title="Products / Software">
-      <i class="fas fa-box-open w-4"></i> <span>Products / Software</span>
-    </button>
+        <button data-section="store" class="nav-btn" data-title="PRO Store">
+          <i class="fas fa-store"></i> <span>PRO Store</span>
+        </button>
 
-    <button data-section="store" class="nav-btn" data-title="PRO Store">
-      <i class="fas fa-store w-4"></i> <span>PRO Store</span>
-    </button>
+        <button data-section="orders" class="nav-btn" data-title="Receive Orders">
+          <i class="fas fa-shopping-cart"></i> <span>Receive Orders</span>
+        </button>
 
-    <button data-section="orders" class="nav-btn" data-title="Receive Orders">
-      <i class="fas fa-shopping-cart w-4"></i> <span>Receive Orders</span>
-    </button>
+        <button data-section="support" class="nav-btn" data-title="Support & Complaints">
+          <i class="fas fa-ticket-alt"></i> <span>Support & Complaints</span>
+        </button>
 
-    <button data-section="support" class="nav-btn" data-title="Support & Complaints">
-      <i class="fas fa-ticket-alt w-4"></i> <span>Support & Complaints</span>
-    </button>
+        <button data-section="marketing" class="nav-btn" data-title="Promotion">
+          <i class="fas fa-bullhorn"></i> <span>Promotion</span>
+        </button>
 
-    <button data-section="marketing" class="nav-btn" data-title="Promotion">
-      <i class="fas fa-bullhorn w-4"></i> <span>Promotion</span>
-    </button>
+        <button data-section="employees" class="nav-btn" data-title="Employees">
+          <i class="fas fa-id-badge"></i> <span>Employees</span>
+        </button>
 
-    <button data-section="employees" class="nav-btn" data-title="Employees">
-      <i class="fas fa-id-badge w-4"></i> <span>Employees</span>
-    </button>
+        <button data-section="user-accounts" class="nav-btn" data-title="User Accounts">
+          <i class="fas fa-user-cog"></i> <span>User Accounts</span>
+        </button>
 
-    <button data-section="user-accounts" class="nav-btn" data-title="User Accounts">
-      <i class="fas fa-user-cog w-4"></i> <span>User Accounts</span>
-    </button>
-
-    <button id="logoutBtn" class="nav-btn mt-auto" data-title="Logout">
-      <i class="fas fa-sign-out-alt w-4"></i> <span>Logout</span>
-    </button>
-  </nav>
-</aside>
-
-
+        <button id="logoutBtn" class="nav-btn mt-auto" data-title="Logout">
+          <i class="fas fa-sign-out-alt"></i> <span>Logout</span>
+        </button>
+      </nav>
+    </aside>
 
     <!-- MAIN -->
     <main class="main-content">
@@ -413,48 +409,38 @@
           </div>
         </div>
 
+        <!-- PRO Store - عرض كامل الشاشة -->
+        <div data-content="store" class="section-content hidden">
+          <div class="store-container">
+            <div class="store-frame-container">
+              <iframe src="https://store-pro.great-site.net/" class="store-frame" id="storeFrame" 
+                      sandbox="allow-same-origin allow-scripts allow-forms allow-popups allow-modals allow-storage-access-by-user-activation"
+                      allow="camera; microphone; geolocation; payment"></iframe>
+            </div>
+          </div>
+        </div>
 
+        <!-- Receive Orders - عرض كامل الشاشة -->
+        <div data-content="orders" class="section-content hidden">
+          <div class="orders-container">
+            <div class="orders-frame-container">
+              <iframe src="Receive orders.html" class="orders-frame" id="ordersFrame"
+                      sandbox="allow-same-origin allow-scripts allow-forms allow-popups allow-modals allow-storage-access-by-user-activation"
+                      allow="camera; microphone; geolocation; payment"></iframe>
+            </div>
+          </div>
+        </div>
 
-
-
-<!-- PRO Store - عرض كامل الشاشة -->
-<div data-content="store" class="section-content hidden">
-  <div class="store-container">
-    <div class="store-frame-container">
-      <iframe src="https://store-pro.great-site.net/" class="store-frame" id="storeFrame" 
-              sandbox="allow-same-origin allow-scripts allow-forms allow-popups allow-modals allow-storage-access-by-user-activation"
-              allow="camera; microphone; geolocation; payment"></iframe>
-    </div>
-  </div>
-</div>
-
-<!-- Receive Orders - عرض كامل الشاشة -->
-<div data-content="orders" class="section-content hidden">
-  <div class="orders-container">
-    <div class="orders-frame-container">
-      <iframe src="Receive orders.html" class="orders-frame" id="ordersFrame"
-              sandbox="allow-same-origin allow-scripts allow-forms allow-popups allow-modals allow-storage-access-by-user-activation"
-              allow="camera; microphone; geolocation; payment"></iframe>
-    </div>
-  </div>
-</div>
-
-<!-- User Accounts - عرض كامل الشاشة -->
-<div data-content="user-accounts" class="section-content hidden">
-  <div class="user-accounts-container">
-    <div class="user-accounts-frame-container">
-      <iframe src="https://yacine2007.github.io/Yacine2007/Management/adminboard.html" class="user-accounts-frame" id="userAccountsFrame"
-              sandbox="allow-same-origin allow-scripts allow-forms allow-popups allow-modals allow-storage-access-by-user-activation"
-              allow="camera; microphone; geolocation"></iframe>
-    </div>
-  </div>
-</div>
-
-
-
-
-
-
+        <!-- User Accounts - عرض كامل الشاشة -->
+        <div data-content="user-accounts" class="section-content hidden">
+          <div class="user-accounts-container">
+            <div class="user-accounts-frame-container">
+              <iframe src="https://bypro-auth-server.onrender.com/" class="user-accounts-frame" id="userAccountsFrame"
+                      sandbox="allow-same-origin allow-scripts allow-forms allow-popups allow-modals allow-storage-access-by-user-activation"
+                      allow="camera; microphone; geolocation"></iframe>
+            </div>
+          </div>
+        </div>
 
         <!-- Support & Complaints -->
         <div data-content="support" class="section-content hidden">
@@ -722,92 +708,6 @@
       document.getElementById('loginError').classList.remove('hidden');
     }
   });
-  
-  
-  
-  
-  
-  
-
-
-
-// التحكم في قائمة الشريط الجانبي المختصرة
-function setupSidebarCollapse() {
-  const sidebar = document.querySelector('.sidebar');
-  const sidebarNav = document.querySelector('.sidebar-nav');
-  
-  // إضافة سمة data-title للأزرار
-  document.querySelectorAll('.nav-btn').forEach(btn => {
-    const text = btn.textContent.trim();
-    btn.setAttribute('data-title', text);
-  });
-  
-  // تغيير عرض الشريط الجانبي تلقائياً
-  function toggleSidebar() {
-    const shouldCollapse = window.innerWidth < 1400;
-    
-    if (shouldCollapse) {
-      sidebar.classList.add('sidebar-collapsed');
-    } else {
-      sidebar.classList.remove('sidebar-collapsed');
-    }
-  }
-  
-  // التبديل اليدوي بالضغط على الأيقونة
-  const logo = document.querySelector('.sidebar-logo');
-  if (logo) {
-    logo.style.cursor = 'pointer';
-    logo.addEventListener('click', (e) => {
-      // منع التبديل إذا كان النقر على زر داخل اللوجو
-      if (e.target.closest('button')) return;
-      
-      sidebar.classList.toggle('sidebar-collapsed');
-      localStorage.setItem('sidebarCollapsed', sidebar.classList.contains('sidebar-collapsed'));
-    });
-  }
-  
-  // استعادة الحالة المحفوظة
-  const savedState = localStorage.getItem('sidebarCollapsed');
-  if (savedState === 'true') {
-    sidebar.classList.add('sidebar-collapsed');
-  } else if (savedState === 'false') {
-    sidebar.classList.remove('sidebar-collapsed');
-  }
-  
-  // التبديل تلقائياً بناءً على حجم الشاشة
-  toggleSidebar();
-  window.addEventListener('resize', toggleSidebar);
-  
-  // إبقاء القائمة مفتوحة عند النقر على زر
-  sidebarNav.addEventListener('click', (e) => {
-    if (e.target.closest('.nav-btn')) {
-      // إذا كانت القائمة مختصرة، قم بتوسيعها مؤقتاً
-      if (sidebar.classList.contains('sidebar-collapsed')) {
-        sidebar.classList.remove('sidebar-collapsed');
-        setTimeout(() => {
-          if (!sidebar.matches(':hover')) {
-            sidebar.classList.add('sidebar-collapsed');
-          }
-        }, 3000);
-      }
-    }
-  });
-}
-
-// تحديث initializeDashboard
-function initializeDashboard() {
-  console.log('🚀 Dashboard loaded');
-  showSection('dashboard');
-  initializeCharts();
-  setupEventListeners();
-  setupSidebarCollapse(); // أضف هذا السطر
-  loadAllData();
-}
-  
-  
-  
-  
-  
 
   // Logout System
   document.getElementById('logoutBtn').addEventListener('click', function() {
@@ -2477,100 +2377,6 @@ function initializeDashboard() {
   database.ref('departments').on('value', loadEmployeesWithDepartments);
 
   console.log('🎯 B.Y PRO Dashboard is fully operational!');
-  
-  
-  
-  
-  
-  
-  
- 
- 
-// ==================== إدارة القائمة الجانبية المختصرة ====================
-function setupSidebarToggle() {
-  const sidebar = document.querySelector('.sidebar');
-  const toggleBtn = document.getElementById('toggleSidebarBtn');
-  
-  // التحقق من الحالة المحفوظة
-  const savedState = localStorage.getItem('sidebarCollapsed');
-  if (savedState === 'true') {
-    sidebar.classList.add('collapsed');
-  }
-  
-  // حدث النقر على زر التبديل
-  toggleBtn.addEventListener('click', () => {
-    sidebar.classList.toggle('collapsed');
-    
-    // حفظ الحالة
-    const isCollapsed = sidebar.classList.contains('collapsed');
-    localStorage.setItem('sidebarCollapsed', isCollapsed);
-  });
-  
-  // تبديل تلقائي عند تغيير حجم الشاشة
-  function handleResponsiveToggle() {
-    if (window.innerWidth < 1024) {
-      // على الشاشات الصغيرة، لا تخف القائمة
-      sidebar.classList.remove('collapsed');
-      toggleBtn.style.display = 'none';
-    } else {
-      toggleBtn.style.display = 'flex';
-      
-      // إذا لم تكن هناك حالة محفوظة، اختصر القائمة تلقائياً على الشاشات الكبيرة
-      if (savedState === null && window.innerWidth >= 1400) {
-        sidebar.classList.add('collapsed');
-        localStorage.setItem('sidebarCollapsed', 'true');
-      }
-    }
-  }
-  
-  // استدعاء عند التحميل وعند تغيير الحجم
-  handleResponsiveToggle();
-  window.addEventListener('resize', handleResponsiveToggle);
-  
-  // توسيع القائمة عند النقر على أي زر
-  document.querySelectorAll('.nav-btn').forEach(btn => {
-    btn.addEventListener('click', () => {
-      if (window.innerWidth >= 1024) {
-        sidebar.classList.remove('collapsed');
-        localStorage.setItem('sidebarCollapsed', 'false');
-        
-        // إعادة الاختصار بعد 5 ثواني إذا لم يكن الماوس على الشريط
-        setTimeout(() => {
-          if (!sidebar.matches(':hover')) {
-            sidebar.classList.add('collapsed');
-            localStorage.setItem('sidebarCollapsed', 'true');
-          }
-        }, 5000);
-      }
-    });
-  });
-}
-
-// تحديث initializeDashboard
-function initializeDashboard() {
-  console.log('🚀 Dashboard loaded');
-  showSection('dashboard');
-  initializeCharts();
-  setupEventListeners();
-  setupSidebarToggle(); // أضف هذا السطر
-  loadAllData();
-}
-
-// إضافة في نهاية الـ script قبل console.log النهائي
-setupSidebarToggle();
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
 </script>
 </body>
 </html>

@@ -187,6 +187,7 @@
 
         .image-controls {
             display: flex; gap: 10px; margin-top: 10px;
+            flex-wrap: wrap;
         }
 
         /* Loading */
@@ -290,7 +291,7 @@
             display: flex; justify-content: flex-end; gap: 15px; margin-top: 30px;
         }
 
-        /* GitHub Image Display */
+        /* Image Preview */
         .image-preview {
             display: flex; align-items: center; gap: 15px; margin-top: 15px;
         }
@@ -308,14 +309,37 @@
             color: var(--primary);
         }
 
-        /* GitHub Info */
-        .github-info {
-            background: rgba(52, 152, 219, 0.1); border: 1px solid rgba(52, 152, 219, 0.3);
-            padding: 10px; border-radius: 6px; margin-top: 10px;
-            font-size: 13px; color: var(--muted);
+        /* GitHub Token Section */
+        .github-token-section {
+            background: rgba(46, 204, 113, 0.1); border: 1px solid rgba(46, 204, 113, 0.3);
+            padding: 15px; border-radius: 6px; margin-top: 20px;
         }
 
-        .github-info i { color: var(--primary); margin-right: 5px; }
+        .github-token-section h4 {
+            color: var(--success); margin-bottom: 10px;
+            display: flex; align-items: center; gap: 8px;
+        }
+
+        .github-token-input {
+            display: flex; gap: 10px; margin-top: 10px;
+        }
+
+        .github-token-input input {
+            flex: 1; padding: 10px; background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 4px;
+            color: var(--text);
+        }
+
+        .token-info {
+            font-size: 12px; color: var(--warning); margin-top: 10px;
+            display: flex; align-items: center; gap: 5px;
+        }
+
+        /* Action Buttons */
+        .action-buttons {
+            display: flex; gap: 10px; margin-bottom: 25px;
+            flex-wrap: wrap;
+        }
 
         /* Responsive */
         @media (max-width: 768px) {
@@ -323,6 +347,8 @@
             .stats { width: 100%; }
             .stat-box { flex: 1; min-width: auto; }
             .modal-content { padding: 25px; }
+            .image-controls { flex-direction: column; }
+            .action-buttons { flex-direction: column; }
         }
     </style>
 </head>
@@ -360,27 +386,35 @@
             </div>
             
             <div class="form-group">
-                <label><i class="fas fa-image"></i> Profile Image (Optional)</label>
+                <label><i class="fas fa-image"></i> Profile Image</label>
                 <div class="file-upload" id="imageUpload">
                     <i class="fas fa-cloud-upload-alt"></i>
                     <p>Click to upload profile image</p>
-                    <span>PNG, JPG up to 2MB</span>
+                    <span>PNG, JPG up to 5MB</span>
                     <input type="file" id="imageInput" accept="image/*" style="display: none;">
                 </div>
                 <div class="file-name" id="fileName"></div>
                 
-                <div class="github-info">
-                    <i class="fab fa-github"></i>
-                    <strong>Note:</strong> Image will be uploaded to GitHub repository: <br>
-                    <code>Yacine2007/B.Y-PRO-Accounts-pic</code>
-                </div>
-                
                 <div class="image-preview" id="imagePreview" style="display: none;">
                     <img id="previewImage" src="" alt="Preview">
                     <div class="image-info">
-                        <p>Image will be saved as:</p>
+                        <p>Image will be uploaded as:</p>
                         <p id="imageNamePreview"></p>
                     </div>
+                </div>
+            </div>
+            
+            <div class="github-token-section">
+                <h4><i class="fas fa-key"></i> GitHub Token (Required for Image Upload)</h4>
+                <div class="github-token-input">
+                    <input type="password" id="githubToken" placeholder="Enter GitHub Personal Access Token">
+                    <button class="btn btn-success" id="saveTokenBtn">
+                        <i class="fas fa-save"></i> Save
+                    </button>
+                </div>
+                <div class="token-info">
+                    <i class="fas fa-info-circle"></i>
+                    Token requires "repo" permissions. Get token from GitHub Settings → Developer settings → Personal access tokens
                 </div>
             </div>
             
@@ -415,28 +449,29 @@
             </div>
             
             <div class="form-group">
-                <label><i class="fas fa-image"></i> Profile Image</label>
+                <label><i class="fas fa-image"></i> Current Profile Image</label>
                 <div class="image-preview" id="currentImagePreview">
                     <img id="currentImage" src="" alt="Current Image">
                     <div class="image-info">
-                        <p>Current image:</p>
-                        <p id="currentImageName"></p>
+                        <p>Image file: <span id="currentImageName"></span></p>
+                        <p id="imageStatus"></p>
                     </div>
                 </div>
                 
-                <div class="github-info">
-                    <i class="fab fa-github"></i>
-                    <strong>Note:</strong> To change image, upload to GitHub repository: <br>
-                    <code>Yacine2007/B.Y-PRO-Accounts-pic/main/{id}.png</code>
+                <label style="margin-top: 15px; display: block;"><i class="fas fa-image"></i> Upload New Image</label>
+                <div class="file-upload" id="editImageUpload">
+                    <i class="fas fa-cloud-upload-alt"></i>
+                    <p>Click to upload new image</p>
+                    <span>PNG, JPG up to 5MB</span>
+                    <input type="file" id="editImageInput" accept="image/*" style="display: none;">
                 </div>
+                <div class="file-name" id="editFileName" style="display: none;"></div>
                 
-                <div class="image-controls">
-                    <button class="btn btn-primary" id="viewGitHubImage">
-                        <i class="fab fa-github"></i> View on GitHub
-                    </button>
-                    <button class="btn btn-warning" id="updateImageInfo">
-                        <i class="fas fa-sync"></i> Refresh Image
-                    </button>
+                <div class="image-preview" id="editImagePreview" style="display: none; margin-top: 15px;">
+                    <img id="editPreviewImage" src="" alt="Preview">
+                    <div class="image-info">
+                        <p>New image preview</p>
+                    </div>
                 </div>
             </div>
             
@@ -457,9 +492,6 @@
             <div class="header-left">
                 <h1><i class="fas fa-users-cog"></i> B.Y PRO Account Management</h1>
                 <p>Google Drive Database - Connected to Render Server</p>
-                <p style="color: var(--primary); font-size: 13px; margin-top: 5px;">
-                    <i class="fab fa-github"></i> Images stored on: Yacine2007/B.Y-PRO-Accounts-pic
-                </p>
             </div>
             
             <div style="display: flex; align-items: center; gap: 20px;">
@@ -467,10 +499,6 @@
                     <div class="stat-box">
                         <h3>Total Accounts</h3>
                         <p id="totalAccounts">0</p>
-                    </div>
-                    <div class="stat-box">
-                        <h3>With Images</h3>
-                        <p id="accountsWithImages">0</p>
                     </div>
                     <div class="stat-box">
                         <h3>Server Status</h3>
@@ -486,15 +514,12 @@
             </div>
         </div>
 
-        <div style="display: flex; gap: 15px; margin-bottom: 25px;">
+        <div class="action-buttons">
             <button class="add-btn" id="addAccountBtn">
                 <i class="fas fa-plus"></i> Add New Account
             </button>
-            <button class="btn btn-warning" id="syncImagesBtn">
-                <i class="fas fa-image"></i> Check All Images
-            </button>
-            <button class="btn btn-primary" id="openGitHubBtn">
-                <i class="fab fa-github"></i> GitHub Images
+            <button class="btn btn-primary" id="manageTokenBtn">
+                <i class="fas fa-key"></i> Manage GitHub Token
             </button>
         </div>
 
@@ -509,13 +534,12 @@
                         <th>Name</th>
                         <th>Email</th>
                         <th>Password</th>
-                        <th>Image Status</th>
                         <th>Actions</th>
                     </tr>
                 </thead>
                 <tbody id="accountsTableBody">
                     <tr>
-                        <td colspan="7" class="loading">
+                        <td colspan="6" class="loading">
                             <i class="fas fa-spinner fa-spin"></i> Loading accounts...
                         </td>
                     </tr>
@@ -529,16 +553,13 @@
         const API_BASE = 'https://b-y-pro-acounts-login.onrender.com/api';
         const API_KEY = 'BYPRO_SECURE_KEY_2007';
         const ADMIN_PASSWORD = '20070909';
-        
-        // GitHub repository configuration (from server.js)
-        const GITHUB_REPO = 'Yacine2007/B.Y-PRO-Accounts-pic';
-        const GITHUB_BRANCH = 'main';
-        const GITHUB_IMAGE_BASE_URL = `https://raw.githubusercontent.com/${GITHUB_REPO}/${GITHUB_BRANCH}/`;
 
         // ==================== STATE MANAGEMENT ====================
         let currentEditId = null;
         let accountsData = [];
         let newAccountImage = null;
+        let editAccountImage = null;
+        let githubToken = localStorage.getItem('github_token') || '';
 
         // ==================== DOM ELEMENTS ====================
         const passwordModal = document.getElementById('passwordModal');
@@ -548,12 +569,10 @@
         const dashboard = document.getElementById('dashboard');
         const accountsTableBody = document.getElementById('accountsTableBody');
         const totalAccountsElement = document.getElementById('totalAccounts');
-        const accountsWithImagesElement = document.getElementById('accountsWithImages');
         const serverStatusElement = document.getElementById('serverStatus');
         const refreshBtn = document.getElementById('refreshBtn');
         const addAccountBtn = document.getElementById('addAccountBtn');
-        const syncImagesBtn = document.getElementById('syncImagesBtn');
-        const openGitHubBtn = document.getElementById('openGitHubBtn');
+        const manageTokenBtn = document.getElementById('manageTokenBtn');
         const statusMessage = document.getElementById('statusMessage');
         
         // Add account modal elements
@@ -567,6 +586,8 @@
         const imagePreview = document.getElementById('imagePreview');
         const previewImage = document.getElementById('previewImage');
         const imageNamePreview = document.getElementById('imageNamePreview');
+        const githubTokenInput = document.getElementById('githubToken');
+        const saveTokenBtn = document.getElementById('saveTokenBtn');
         const cancelAdd = document.getElementById('cancelAdd');
         const saveNewAccount = document.getElementById('saveNewAccount');
         
@@ -578,8 +599,12 @@
         const currentImagePreview = document.getElementById('currentImagePreview');
         const currentImage = document.getElementById('currentImage');
         const currentImageName = document.getElementById('currentImageName');
-        const viewGitHubImage = document.getElementById('viewGitHubImage');
-        const updateImageInfo = document.getElementById('updateImageInfo');
+        const imageStatus = document.getElementById('imageStatus');
+        const editImageUpload = document.getElementById('editImageUpload');
+        const editImageInput = document.getElementById('editImageInput');
+        const editFileName = document.getElementById('editFileName');
+        const editImagePreview = document.getElementById('editImagePreview');
+        const editPreviewImage = document.getElementById('editPreviewImage');
         const cancelEdit = document.getElementById('cancelEdit');
         const saveEditBtn = document.getElementById('saveEdit');
 
@@ -591,7 +616,7 @@
             
             setTimeout(() => {
                 statusMessage.style.display = 'none';
-            }, 4000);
+            }, 5000);
         }
 
         function hideModal(modal) {
@@ -613,6 +638,18 @@
             newAccountImage = null;
         }
 
+        function resetEditForm() {
+            editName.value = '';
+            editEmail.value = '';
+            editPassword.value = '';
+            editImageInput.value = '';
+            editFileName.textContent = '';
+            editFileName.style.display = 'none';
+            editImagePreview.style.display = 'none';
+            editAccountImage = null;
+            currentEditId = null;
+        }
+
         async function checkServerStatus() {
             try {
                 const response = await fetch(`${API_BASE}/health`);
@@ -627,31 +664,33 @@
             return false;
         }
 
-        // ==================== GITHUB IMAGE FUNCTIONS ====================
-        function getGitHubImageUrl(accountId) {
-            return `${GITHUB_IMAGE_BASE_URL}${accountId}.png`;
-        }
-
-        async function checkImageExists(url) {
-            try {
-                const response = await fetch(url, { method: 'HEAD' });
-                return response.ok;
-            } catch (error) {
-                return false;
-            }
-        }
-
-        async function testAllImages() {
-            const loadingAccounts = await loadAccountsData();
-            let withImages = 0;
+        function showTokenManager() {
+            const token = localStorage.getItem('github_token') || '';
+            const hasToken = !!token;
             
-            for (const account of loadingAccounts) {
-                const imageUrl = getGitHubImageUrl(account.id);
-                const exists = await checkImageExists(imageUrl);
-                if (exists) withImages++;
-            }
+            const message = hasToken 
+                ? `GitHub Token is ${token.substring(0, 10)}...${token.substring(token.length - 4)}`
+                : 'No GitHub token set. Image upload will not work.';
             
-            return withImages;
+            const action = hasToken 
+                ? 'Remove Token'
+                : 'Set Token';
+            
+            const userAction = prompt(`${message}\n\nEnter new token (leave empty to ${hasToken ? 'remove' : 'cancel'}):`);
+            
+            if (userAction === null) return;
+            
+            if (userAction === '') {
+                if (hasToken) {
+                    localStorage.removeItem('github_token');
+                    githubToken = '';
+                    showStatus('GitHub token removed', 'success');
+                }
+            } else {
+                localStorage.setItem('github_token', userAction);
+                githubToken = userAction;
+                showStatus('GitHub token saved', 'success');
+            }
         }
 
         // ==================== API FUNCTIONS ====================
@@ -682,6 +721,27 @@
             }
         }
 
+        async function uploadImageAPI(endpoint, formData) {
+            try {
+                const response = await fetch(`${API_BASE}${endpoint}`, {
+                    method: 'POST',
+                    headers: {
+                        'API-Key': API_KEY
+                    },
+                    body: formData
+                });
+                
+                if (!response.ok) {
+                    throw new Error(`HTTP ${response.status}`);
+                }
+
+                return await response.json();
+            } catch (error) {
+                console.error('Upload Error:', error);
+                throw error;
+            }
+        }
+
         async function loadAccountsData() {
             try {
                 const result = await callAPI('/accounts');
@@ -700,7 +760,7 @@
             try {
                 accountsTableBody.innerHTML = `
                     <tr>
-                        <td colspan="7" class="loading">
+                        <td colspan="6" class="loading">
                             <i class="fas fa-spinner fa-spin"></i> Loading accounts...
                         </td>
                     </tr>
@@ -721,7 +781,7 @@
                 console.error('Load error:', error);
                 accountsTableBody.innerHTML = `
                     <tr>
-                        <td colspan="7" class="loading">
+                        <td colspan="6" class="loading">
                             <i class="fas fa-exclamation-triangle"></i> 
                             Error: ${error.message}
                         </td>
@@ -737,7 +797,7 @@
             if (!accounts || accounts.length === 0) {
                 accountsTableBody.innerHTML = `
                     <tr>
-                        <td colspan="7" class="loading">
+                        <td colspan="6" class="loading">
                             <i class="fas fa-users"></i> No accounts found
                         </td>
                     </tr>
@@ -747,24 +807,17 @@
             
             accounts.forEach(account => {
                 const row = document.createElement('tr');
-                const imageUrl = getGitHubImageUrl(account.id);
-                const hasImage = account.hasImage || false;
+                const imageUrl = account.imageUrl || `https://ui-avatars.com/api/?name=${encodeURIComponent(account.name || account.id)}&background=3498db&color=fff&size=50`;
                 
                 row.innerHTML = `
                     <td><strong style="color: var(--primary);">${account.id}</strong></td>
                     <td>
                         <img class="profile-img" src="${imageUrl}" 
-                             onerror="this.src='https://ui-avatars.com/api/?name=${encodeURIComponent(account.name || account.id)}&background=3498db&color=fff&size=50'" 
                              alt="${account.name}">
                     </td>
                     <td>${account.name || 'No Name'}</td>
                     <td>${account.email || 'No Email'}</td>
                     <td><span style="font-family: monospace;">${'•'.repeat(Math.min(10, account.password?.length || 8))}</span></td>
-                    <td>
-                        ${hasImage ? 
-                            '<span style="color: var(--success);"><i class="fas fa-check-circle"></i> Yes</span>' : 
-                            '<span style="color: var(--muted);"><i class="fas fa-times-circle"></i> No</span>'}
-                    </td>
                     <td>
                         <button class="btn btn-primary" onclick="openEditModal('${account.id}')">
                             <i class="fas fa-edit"></i> Edit
@@ -781,8 +834,6 @@
 
         function updateStats(accounts) {
             totalAccountsElement.textContent = accounts.length;
-            const withImages = accounts.filter(acc => acc.hasImage).length;
-            accountsWithImagesElement.textContent = withImages;
         }
 
         async function addAccount() {
@@ -793,31 +844,36 @@
                     return;
                 }
 
+                // Check if GitHub token is available for image upload
+                if (newAccountImage && !githubToken) {
+                    showStatus('GitHub token is required for image upload. Please save your token first.', 'error');
+                    return;
+                }
+
                 // Get next available ID
                 const nextIdResult = await callAPI('/next-id');
                 const newId = nextIdResult.nextId || '1000';
                 
-                // Get image URL (if image was uploaded, it needs to be manually uploaded to GitHub)
-                const imageUrl = newAccountImage ? 
-                    `https://raw.githubusercontent.com/Yacine2007/B.Y-PRO-Accounts-pic/main/${newId}.png` : 
-                    `https://raw.githubusercontent.com/Yacine2007/B.Y-PRO-Accounts-pic/main/${newId}.png`;
+                // Prepare form data for account creation with image
+                const formData = new FormData();
+                formData.append('id', newId);
+                formData.append('name', addName.value.trim());
+                formData.append('email', addEmail.value.trim());
+                formData.append('password', addPassword.value.trim());
                 
-                // Create account in database
-                const result = await callAPI('/accounts', 'POST', {
-                    id: newId,
-                    name: addName.value.trim(),
-                    email: addEmail.value.trim(),
-                    password: addPassword.value.trim()
-                });
+                if (githubToken) {
+                    formData.append('githubToken', githubToken);
+                }
+                
+                if (newAccountImage) {
+                    formData.append('image', newAccountImage);
+                }
+                
+                // Create account with image upload
+                const result = await uploadImageAPI('/accounts', formData);
                 
                 if (result.success) {
                     showStatus(`Account ${newId} created successfully!`, 'success');
-                    
-                    // Show instructions for uploading image
-                    if (newAccountImage) {
-                        showStatus(`Note: Upload image to GitHub as ${newId}.png manually`, 'warning');
-                    }
-                    
                     hideModal(addAccountModal);
                     resetAddForm();
                     loadAccounts();
@@ -840,12 +896,11 @@
             editPassword.value = account.password || '';
             
             // Load current image
-            const imageUrl = getGitHubImageUrl(id);
+            const imageUrl = account.imageUrl || `https://ui-avatars.com/api/?name=${encodeURIComponent(account.name || id)}&background=3498db&color=fff&size=80`;
             currentImage.src = imageUrl;
-            currentImage.onerror = function() {
-                this.src = `https://ui-avatars.com/api/?name=${encodeURIComponent(account.name || id)}&background=3498db&color=fff&size=80`;
-            };
-            currentImageName.textContent = `${id}.png`;
+            currentImageName.textContent = account.hasImage ? `${id}.png` : 'No image';
+            imageStatus.textContent = account.hasImage ? 'Image exists on GitHub' : 'No image uploaded';
+            imageStatus.style.color = account.hasImage ? 'var(--success)' : 'var(--muted)';
             currentImagePreview.style.display = 'flex';
             
             showModal(editModal);
@@ -864,20 +919,42 @@
                     return;
                 }
                 
-                // Update account in database
-                const result = await callAPI(`/accounts/${currentEditId}`, 'PUT', {
+                // Update account information
+                const updateResult = await callAPI(`/accounts/${currentEditId}`, 'PUT', {
                     name: name,
                     email: email,
                     password: password
                 });
                 
-                if (result.success) {
-                    showStatus(`Account ${currentEditId} updated successfully!`, 'success');
-                    hideModal(editModal);
-                    loadAccounts();
-                } else {
-                    showStatus('Error: ' + result.error, 'error');
+                if (!updateResult.success) {
+                    throw new Error(updateResult.error);
                 }
+                
+                // Upload new image if provided
+                if (editAccountImage) {
+                    if (!githubToken) {
+                        showStatus('GitHub token is required for image upload. Please save your token first.', 'error');
+                        return;
+                    }
+                    
+                    const formData = new FormData();
+                    formData.append('githubToken', githubToken);
+                    formData.append('image', editAccountImage);
+                    
+                    const uploadResult = await uploadImageAPI(`/accounts/${currentEditId}/upload-image`, formData);
+                    
+                    if (!uploadResult.success) {
+                        showStatus('Account updated but image upload failed: ' + uploadResult.error, 'warning');
+                    } else {
+                        showStatus(`Account ${currentEditId} updated with new image!`, 'success');
+                    }
+                } else {
+                    showStatus(`Account ${currentEditId} updated successfully!`, 'success');
+                }
+                
+                hideModal(editModal);
+                resetEditForm();
+                loadAccounts();
                 
             } catch (error) {
                 showStatus('Error updating account: ' + error.message, 'error');
@@ -890,7 +967,9 @@
             }
             
             try {
-                const result = await callAPI(`/accounts/${id}`, 'DELETE');
+                const result = await callAPI(`/accounts/${id}`, 'DELETE', {
+                    githubToken: githubToken
+                });
                 
                 if (result.success) {
                     showStatus(`Account ${id} deleted successfully`, 'success');
@@ -928,6 +1007,20 @@
         addAccountBtn.addEventListener('click', () => {
             showModal(addAccountModal);
             addName.focus();
+            githubTokenInput.value = githubToken;
+        });
+        
+        manageTokenBtn.addEventListener('click', showTokenManager);
+        
+        saveTokenBtn.addEventListener('click', () => {
+            const token = githubTokenInput.value.trim();
+            if (token) {
+                localStorage.setItem('github_token', token);
+                githubToken = token;
+                showStatus('GitHub token saved', 'success');
+            } else {
+                showStatus('Please enter a valid token', 'error');
+            }
         });
         
         cancelAdd.addEventListener('click', () => {
@@ -951,8 +1044,8 @@
                 return;
             }
             
-            if (file.size > 2 * 1024 * 1024) {
-                showStatus('Image size should be less than 2MB', 'error');
+            if (file.size > 5 * 1024 * 1024) {
+                showStatus('Image size should be less than 5MB', 'error');
                 return;
             }
             
@@ -968,53 +1061,52 @@
             reader.onload = function(e) {
                 previewImage.src = e.target.result;
                 imagePreview.style.display = 'flex';
-                
-                // Show suggested image name
-                imageNamePreview.textContent = 'NEW_ID.png (Upload manually to GitHub)';
+                imageNamePreview.textContent = 'Will be uploaded with account ID';
             };
             reader.readAsDataURL(file);
         });
         
-        // Edit modal events
-        viewGitHubImage.addEventListener('click', () => {
-            if (currentEditId) {
-                const githubUrl = `https://github.com/${GITHUB_REPO}/blob/${GITHUB_BRANCH}/${currentEditId}.png`;
-                window.open(githubUrl, '_blank');
-            }
+        // Image upload for edit account
+        editImageUpload.addEventListener('click', () => {
+            editImageInput.click();
         });
         
-        updateImageInfo.addEventListener('click', async () => {
-            if (currentEditId) {
-                const imageUrl = getGitHubImageUrl(currentEditId);
-                const exists = await checkImageExists(imageUrl);
-                
-                if (exists) {
-                    currentImage.src = imageUrl + '?t=' + new Date().getTime();
-                    showStatus('Image refreshed', 'success');
-                } else {
-                    showStatus('Image not found on GitHub', 'warning');
-                }
+        editImageInput.addEventListener('change', () => {
+            const file = editImageInput.files[0];
+            if (!file) return;
+            
+            if (!file.type.match('image.*')) {
+                showStatus('Please select a valid image file (PNG, JPG, JPEG)', 'error');
+                return;
             }
+            
+            if (file.size > 5 * 1024 * 1024) {
+                showStatus('Image size should be less than 5MB', 'error');
+                return;
+            }
+            
+            // Show file name
+            editFileName.textContent = file.name;
+            editFileName.style.display = 'block';
+            
+            // Update state variable
+            editAccountImage = file;
+            
+            // Show preview
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                editPreviewImage.src = e.target.result;
+                editImagePreview.style.display = 'flex';
+            };
+            reader.readAsDataURL(file);
         });
         
         cancelEdit.addEventListener('click', () => {
             hideModal(editModal);
+            resetEditForm();
         });
         
         saveEditBtn.addEventListener('click', saveAccountChanges);
-        
-        // Sync images button
-        syncImagesBtn.addEventListener('click', async () => {
-            showStatus('Checking image status for all accounts...', 'success');
-            const withImages = await testAllImages();
-            accountsWithImagesElement.textContent = withImages;
-            showStatus(`Found ${withImages} accounts with images on GitHub`, 'success');
-        });
-        
-        // Open GitHub button
-        openGitHubBtn.addEventListener('click', () => {
-            window.open(`https://github.com/${GITHUB_REPO}`, '_blank');
-        });
 
         // Close modals when clicking outside
         window.addEventListener('click', (e) => {
@@ -1024,6 +1116,7 @@
             }
             if (e.target === editModal) {
                 hideModal(editModal);
+                resetEditForm();
             }
         });
 
@@ -1032,14 +1125,15 @@
             console.log('🚀 B.Y PRO Dashboard Initialized');
             console.log('🔗 Server URL:', API_BASE);
             console.log('🔐 API Key:', API_KEY ? 'Loaded' : 'Missing');
-            console.log('🖼️ GitHub Repository:', GITHUB_REPO);
-            console.log('🔗 Image Base URL:', GITHUB_IMAGE_BASE_URL);
             
             passwordModal.style.display = 'flex';
             passwordInput.focus();
             
             // Check server status on load
             checkServerStatus();
+            
+            // Load saved GitHub token
+            githubToken = localStorage.getItem('github_token') || '';
         });
 
         // Global functions for HTML event handlers

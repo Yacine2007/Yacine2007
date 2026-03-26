@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>B.Y PRO - Admin Dashboard</title>
+    <title>B.Y PRO - Admin Dashboard (Full Control)</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         :root {
@@ -63,11 +63,6 @@
         .password-box button {
             background: linear-gradient(135deg, var(--primary), var(--dark)); 
             color: white; border: none; cursor: pointer; font-weight: 600;
-            letter-spacing: 0.5px;
-        }
-
-        .password-box button:hover {
-            transform: translateY(-2px); box-shadow: 0 5px 15px rgba(52, 152, 219, 0.4);
         }
 
         .error { 
@@ -90,20 +85,15 @@
             -webkit-background-clip: text; -webkit-text-fill-color: transparent;
         }
 
-        .header-left p { color: var(--muted); font-size: 14px; }
-
         .stats { display: flex; gap: 20px; flex-wrap: wrap; }
         .stat-box {
             background: linear-gradient(145deg, var(--card), #151515);
             padding: 20px; border-radius: var(--radius); min-width: 160px; 
             text-align: center; border: 1px solid rgba(255, 255, 255, 0.05);
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
         }
 
         .stat-box h3 { font-size: 14px; color: var(--muted); margin-bottom: 8px; }
         .stat-box p { font-size: 32px; font-weight: 700; }
-
-        #serverStatus { font-size: 16px !important; font-weight: 600; }
 
         /* Buttons */
         .btn {
@@ -112,115 +102,45 @@
             gap: 8px; font-size: 14px; font-weight: 600; transition: all 0.3s;
         }
 
-        .btn-primary { 
-            background: linear-gradient(135deg, var(--primary), var(--dark)); 
-            color: white;
-        }
-
-        .btn-danger { 
-            background: linear-gradient(135deg, var(--danger), #c0392b); 
-            color: white;
-        }
-
-        .btn-success { 
-            background: linear-gradient(135deg, var(--success), #27ae60); 
-            color: white;
-        }
-
-        .btn-warning { 
-            background: linear-gradient(135deg, var(--warning), #e67e22); 
-            color: white;
-        }
-
+        .btn-primary { background: linear-gradient(135deg, var(--primary), var(--dark)); color: white; }
+        .btn-danger { background: linear-gradient(135deg, var(--danger), #c0392b); color: white; }
+        .btn-success { background: linear-gradient(135deg, var(--success), #27ae60); color: white; }
+        .btn-warning { background: linear-gradient(135deg, var(--warning), #e67e22); color: white; }
+        .btn-sm { padding: 5px 12px; font-size: 12px; }
         .btn:hover { transform: translateY(-2px); box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3); }
 
         .refresh-btn, .add-btn {
             background: linear-gradient(135deg, var(--primary), var(--dark)); 
-            color: white; border: none; padding: 12px 24px; 
-            border-radius: var(--radius); cursor: pointer;
-            display: flex; align-items: center; gap: 10px; font-size: 15px;
+            color: white; border: none; padding: 12px 24px; border-radius: var(--radius);
+            cursor: pointer; display: flex; align-items: center; gap: 10px;
             font-weight: 600; transition: all 0.3s;
         }
-
-        .refresh-btn:hover, .add-btn:hover {
-            transform: translateY(-3px); box-shadow: 0 8px 20px rgba(52, 152, 219, 0.4);
-        }
-
-        .add-btn { margin-bottom: 25px; }
 
         /* Table */
         .table-container {
             background: linear-gradient(145deg, var(--card), #151515); 
             border-radius: var(--radius); padding: 25px;
-            overflow-x: auto; border: 1px solid rgba(255, 255, 255, 0.05);
+            overflow-x: auto;
             box-shadow: var(--shadow);
         }
 
         table { width: 100%; border-collapse: collapse; }
-        thead { 
-            background: linear-gradient(135deg, rgba(52, 152, 219, 0.2), rgba(41, 128, 185, 0.1));
-            backdrop-filter: blur(10px);
-        }
-        
-        th { 
-            padding: 18px 15px; text-align: left; color: var(--primary);
-            font-weight: 600; font-size: 15px;
-        }
-        
-        td { 
-            padding: 16px 15px; border-bottom: 1px solid rgba(255, 255, 255, 0.05); 
-            font-size: 15px;
-        }
-        
-        tbody tr { transition: all 0.3s; }
-        tbody tr:hover { 
-            background: rgba(52, 152, 219, 0.05); 
-            transform: translateX(5px);
-        }
+        thead { background: linear-gradient(135deg, rgba(52, 152, 219, 0.2), rgba(41, 128, 185, 0.1)); }
+        th { padding: 18px 15px; text-align: left; color: var(--primary); font-weight: 600; }
+        td { padding: 16px 15px; border-bottom: 1px solid rgba(255, 255, 255, 0.05); }
+        tbody tr:hover { background: rgba(52, 152, 219, 0.05); transform: translateX(5px); }
 
-        /* Profile Image */
-        .profile-img {
-            width: 50px; height: 50px; border-radius: 50%;
-            object-fit: cover; border: 2px solid var(--primary);
-            background: #2c3e50;
+        .badge {
+            display: inline-block; padding: 4px 10px; border-radius: 20px;
+            font-size: 12px; font-weight: 600;
         }
+        .badge-active { background: rgba(46, 204, 113, 0.2); color: var(--success); border: 1px solid rgba(46, 204, 113, 0.3); }
+        .badge-blocked { background: rgba(231, 76, 60, 0.2); color: var(--danger); border: 1px solid rgba(231, 76, 60, 0.3); }
 
-        .image-controls {
-            display: flex; gap: 10px; margin-top: 10px;
-            flex-wrap: wrap;
-        }
-
-        /* Loading */
-        .loading { 
-            text-align: center; padding: 60px; color: var(--muted); 
-            font-size: 16px;
-        }
-        
-        .fa-spin { animation: spin 1s linear infinite; }
-        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
-
-        /* Status Messages */
-        .status {
-            padding: 15px 20px; margin: 15px 0; border-radius: var(--radius);
-            text-align: center; display: none; font-weight: 600;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
-        }
-
-        .status-success { 
-            background: linear-gradient(135deg, rgba(46, 204, 113, 0.2), rgba(39, 174, 96, 0.1));
-            color: var(--success); border: 1px solid rgba(46, 204, 113, 0.3);
-        }
-        
-        .status-error { 
-            background: linear-gradient(135deg, rgba(231, 76, 60, 0.2), rgba(192, 57, 43, 0.1));
-            color: var(--danger); border: 1px solid rgba(231, 76, 60, 0.3);
-        }
-
-        /* Modals */
+        /* Modal */
         .modal {
             display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.9); z-index: 1001; 
-            justify-content: center; align-items: center;
+            background: rgba(0,0,0,0.9); z-index: 1001; justify-content: center; align-items: center;
             backdrop-filter: blur(5px);
         }
 
@@ -228,7 +148,6 @@
             background: linear-gradient(145deg, var(--card), #151515); 
             padding: 35px; border-radius: var(--radius);
             width: 90%; max-width: 600px; border: 1px solid var(--primary);
-            box-shadow: var(--shadow); position: relative;
             max-height: 90vh; overflow-y: auto;
         }
 
@@ -238,207 +157,72 @@
             border-radius: var(--radius) var(--radius) 0 0;
         }
 
-        .modal-content h3 { 
-            margin-bottom: 25px; color: var(--primary);
-            font-size: 22px; display: flex; align-items: center; gap: 10px;
-        }
-
-        .form-group {
-            margin-bottom: 20px;
-        }
-
-        .form-group label {
-            display: block; margin-bottom: 8px; color: var(--muted);
-            font-weight: 600; font-size: 14px;
-        }
-
-        .form-group input {
+        .modal-content h3 { margin-bottom: 25px; color: var(--primary); display: flex; align-items: center; gap: 10px; }
+        .form-group { margin-bottom: 20px; }
+        .form-group label { display: block; margin-bottom: 8px; color: var(--muted); font-weight: 600; }
+        .form-group input, .form-group select {
             width: 100%; padding: 12px 15px; background: rgba(255, 255, 255, 0.05);
             color: var(--text); border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 6px; font-size: 15px; transition: all 0.3s;
-            outline: none;
+            border-radius: 6px; outline: none;
         }
+        .form-group input:focus { border-color: var(--primary); }
+        
+        .info-row { display: flex; justify-content: space-between; padding: 12px 0; border-bottom: 1px solid rgba(255, 255, 255, 0.1); }
+        .info-label { color: var(--muted); }
+        .info-value { color: var(--primary); font-weight: 600; }
 
-        .form-group input:focus {
-            border-color: var(--primary); box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.2);
-        }
-
-        .file-upload {
-            border: 2px dashed rgba(255, 255, 255, 0.1); padding: 25px;
-            text-align: center; border-radius: 6px; cursor: pointer;
-            transition: all 0.3s; margin-top: 10px;
-        }
-
-        .file-upload:hover {
-            border-color: var(--primary); background: rgba(52, 152, 219, 0.05);
-        }
-
-        .file-upload i { font-size: 40px; color: var(--muted); margin-bottom: 10px; }
-        .file-upload p { color: var(--muted); margin-bottom: 5px; }
-        .file-upload span { font-size: 12px; color: var(--primary); }
-
-        .file-name {
-            margin-top: 10px; padding: 8px 12px; background: rgba(255, 255, 255, 0.05);
-            border-radius: 4px; color: var(--muted); font-size: 14px;
-            display: none;
-        }
-
-        .modal-actions {
-            display: flex; justify-content: flex-end; gap: 15px; margin-top: 30px;
-        }
-
-        /* Image Preview */
-        .image-preview {
-            display: flex; align-items: center; gap: 15px; margin-top: 15px;
-        }
-
-        .image-preview img {
-            width: 80px; height: 80px; border-radius: 50%;
-            object-fit: cover; border: 3px solid var(--primary);
-        }
-
-        .image-preview .image-info {
-            color: var(--muted); font-size: 14px;
-        }
-
-        .image-preview .image-info strong {
-            color: var(--primary);
-        }
-
-        /* GitHub Token Input */
-        .token-input {
-            display: flex; gap: 10px; margin-top: 10px;
-        }
-
-        .token-input input {
-            flex: 1; padding: 10px; background: rgba(255, 255, 255, 0.05);
-            border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 4px;
-            color: var(--text); font-size: 14px;
-        }
-
-        /* Responsive */
-        @media (max-width: 768px) {
-            .header { flex-direction: column; align-items: flex-start; }
-            .stats { width: 100%; }
-            .stat-box { flex: 1; min-width: auto; }
-            .modal-content { padding: 25px; }
-            .image-controls { flex-direction: column; }
-        }
+        .modal-actions { display: flex; justify-content: flex-end; gap: 15px; margin-top: 30px; }
+        .status { padding: 15px; border-radius: var(--radius); text-align: center; display: none; margin-bottom: 20px; }
+        .status-success { background: rgba(46, 204, 113, 0.2); color: var(--success); }
+        .status-error { background: rgba(231, 76, 60, 0.2); color: var(--danger); }
+        .loading { text-align: center; padding: 60px; color: var(--muted); }
+        .fa-spin { animation: spin 1s linear infinite; }
+        @keyframes spin { to { transform: rotate(360deg); } }
     </style>
 </head>
 <body>
-    <!-- Password Modal -->
     <div class="password-modal" id="passwordModal">
         <div class="password-box">
             <h2><i class="fas fa-lock"></i> Admin Dashboard</h2>
             <p>Enter admin password to access the system</p>
-            <input type="password" id="passwordInput" placeholder="Enter password" autocomplete="off">
+            <input type="password" id="passwordInput" placeholder="Enter password">
             <button id="submitPassword"><i class="fas fa-unlock"></i> Access Dashboard</button>
-            <div class="error" id="errorMessage">
-                <i class="fas fa-exclamation-triangle"></i> Incorrect password
+            <div class="error" id="errorMessage">Incorrect password</div>
+        </div>
+    </div>
+
+    <!-- Financial Details Modal -->
+    <div class="modal" id="financialModal">
+        <div class="modal-content">
+            <h3><i class="fas fa-wallet"></i> Financial Details</h3>
+            <div id="financialInfo"></div>
+            <div class="form-group">
+                <label>Update Balance ($)</label>
+                <input type="number" id="updateBalanceAmount" step="0.01" placeholder="Enter new balance or amount to add">
+                <select id="balanceAction" style="margin-top: 10px;">
+                    <option value="set">Set Balance (replace)</option>
+                    <option value="add">Add to Balance</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Update Card Code</label>
+                <input type="text" id="updateCardCode" placeholder="byppcn-xxxxxxxxxxxxxxx">
+            </div>
+            <div class="modal-actions">
+                <button class="btn btn-danger" id="closeFinancialModal">Close</button>
+                <button class="btn btn-success" id="saveFinancialChanges">Save Changes</button>
             </div>
         </div>
     </div>
 
-    <!-- Add Account Modal -->
-    <div class="modal" id="addAccountModal">
+    <!-- Block/Unblock Modal -->
+    <div class="modal" id="blockModal">
         <div class="modal-content">
-            <h3><i class="fas fa-user-plus"></i> Add New Account</h3>
-            <div class="form-group">
-                <label for="addName"><i class="fas fa-user"></i> Full Name</label>
-                <input type="text" id="addName" placeholder="Enter full name">
-            </div>
-            
-            <div class="form-group">
-                <label for="addEmail"><i class="fas fa-envelope"></i> Email Address</label>
-                <input type="email" id="addEmail" placeholder="Enter email address">
-            </div>
-            
-            <div class="form-group">
-                <label for="addPassword"><i class="fas fa-key"></i> Password</label>
-                <input type="text" id="addPassword" placeholder="Enter password">
-            </div>
-            
-            <div class="form-group">
-                <label><i class="fas fa-image"></i> Profile Image</label>
-                <div class="file-upload" id="imageUpload">
-                    <i class="fas fa-cloud-upload-alt"></i>
-                    <p>Click to upload profile image</p>
-                    <span>PNG, JPG up to 5MB</span>
-                    <input type="file" id="imageInput" accept="image/*" style="display: none;">
-                </div>
-                <div class="file-name" id="fileName"></div>
-                
-                <div class="image-preview" id="imagePreview" style="display: none;">
-                    <img id="previewImage" src="" alt="Preview">
-                    <div class="image-info">
-                        <p>Image will be uploaded automatically</p>
-                    </div>
-                </div>
-            </div>
-            
+            <h3><i class="fas fa-ban"></i> Account Status</h3>
+            <div id="blockInfo"></div>
             <div class="modal-actions">
-                <button class="btn btn-danger" id="cancelAdd">
-                    <i class="fas fa-times"></i> Cancel
-                </button>
-                <button class="btn btn-success" id="saveNewAccount">
-                    <i class="fas fa-save"></i> Create Account
-                </button>
-            </div>
-        </div>
-    </div>
-
-    <!-- Edit Account Modal -->
-    <div class="modal" id="editModal">
-        <div class="modal-content">
-            <h3><i class="fas fa-user-edit"></i> Edit Account</h3>
-            <div class="form-group">
-                <label for="editName"><i class="fas fa-user"></i> Full Name</label>
-                <input type="text" id="editName" placeholder="Enter full name">
-            </div>
-            
-            <div class="form-group">
-                <label for="editEmail"><i class="fas fa-envelope"></i> Email Address</label>
-                <input type="email" id="editEmail" placeholder="Enter email address">
-            </div>
-            
-            <div class="form-group">
-                <label for="editPassword"><i class="fas fa-key"></i> Password</label>
-                <input type="text" id="editPassword" placeholder="Enter password">
-            </div>
-            
-            <div class="form-group">
-                <label><i class="fas fa-image"></i> Update Profile Image</label>
-                <div class="image-preview" id="currentImagePreview">
-                    <img id="currentImage" src="" alt="Current Image">
-                    <div class="image-info">
-                        <p>Current image</p>
-                        <p id="currentImageName"></p>
-                    </div>
-                </div>
-                
-                <div class="file-upload" id="editImageUpload">
-                    <i class="fas fa-cloud-upload-alt"></i>
-                    <p>Click to upload new image</p>
-                    <span>PNG, JPG up to 5MB</span>
-                    <input type="file" id="editImageInput" accept="image/*" style="display: none;">
-                </div>
-                <div class="file-name" id="editFileName" style="display: none;"></div>
-                
-                <div class="image-controls">
-                    <button class="btn btn-warning" id="uploadImageBtn" style="display: none;">
-                        <i class="fas fa-upload"></i> Upload New Image
-                    </button>
-                </div>
-            </div>
-            
-            <div class="modal-actions">
-                <button class="btn btn-danger" id="cancelEdit">
-                    <i class="fas fa-times"></i> Cancel
-                </button>
-                <button class="btn btn-success" id="saveEdit">
-                    <i class="fas fa-save"></i> Save Changes
-                </button>
+                <button class="btn btn-danger" id="closeBlockModal">Cancel</button>
+                <button class="btn btn-warning" id="confirmBlockAction">Block Account</button>
             </div>
         </div>
     </div>
@@ -447,576 +231,214 @@
     <div class="dashboard" id="dashboard">
         <div class="header">
             <div class="header-left">
-                <h1><i class="fas fa-users-cog"></i> B.Y PRO Account Management</h1>
-                <p>Google Drive Database - Connected to Render Server</p>
+                <h1><i class="fas fa-users-cog"></i> B.Y PRO Admin Panel</h1>
+                <p>Full Control - Accounts & Financial Management</p>
             </div>
-            
-            <div style="display: flex; align-items: center; gap: 20px;">
-                <div class="stats">
-                    <div class="stat-box">
-                        <h3>Total Accounts</h3>
-                        <p id="totalAccounts">0</p>
-                    </div>
-                    <div class="stat-box">
-                        <h3>Server Status</h3>
-                        <p id="serverStatus" style="color: var(--success);">
-                            <i class="fas fa-circle" style="font-size: 12px;"></i> Online
-                        </p>
-                    </div>
-                </div>
-                
-                <button class="refresh-btn" id="refreshBtn">
-                    <i class="fas fa-sync-alt"></i> Refresh
-                </button>
+            <div style="display: flex; gap: 20px;">
+                <div class="stat-box"><h3>Total Accounts</h3><p id="totalAccounts">0</p></div>
+                <div class="stat-box"><h3>Total Balance</h3><p id="totalBalance">$0</p></div>
+                <div class="stat-box"><h3>Blocked</h3><p id="blockedCount">0</p></div>
+                <button class="refresh-btn" id="refreshBtn"><i class="fas fa-sync-alt"></i> Refresh</button>
             </div>
         </div>
 
-        <button class="add-btn" id="addAccountBtn">
-            <i class="fas fa-plus"></i> Add New Account
-        </button>
-
+        <button class="add-btn" id="addAccountBtn"><i class="fas fa-plus"></i> Add New Account</button>
         <div id="statusMessage" class="status"></div>
 
         <div class="table-container">
             <table>
-                <thead>
-                    <tr>
-                        <th>ID</th>
-                        <th>Profile</th>
-                        <th>Name</th>
-                        <th>Email</th>
-                        <th>Password</th>
-                        <th>Actions</th>
-                    </tr>
-                </thead>
-                <tbody id="accountsTableBody">
-                    <tr>
-                        <td colspan="6" class="loading">
-                            <i class="fas fa-spinner fa-spin"></i> Loading accounts...
-                        </td>
-                    </tr>
-                </tbody>
+                <thead><tr><th>ID</th><th>Name</th><th>Email</th><th>Balance</th><th>Card Code</th><th>Status</th><th>Actions</th></tr></thead>
+                <tbody id="accountsTableBody"><tr><td colspan="7" class="loading"><i class="fas fa-spinner fa-spin"></i> Loading...</td></tr></tbody>
             </table>
         </div>
     </div>
 
     <script>
-        // ==================== CONFIGURATION ====================
         const API_BASE = 'https://b-y-pro-acounts-login.onrender.com/api';
-        const API_KEY = 'BYPRO_SECURE_KEY_2007';
+        const INTERNAL_KEY = 'bypro-internal-key-2025';
         const ADMIN_PASSWORD = '20070909';
 
-        // ==================== STATE MANAGEMENT ====================
-        let currentEditId = null;
         let accountsData = [];
-        let newAccountImage = null;
-        let editAccountImage = null;
+        let financialDataCache = {};
+        let blockedAccounts = JSON.parse(localStorage.getItem('blockedAccounts') || '[]');
+        let currentFinancialUserId = null;
 
-        // ==================== DOM ELEMENTS ====================
-        const passwordModal = document.getElementById('passwordModal');
-        const passwordInput = document.getElementById('passwordInput');
-        const submitPassword = document.getElementById('submitPassword');
-        const errorMessage = document.getElementById('errorMessage');
-        const dashboard = document.getElementById('dashboard');
-        const accountsTableBody = document.getElementById('accountsTableBody');
-        const totalAccountsElement = document.getElementById('totalAccounts');
-        const serverStatusElement = document.getElementById('serverStatus');
-        const refreshBtn = document.getElementById('refreshBtn');
-        const addAccountBtn = document.getElementById('addAccountBtn');
-        const statusMessage = document.getElementById('statusMessage');
-        
-        // Add account modal elements
-        const addAccountModal = document.getElementById('addAccountModal');
-        const addName = document.getElementById('addName');
-        const addEmail = document.getElementById('addEmail');
-        const addPassword = document.getElementById('addPassword');
-        const imageUpload = document.getElementById('imageUpload');
-        const imageInput = document.getElementById('imageInput');
-        const fileName = document.getElementById('fileName');
-        const imagePreview = document.getElementById('imagePreview');
-        const previewImage = document.getElementById('previewImage');
-        const cancelAdd = document.getElementById('cancelAdd');
-        const saveNewAccount = document.getElementById('saveNewAccount');
-        
-        // Edit account modal elements
-        const editModal = document.getElementById('editModal');
-        const editName = document.getElementById('editName');
-        const editEmail = document.getElementById('editEmail');
-        const editPassword = document.getElementById('editPassword');
-        const currentImagePreview = document.getElementById('currentImagePreview');
-        const currentImage = document.getElementById('currentImage');
-        const currentImageName = document.getElementById('currentImageName');
-        const editImageUpload = document.getElementById('editImageUpload');
-        const editImageInput = document.getElementById('editImageInput');
-        const editFileName = document.getElementById('editFileName');
-        const uploadImageBtn = document.getElementById('uploadImageBtn');
-        const cancelEdit = document.getElementById('cancelEdit');
-        const saveEditBtn = document.getElementById('saveEdit');
+        function saveBlockedToStorage() { localStorage.setItem('blockedAccounts', JSON.stringify(blockedAccounts)); }
 
-        // ==================== UTILITY FUNCTIONS ====================
-        function showStatus(message, type = 'success') {
-            statusMessage.textContent = message;
-            statusMessage.className = `status status-${type}`;
-            statusMessage.style.display = 'block';
-            
-            setTimeout(() => {
-                statusMessage.style.display = 'none';
-            }, 5000);
+        function showStatus(msg, type) {
+            const el = document.getElementById('statusMessage');
+            el.textContent = msg;
+            el.className = `status status-${type}`;
+            el.style.display = 'block';
+            setTimeout(() => el.style.display = 'none', 4000);
         }
 
-        function hideModal(modal) {
-            modal.style.display = 'none';
+        async function callAPI(endpoint, method = 'GET', data = null) {
+            const options = { method, headers: { 'Content-Type': 'application/json', 'x-api-key': INTERNAL_KEY } };
+            if (data) options.body = JSON.stringify(data);
+            const response = await fetch(`${API_BASE}${endpoint}`, options);
+            if (!response.ok) throw new Error(`HTTP ${response.status}`);
+            return await response.json();
         }
 
-        function showModal(modal) {
-            modal.style.display = 'flex';
-        }
-
-        function resetAddForm() {
-            addName.value = '';
-            addEmail.value = '';
-            addPassword.value = '';
-            imageInput.value = '';
-            fileName.textContent = '';
-            fileName.style.display = 'none';
-            imagePreview.style.display = 'none';
-            newAccountImage = null;
-        }
-
-        async function checkServerStatus() {
+        async function fetchFinancialData(userId) {
             try {
-                const response = await fetch(`${API_BASE}/health`);
-                if (response.ok) {
-                    const data = await response.json();
-                    serverStatusElement.innerHTML = `<i class="fas fa-circle" style="font-size: 12px; color: var(--success);"></i> Online`;
-                    return true;
-                }
-            } catch (error) {
-                serverStatusElement.innerHTML = '<i class="fas fa-circle" style="font-size: 12px; color: var(--danger);"></i> Offline';
+                const result = await callAPI(`/financial/${userId}`);
+                if (result.success) return result.data;
+            } catch (e) { console.warn('No financial data:', e.message); }
+            return { id: userId, name: '', email: '', balance: 0, cardCode: 'Not available', transactions: [] };
+        }
+
+        async function updateFinancialData(userId, updates) {
+            if (updates.balance !== undefined) {
+                const current = await fetchFinancialData(userId);
+                const newBalance = updates.balance;
+                await callAPI('/financial/add-balance', 'POST', { userId, amount: newBalance - current.balance, description: 'Admin update' });
             }
-            return false;
+            if (updates.cardCode) {
+                await callAPI('/financial/update-card', 'POST', { userId, cardCode: updates.cardCode });
+            }
         }
 
-        // ==================== API FUNCTIONS ====================
-        async function callAPI(endpoint, method = 'GET', data = null, isFormData = false) {
+        async function loadAccounts() {
+            const tbody = document.getElementById('accountsTableBody');
+            tbody.innerHTML = '<tr><td colspan="7" class="loading"><i class="fas fa-spinner fa-spin"></i> Loading...</td></tr>';
             try {
-                const options = {
-                    method: method,
-                    headers: {}
-                };
-
-                if (!isFormData) {
-                    options.headers['Content-Type'] = 'application/json';
+                const authResult = await callAPI('/get-all-accounts');
+                if (!authResult.success) throw new Error(authResult.error);
+                
+                const accounts = authResult.accounts || [];
+                let totalBalance = 0;
+                
+                for (const acc of accounts) {
+                    const financial = await fetchFinancialData(acc.id);
+                    financialDataCache[acc.id] = financial;
+                    acc.balance = financial?.balance || 0;
+                    acc.cardCode = financial?.cardCode || 'Not set';
+                    totalBalance += acc.balance || 0;
                 }
                 
-                options.headers['API-Key'] = API_KEY;
+                accountsData = accounts;
+                document.getElementById('totalAccounts').textContent = accounts.length;
+                document.getElementById('totalBalance').textContent = `$${totalBalance.toFixed(2)}`;
+                document.getElementById('blockedCount').textContent = blockedAccounts.length;
+                
+                tbody.innerHTML = accounts.map(acc => {
+                    const isBlocked = blockedAccounts.includes(acc.id);
+                    return `
+                        <tr style="${isBlocked ? 'opacity: 0.6;' : ''}">
+                            <td><strong style="color: var(--primary);">${acc.id}</strong></td>
+                            <td>${acc.name || 'No Name'}</td>
+                            <td>${acc.email || 'No Email'}</td>
+                            <td style="color: var(--success);">$${(acc.balance || 0).toFixed(2)}</td>
+                            <td><code style="font-size: 12px;">${acc.cardCode || 'Not set'}</code></td>
+                            <td><span class="badge ${isBlocked ? 'badge-blocked' : 'badge-active'}">${isBlocked ? 'BLOCKED' : 'ACTIVE'}</span></td>
+                            <td>
+                                <button class="btn btn-primary btn-sm" onclick="openFinancialModal('${acc.id}')"><i class="fas fa-wallet"></i> Finance</button>
+                                <button class="btn btn-warning btn-sm" onclick="toggleBlock('${acc.id}', ${!isBlocked})"><i class="fas ${isBlocked ? 'fa-unlock' : 'fa-ban'}"></i> ${isBlocked ? 'Unblock' : 'Block'}</button>
+                            </td>
+                        </tr>
+                    `;
+                }).join('');
+            } catch (error) {
+                tbody.innerHTML = `<tr><td colspan="7" class="loading"><i class="fas fa-exclamation-triangle"></i> Error: ${error.message}</td></tr>`;
+                showStatus('Error loading accounts: ' + error.message, 'error');
+            }
+        }
 
-                if (data) {
-                    if (isFormData) {
-                        options.body = data;
-                    } else {
-                        options.body = JSON.stringify(data);
+        async function openFinancialModal(userId) {
+            currentFinancialUserId = userId;
+            const financial = await fetchFinancialData(userId);
+            document.getElementById('financialInfo').innerHTML = `
+                <div class="info-row"><span class="info-label">Current Balance</span><span class="info-value">$${(financial?.balance || 0).toFixed(2)}</span></div>
+                <div class="info-row"><span class="info-label">Card Code</span><span class="info-value"><code>${financial?.cardCode || 'Not set'}</code></span></div>
+                <div class="info-row"><span class="info-label">Last Transaction</span><span class="info-value">${financial?.transactions?.[0]?.description || 'None'}</span></div>
+            `;
+            document.getElementById('updateBalanceAmount').value = '';
+            document.getElementById('updateCardCode').value = financial?.cardCode || '';
+            document.getElementById('financialModal').style.display = 'flex';
+        }
+
+        async function saveFinancialChanges() {
+            const userId = currentFinancialUserId;
+            const amountInput = document.getElementById('updateBalanceAmount').value;
+            const action = document.getElementById('balanceAction').value;
+            const newCardCode = document.getElementById('updateCardCode').value;
+            
+            try {
+                const current = await fetchFinancialData(userId);
+                let newBalance = current.balance;
+                
+                if (amountInput) {
+                    const amount = parseFloat(amountInput);
+                    if (!isNaN(amount)) {
+                        if (action === 'set') newBalance = amount;
+                        else newBalance = current.balance + amount;
+                        await callAPI('/financial/add-balance', 'POST', { userId, amount: newBalance - current.balance, description: `Admin ${action} balance` });
                     }
                 }
-
-                const response = await fetch(`${API_BASE}${endpoint}`, options);
                 
-                if (!response.ok) {
-                    throw new Error(`HTTP ${response.status}`);
+                if (newCardCode && newCardCode !== current.cardCode) {
+                    await callAPI('/financial/update-card', 'POST', { userId, cardCode: newCardCode });
                 }
-
-                return await response.json();
+                
+                showStatus('Financial data updated successfully!', 'success');
+                document.getElementById('financialModal').style.display = 'none';
+                loadAccounts();
             } catch (error) {
-                console.error('API Error:', error);
-                throw error;
+                showStatus('Error updating: ' + error.message, 'error');
             }
         }
 
-        // ==================== ACCOUNT FUNCTIONS ====================
-        async function loadAccounts() {
+        function toggleBlock(userId, block) {
+            if (block) {
+                if (!blockedAccounts.includes(userId)) blockedAccounts.push(userId);
+            } else {
+                blockedAccounts = blockedAccounts.filter(id => id !== userId);
+            }
+            saveBlockedToStorage();
+            loadAccounts();
+            showStatus(`Account ${userId} ${block ? 'blocked' : 'unblocked'}`, 'success');
+        }
+
+        async function addAccount() {
+            const name = prompt('Enter full name:');
+            if (!name) return;
+            const email = prompt('Enter email:');
+            if (!email) return;
+            const password = prompt('Enter password:');
+            if (!password) return;
+            
             try {
-                accountsTableBody.innerHTML = `
-                    <tr>
-                        <td colspan="6" class="loading">
-                            <i class="fas fa-spinner fa-spin"></i> Loading accounts...
-                        </td>
-                    </tr>
-                `;
-
-                const serverOnline = await checkServerStatus();
-                if (!serverOnline) {
-                    throw new Error('Server is offline');
-                }
-
-                const result = await callAPI('/accounts');
-                
-                if (result.success && result.accounts) {
-                    accountsData = result.accounts;
-                    displayAccounts(result.accounts);
-                    updateStats(result.accounts);
-                    
-                    showStatus(`Loaded ${result.accounts.length} accounts`, 'success');
-                } else {
-                    throw new Error(result.error || 'Failed to load accounts');
-                }
-                
+                const nextId = await callAPI('/next-id');
+                const newId = nextId.nextId || '1001';
+                await callAPI('/create-account', 'POST', { id: newId, name, email, password, otpCode: '123456' });
+                showStatus(`Account ${newId} created!`, 'success');
+                loadAccounts();
             } catch (error) {
-                console.error('Load error:', error);
-                accountsTableBody.innerHTML = `
-                    <tr>
-                        <td colspan="6" class="loading">
-                            <i class="fas fa-exclamation-triangle"></i> 
-                            Error: ${error.message}
-                        </td>
-                    </tr>
-                `;
                 showStatus('Error: ' + error.message, 'error');
             }
         }
 
-        function displayAccounts(accounts) {
-            accountsTableBody.innerHTML = '';
-            
-            if (!accounts || accounts.length === 0) {
-                accountsTableBody.innerHTML = `
-                    <tr>
-                        <td colspan="6" class="loading">
-                            <i class="fas fa-users"></i> No accounts found
-                        </td>
-                    </tr>
-                `;
-                return;
-            }
-            
-            accounts.forEach(account => {
-                const row = document.createElement('tr');
-                const imageUrl = account.imageUrl || `https://ui-avatars.com/api/?name=${encodeURIComponent(account.name || account.id)}&background=3498db&color=fff&size=50`;
-                
-                row.innerHTML = `
-                    <td><strong style="color: var(--primary);">${account.id}</strong></td>
-                    <td>
-                        <img class="profile-img" src="${imageUrl}" 
-                             onerror="this.src='https://ui-avatars.com/api/?name=${encodeURIComponent(account.name || account.id)}&background=3498db&color=fff&size=50'" 
-                             alt="${account.name}">
-                    </td>
-                    <td>${account.name || 'No Name'}</td>
-                    <td>${account.email || 'No Email'}</td>
-                    <td><span style="font-family: monospace;">${'•'.repeat(Math.min(10, account.password?.length || 8))}</span></td>
-                    <td>
-                        <button class="btn btn-primary" onclick="openEditModal('${account.id}')">
-                            <i class="fas fa-edit"></i> Edit
-                        </button>
-                        <button class="btn btn-danger" onclick="deleteAccount('${account.id}')">
-                            <i class="fas fa-trash"></i> Delete
-                        </button>
-                    </td>
-                `;
-                
-                accountsTableBody.appendChild(row);
-            });
-        }
-
-        function updateStats(accounts) {
-            totalAccountsElement.textContent = accounts.length;
-        }
-
-        async function addAccount() {
-            try {
-                // Validate form
-                if (!addName.value.trim() || !addEmail.value.trim() || !addPassword.value.trim()) {
-                    showStatus('Please fill in all required fields', 'error');
-                    return;
-                }
-
-                // Get next available ID
-                const nextIdResult = await callAPI('/next-id');
-                const newId = nextIdResult.nextId || '1000';
-                
-                let formData = null;
-                
-                // If image is provided, upload with form data
-                if (newAccountImage) {
-                    formData = new FormData();
-                    formData.append('id', newId);
-                    formData.append('name', addName.value.trim());
-                    formData.append('email', addEmail.value.trim());
-                    formData.append('password', addPassword.value.trim());
-                    formData.append('image', newAccountImage);
-                }
-                
-                // Create account
-                let result;
-                if (formData) {
-                    result = await callAPI('/accounts', 'POST', formData, true);
-                } else {
-                    result = await callAPI('/accounts', 'POST', {
-                        id: newId,
-                        name: addName.value.trim(),
-                        email: addEmail.value.trim(),
-                        password: addPassword.value.trim()
-                    });
-                }
-                
-                if (result.success) {
-                    showStatus(`Account ${newId} created successfully!`, 'success');
-                    hideModal(addAccountModal);
-                    resetAddForm();
-                    loadAccounts();
-                } else {
-                    showStatus('Error: ' + result.error, 'error');
-                }
-                
-            } catch (error) {
-                showStatus('Error adding account: ' + error.message, 'error');
-            }
-        }
-
-        async function openEditModal(id) {
-            const account = accountsData.find(acc => acc.id === id);
-            if (!account) return;
-            
-            currentEditId = id;
-            editName.value = account.name || '';
-            editEmail.value = account.email || '';
-            editPassword.value = account.password || '';
-            
-            // Load current image
-            const imageUrl = account.imageUrl || `https://ui-avatars.com/api/?name=${encodeURIComponent(account.name || id)}&background=3498db&color=fff&size=80`;
-            currentImage.src = imageUrl;
-            currentImage.onerror = function() {
-                this.src = `https://ui-avatars.com/api/?name=${encodeURIComponent(account.name || id)}&background=3498db&color=fff&size=80`;
-            };
-            currentImageName.textContent = account.name || 'User';
-            currentImagePreview.style.display = 'flex';
-            
-            showModal(editModal);
-        }
-
-        async function saveAccountChanges() {
-            try {
-                if (!currentEditId) return;
-                
-                const name = editName.value.trim();
-                const email = editEmail.value.trim();
-                const password = editPassword.value.trim();
-                
-                if (!name || !email || !password) {
-                    showStatus('All fields are required', 'error');
-                    return;
-                }
-                
-                // Update account in database
-                const result = await callAPI(`/accounts/${currentEditId}`, 'PUT', {
-                    name: name,
-                    email: email,
-                    password: password
-                });
-                
-                if (result.success) {
-                    showStatus(`Account ${currentEditId} updated successfully!`, 'success');
-                    hideModal(editModal);
-                    loadAccounts();
-                } else {
-                    showStatus('Error: ' + result.error, 'error');
-                }
-                
-            } catch (error) {
-                showStatus('Error updating account: ' + error.message, 'error');
-            }
-        }
-
-        async function uploadAccountImage() {
-            try {
-                if (!currentEditId || !editAccountImage) {
-                    showStatus('No image selected for upload', 'error');
-                    return;
-                }
-                
-                const formData = new FormData();
-                formData.append('image', editAccountImage);
-                
-                const result = await callAPI(`/accounts/${currentEditId}/upload-image`, 'POST', formData, true);
-                
-                if (result.success) {
-                    showStatus('Image uploaded successfully!', 'success');
-                    editAccountImage = null;
-                    editFileName.textContent = '';
-                    editFileName.style.display = 'none';
-                    uploadImageBtn.style.display = 'none';
-                    
-                    // Update image preview
-                    currentImage.src = result.imageUrl + '?t=' + new Date().getTime();
-                    loadAccounts();
-                } else {
-                    showStatus('Error: ' + result.error, 'error');
-                }
-                
-            } catch (error) {
-                showStatus('Error uploading image: ' + error.message, 'error');
-            }
-        }
-
-        async function deleteAccount(id) {
-            if (!confirm(`Are you sure you want to delete account ${id}? This will also delete the associated image.`)) {
-                return;
-            }
-            
-            try {
-                const result = await callAPI(`/accounts/${id}`, 'DELETE');
-                
-                if (result.success) {
-                    showStatus(`Account ${id} deleted successfully`, 'success');
-                    loadAccounts();
-                } else {
-                    showStatus('Error: ' + result.error, 'error');
-                }
-                
-            } catch (error) {
-                showStatus('Error deleting account: ' + error.message, 'error');
-            }
-        }
-
-        // ==================== EVENT LISTENERS ====================
-        submitPassword.addEventListener('click', () => {
-            if (passwordInput.value === ADMIN_PASSWORD) {
-                passwordModal.style.display = 'none';
-                dashboard.style.display = 'block';
+        // Authentication
+        document.getElementById('submitPassword').onclick = () => {
+            if (document.getElementById('passwordInput').value === ADMIN_PASSWORD) {
+                document.getElementById('passwordModal').style.display = 'none';
+                document.getElementById('dashboard').style.display = 'block';
                 loadAccounts();
             } else {
-                errorMessage.style.display = 'block';
-                passwordInput.value = '';
-                passwordInput.focus();
+                document.getElementById('errorMessage').style.display = 'block';
             }
-        });
+        };
+        document.getElementById('passwordInput').onkeypress = e => e.key === 'Enter' && document.getElementById('submitPassword').click();
+        document.getElementById('refreshBtn').onclick = loadAccounts;
+        document.getElementById('addAccountBtn').onclick = addAccount;
+        document.getElementById('closeFinancialModal').onclick = () => document.getElementById('financialModal').style.display = 'none';
+        document.getElementById('saveFinancialChanges').onclick = saveFinancialChanges;
+        document.getElementById('closeBlockModal').onclick = () => document.getElementById('blockModal').style.display = 'none';
 
-        passwordInput.addEventListener('keypress', (e) => {
-            if (e.key === 'Enter') {
-                submitPassword.click();
-            }
-        });
-
-        refreshBtn.addEventListener('click', loadAccounts);
-        
-        addAccountBtn.addEventListener('click', () => {
-            showModal(addAccountModal);
-            addName.focus();
-        });
-        
-        cancelAdd.addEventListener('click', () => {
-            hideModal(addAccountModal);
-            resetAddForm();
-        });
-        
-        saveNewAccount.addEventListener('click', addAccount);
-        
-        // Image upload for new account
-        imageUpload.addEventListener('click', () => {
-            imageInput.click();
-        });
-        
-        imageInput.addEventListener('change', () => {
-            const file = imageInput.files[0];
-            if (!file) return;
-            
-            if (!file.type.match('image.*')) {
-                showStatus('Please select a valid image file (PNG, JPG, JPEG)', 'error');
-                return;
-            }
-            
-            if (file.size > 5 * 1024 * 1024) {
-                showStatus('Image size should be less than 5MB', 'error');
-                return;
-            }
-            
-            // Show file name
-            fileName.textContent = file.name;
-            fileName.style.display = 'block';
-            
-            // Update state variable
-            newAccountImage = file;
-            
-            // Show preview
-            const reader = new FileReader();
-            reader.onload = function(e) {
-                previewImage.src = e.target.result;
-                imagePreview.style.display = 'flex';
-            };
-            reader.readAsDataURL(file);
-        });
-        
-        // Image upload for edit account
-        editImageUpload.addEventListener('click', () => {
-            editImageInput.click();
-        });
-        
-        editImageInput.addEventListener('change', () => {
-            const file = editImageInput.files[0];
-            if (!file) return;
-            
-            if (!file.type.match('image.*')) {
-                showStatus('Please select a valid image file (PNG, JPG, JPEG)', 'error');
-                return;
-            }
-            
-            if (file.size > 5 * 1024 * 1024) {
-                showStatus('Image size should be less than 5MB', 'error');
-                return;
-            }
-            
-            // Show file name
-            editFileName.textContent = file.name;
-            editFileName.style.display = 'block';
-            
-            // Update state variable
-            editAccountImage = file;
-            
-            // Show upload button
-            uploadImageBtn.style.display = 'flex';
-        });
-        
-        uploadImageBtn.addEventListener('click', uploadAccountImage);
-        
-        cancelEdit.addEventListener('click', () => {
-            hideModal(editModal);
-            editAccountImage = null;
-            editFileName.textContent = '';
-            editFileName.style.display = 'none';
-            uploadImageBtn.style.display = 'none';
-        });
-        
-        saveEditBtn.addEventListener('click', saveAccountChanges);
-
-        // Close modals when clicking outside
-        window.addEventListener('click', (e) => {
-            if (e.target === addAccountModal) {
-                hideModal(addAccountModal);
-                resetAddForm();
-            }
-            if (e.target === editModal) {
-                hideModal(editModal);
-                editAccountImage = null;
-                editFileName.textContent = '';
-                editFileName.style.display = 'none';
-                uploadImageBtn.style.display = 'none';
-            }
-        });
-
-        // ==================== INITIALIZATION ====================
-        document.addEventListener('DOMContentLoaded', () => {
-            console.log('🚀 B.Y PRO Dashboard Initialized');
-            console.log('🔗 Server URL:', API_BASE);
-            console.log('🔐 API Key:', API_KEY ? 'Loaded' : 'Missing');
-            
-            passwordModal.style.display = 'flex';
-            passwordInput.focus();
-            
-            // Check server status on load
-            checkServerStatus();
-        });
-
-        // Global functions for HTML event handlers
-        window.openEditModal = openEditModal;
-        window.deleteAccount = deleteAccount;
+        window.openFinancialModal = openFinancialModal;
+        window.toggleBlock = toggleBlock;
     </script>
 </body>
 </html>

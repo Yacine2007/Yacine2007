@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>B.Y PRO - Admin Dashboard (Full Integration)</title>
+    <title>B.Y PRO - Admin Dashboard (Full Control)</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         :root {
@@ -73,9 +73,14 @@
         }
         table { width: 100%; border-collapse: collapse; }
         th { padding: 18px 15px; text-align: left; color: var(--primary); }
-        td { padding: 16px 15px; border-bottom: 1px solid rgba(255, 255, 255, 0.05); }
+        td { padding: 16px 15px; border-bottom: 1px solid rgba(255, 255, 255, 0.05); vertical-align: middle; }
         tbody tr:hover { background: rgba(52, 152, 219, 0.05); }
 
+        .avatar-circle {
+            width: 45px; height: 45px; border-radius: 50%;
+            object-fit: cover; border: 2px solid var(--primary);
+            background: #2c3e50;
+        }
         .badge {
             display: inline-block; padding: 4px 10px; border-radius: 20px;
             font-size: 12px; font-weight: 600;
@@ -83,6 +88,28 @@
         .badge-active { background: rgba(46, 204, 113, 0.2); color: var(--success); }
         .badge-blocked { background: rgba(231, 76, 60, 0.2); color: var(--danger); }
 
+        .actions-dropdown {
+            position: relative;
+            display: inline-block;
+        }
+        .dropdown-btn {
+            background: none; border: none; color: var(--muted); cursor: pointer;
+            font-size: 18px; padding: 5px 10px;
+        }
+        .dropdown-content {
+            display: none; position: absolute; right: 0; background: var(--card);
+            min-width: 150px; border-radius: 6px; box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+            z-index: 10; border: 1px solid rgba(255,255,255,0.1);
+        }
+        .dropdown-content button {
+            width: 100%; text-align: left; background: none; border: none;
+            padding: 10px 15px; color: var(--text); cursor: pointer;
+            display: flex; align-items: center; gap: 8px;
+        }
+        .dropdown-content button:hover { background: rgba(52,152,219,0.2); }
+        .actions-dropdown:hover .dropdown-content { display: block; }
+
+        /* Modals */
         .modal {
             display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             background: rgba(0,0,0,0.95); z-index: 1001; justify-content: center; align-items: center;
@@ -100,12 +127,18 @@
             color: var(--text); border: 1px solid rgba(255, 255, 255, 0.1);
             border-radius: 6px;
         }
+        .avatar-upload {
+            border: 2px dashed rgba(255,255,255,0.2);
+            padding: 20px; text-align: center; cursor: pointer; border-radius: 8px;
+            margin-top: 10px;
+        }
+        .avatar-upload:hover { border-color: var(--primary); background: rgba(52,152,219,0.05); }
+        .avatar-preview { width: 80px; height: 80px; border-radius: 50%; object-fit: cover; margin: 10px auto; display: block; border: 2px solid var(--primary); }
         .info-row { display: flex; justify-content: space-between; padding: 12px 0; border-bottom: 1px solid rgba(255, 255, 255, 0.1); }
         .modal-actions { display: flex; justify-content: flex-end; gap: 15px; margin-top: 30px; }
         .status { padding: 15px; border-radius: var(--radius); text-align: center; display: none; margin-bottom: 20px; }
         .status-success { background: rgba(46, 204, 113, 0.2); color: var(--success); }
         .status-error { background: rgba(231, 76, 60, 0.2); color: var(--danger); }
-        .status-warning { background: rgba(243, 156, 18, 0.2); color: var(--warning); }
         .loading { text-align: center; padding: 60px; }
         .fa-spin { animation: spin 1s linear infinite; }
         @keyframes spin { to { transform: rotate(360deg); } }
@@ -121,6 +154,28 @@
         </div>
     </div>
 
+    <!-- Add Account Modal -->
+    <div class="modal" id="addAccountModal">
+        <div class="modal-content">
+            <h3><i class="fas fa-user-plus"></i> Add New Account</h3>
+            <div class="form-group"><label>Name</label><input type="text" id="addName"></div>
+            <div class="form-group"><label>Email</label><input type="email" id="addEmail"></div>
+            <div class="form-group"><label>Password</label><input type="text" id="addPassword"></div>
+            <div class="form-group">
+                <label>Avatar (optional)</label>
+                <div class="avatar-upload" id="addAvatarUpload">
+                    <i class="fas fa-cloud-upload-alt"></i> Click to upload image
+                    <input type="file" id="addAvatarInput" accept="image/*" style="display:none">
+                </div>
+                <img id="addAvatarPreview" class="avatar-preview" style="display:none">
+            </div>
+            <div class="modal-actions">
+                <button class="btn btn-danger" id="closeAddModal">Cancel</button>
+                <button class="btn btn-success" id="confirmAddAccount">Create Account</button>
+            </div>
+        </div>
+    </div>
+
     <!-- Edit Account Modal -->
     <div class="modal" id="editAccountModal">
         <div class="modal-content">
@@ -129,6 +184,14 @@
             <div class="form-group"><label>Name</label><input type="text" id="editName"></div>
             <div class="form-group"><label>Email</label><input type="email" id="editEmail"></div>
             <div class="form-group"><label>New Password</label><input type="text" id="editPassword" placeholder="Leave empty to keep current"></div>
+            <div class="form-group">
+                <label>Avatar</label>
+                <div class="avatar-upload" id="editAvatarUpload">
+                    <i class="fas fa-cloud-upload-alt"></i> Click to upload new image
+                    <input type="file" id="editAvatarInput" accept="image/*" style="display:none">
+                </div>
+                <img id="editAvatarPreview" class="avatar-preview">
+            </div>
             <div class="modal-actions">
                 <button class="btn btn-danger" id="closeEditModal">Cancel</button>
                 <button class="btn btn-success" id="saveEditAccount">Save Changes</button>
@@ -141,9 +204,9 @@
         <div class="modal-content">
             <h3><i class="fas fa-wallet"></i> Financial Details</h3>
             <div id="financialInfo"></div>
-            <div class="form-group"><label>Update Balance ($)</label><input type="number" id="updateBalanceAmount" step="0.01" placeholder="Enter amount"></div>
+            <div class="form-group"><label>Update Balance ($)</label><input type="number" id="updateBalanceAmount" step="0.01"></div>
             <div class="form-group"><label>Action</label><select id="balanceAction"><option value="add">Add to Balance</option><option value="set">Set New Balance</option></select></div>
-            <div class="form-group"><label>Card Code</label><input type="text" id="updateCardCode" placeholder="byppcn-xxxxxxxxxxxxxxx"></div>
+            <div class="form-group"><label>Card Code</label><input type="text" id="updateCardCode"></div>
             <div class="modal-actions">
                 <button class="btn btn-danger" id="closeFinancialModal">Close</button>
                 <button class="btn btn-success" id="saveFinancialChanges">Save Changes</button>
@@ -164,21 +227,17 @@
         </div>
 
         <button class="btn btn-success" id="addAccountBtn" style="margin-bottom: 20px;"><i class="fas fa-plus"></i> Add New Account</button>
-
         <div id="statusMessage" class="status"></div>
 
         <div class="table-container">
             <table>
-                <thead>
-                    <tr><th>ID</th><th>Name</th><th>Email</th><th>Balance</th><th>Card Code</th><th>Status</th><th>Actions</th></tr>
-                </thead>
-                <tbody id="accountsTableBody"><tr><td colspan="7" class="loading"><i class="fas fa-spinner fa-spin"></i> Loading...</td></tr></tbody>
+                <thead><tr><th>Avatar</th><th>ID</th><th>Name</th><th>Email</th><th>Balance</th><th>Card Code</th><th>Status</th><th>Actions</th></tr></thead>
+                <tbody id="accountsTableBody"><tr><td colspan="8" class="loading"><i class="fas fa-spinner fa-spin"></i> Loading...</td></tr></tbody>
             </table>
         </div>
     </div>
 
     <script>
-        // ==================== CONFIG ====================
         const API_BASE = 'https://b-y-pro-acounts-login.onrender.com/api';
         const INTERNAL_KEY = 'bypro-internal-key-2025';
         const ADMIN_PASSWORD = '20070909';
@@ -186,6 +245,8 @@
         let accountsData = [];
         let currentEditId = null;
         let currentFinancialId = null;
+        let addAvatarFile = null;
+        let editAvatarFile = null;
 
         function showStatus(msg, type) {
             const el = document.getElementById('statusMessage');
@@ -195,15 +256,11 @@
             setTimeout(() => el.style.display = 'none', 5000);
         }
 
-        async function callAPI(endpoint, method = 'GET', data = null) {
-            const options = {
-                method,
-                headers: {
-                    'Content-Type': 'application/json',
-                    'x-api-key': INTERNAL_KEY
-                }
-            };
-            if (data) options.body = JSON.stringify(data);
+        async function callAPI(endpoint, method = 'GET', data = null, isFormData = false) {
+            const options = { method, headers: {} };
+            if (!isFormData) options.headers['Content-Type'] = 'application/json';
+            options.headers['x-api-key'] = INTERNAL_KEY;
+            if (data) options.body = isFormData ? data : JSON.stringify(data);
             const response = await fetch(`${API_BASE}${endpoint}`, options);
             if (!response.ok) {
                 const err = await response.json().catch(() => ({}));
@@ -220,28 +277,26 @@
             return { balance: 0, cardCode: 'Not set', transactions: [] };
         }
 
-        async function updateFinancial(userId, updates) {
-            if (updates.balance !== undefined) {
-                const current = await fetchFinancial(userId);
-                await callAPI('/financial/add-balance', 'POST', {
-                    userId,
-                    amount: updates.balance - current.balance,
-                    description: 'Admin update'
-                });
-            }
-            if (updates.cardCode) {
-                await callAPI('/financial/update-card', 'POST', { userId, cardCode: updates.cardCode });
-            }
+        async function uploadAvatar(accountId, file) {
+            const formData = new FormData();
+            formData.append('avatar', file);
+            const response = await fetch(`${API_BASE}/accounts/${accountId}/avatar`, {
+                method: 'POST',
+                headers: { 'x-api-key': INTERNAL_KEY },
+                body: formData
+            });
+            const data = await response.json();
+            if (!data.success) throw new Error(data.error);
+            return data.avatarUrl;
         }
 
         async function loadAccounts() {
             const tbody = document.getElementById('accountsTableBody');
-            tbody.innerHTML = '<tr><td colspan="7" class="loading"><i class="fas fa-spinner fa-spin"></i> Loading...</td></tr>';
+            tbody.innerHTML = '<tr><td colspan="8" class="loading"><i class="fas fa-spinner fa-spin"></i> Loading...</td></tr>';
             try {
                 const result = await callAPI('/get-all-accounts');
                 let accounts = result.accounts || [];
-                let totalBalance = 0;
-                let blockedCount = 0;
+                let totalBalance = 0, blockedCount = 0;
                 for (const acc of accounts) {
                     const financial = await fetchFinancial(acc.id);
                     acc.balance = financial?.balance || 0;
@@ -256,6 +311,7 @@
 
                 tbody.innerHTML = accounts.map(acc => `
                     <tr>
+                        <td><img class="avatar-circle" src="${acc.avatar || 'https://i.ibb.co/SDxkt40s/user.png'}" onerror="this.src='https://i.ibb.co/SDxkt40s/user.png'"></td>
                         <td><strong>${acc.id}</strong></td>
                         <td>${acc.name || 'No Name'}</td>
                         <td>${acc.email || 'No Email'}</td>
@@ -263,20 +319,24 @@
                         <td><code style="font-size: 11px;">${acc.cardCode}</code></td>
                         <td><span class="badge ${acc.blocked ? 'badge-blocked' : 'badge-active'}">${acc.blocked ? 'BLOCKED' : 'ACTIVE'}</span></td>
                         <td>
-                            <button class="btn btn-primary btn-sm" onclick="openEditAccount('${acc.id}')"><i class="fas fa-edit"></i> Edit</button>
-                            <button class="btn btn-warning btn-sm" onclick="openFinancialModal('${acc.id}')"><i class="fas fa-wallet"></i> Finance</button>
-                            <button class="btn btn-danger btn-sm" onclick="toggleBlock('${acc.id}', ${!acc.blocked})"><i class="fas ${acc.blocked ? 'fa-unlock' : 'fa-ban'}"></i> ${acc.blocked ? 'Unblock' : 'Block'}</button>
-                            <button class="btn btn-danger btn-sm" onclick="deleteAccount('${acc.id}')"><i class="fas fa-trash"></i> Delete</button>
+                            <div class="actions-dropdown">
+                                <button class="dropdown-btn"><i class="fas fa-ellipsis-v"></i></button>
+                                <div class="dropdown-content">
+                                    <button onclick="openEditAccount('${acc.id}')"><i class="fas fa-edit"></i> Edit</button>
+                                    <button onclick="openFinancialModal('${acc.id}')"><i class="fas fa-wallet"></i> Finance</button>
+                                    <button onclick="toggleBlock('${acc.id}', ${!acc.blocked})"><i class="fas ${acc.blocked ? 'fa-unlock' : 'fa-ban'}"></i> ${acc.blocked ? 'Unblock' : 'Block'}</button>
+                                    <button onclick="deleteAccount('${acc.id}')"><i class="fas fa-trash"></i> Delete</button>
+                                </div>
+                            </div>
                         </td>
                     </tr>
                 `).join('');
             } catch (error) {
-                tbody.innerHTML = `<tr><td colspan="7" class="loading"><i class="fas fa-exclamation-triangle"></i> Error: ${error.message}</td></tr>`;
+                tbody.innerHTML = `<tr><td colspan="8" class="loading"><i class="fas fa-exclamation-triangle"></i> Error: ${error.message}</td></tr>`;
                 showStatus('Error: ' + error.message, 'error');
             }
         }
 
-        // ==================== ACCOUNT MANAGEMENT ====================
         async function openEditAccount(id) {
             const account = accountsData.find(a => a.id === id);
             if (!account) return;
@@ -285,6 +345,8 @@
             document.getElementById('editName').value = account.name || '';
             document.getElementById('editEmail').value = account.email || '';
             document.getElementById('editPassword').value = '';
+            document.getElementById('editAvatarPreview').src = account.avatar || 'https://i.ibb.co/SDxkt40s/user.png';
+            editAvatarFile = null;
             document.getElementById('editAccountModal').style.display = 'flex';
         }
 
@@ -293,15 +355,16 @@
             const name = document.getElementById('editName').value.trim();
             const email = document.getElementById('editEmail').value.trim();
             const password = document.getElementById('editPassword').value.trim();
-            if (!name || !email) {
-                showStatus('Name and email are required', 'error');
-                return;
-            }
+            if (!name || !email) { showStatus('Name and email required', 'error'); return; }
             const payload = { name, email };
             if (password) payload.password = password;
             try {
                 await callAPI(`/accounts/${id}`, 'PUT', payload);
-                showStatus(`Account ${id} updated successfully`, 'success');
+                if (editAvatarFile) {
+                    const newAvatarUrl = await uploadAvatar(id, editAvatarFile);
+                    // Optionally update local data
+                }
+                showStatus(`Account ${id} updated`, 'success');
                 document.getElementById('editAccountModal').style.display = 'none';
                 loadAccounts();
             } catch (error) {
@@ -310,7 +373,7 @@
         }
 
         async function deleteAccount(id) {
-            if (!confirm(`⚠️ Permanently delete account ${id}?\nThis action cannot be undone!`)) return;
+            if (!confirm(`⚠️ Permanently delete account ${id}?`)) return;
             try {
                 await callAPI(`/accounts/${id}`, 'DELETE');
                 showStatus(`Account ${id} deleted`, 'success');
@@ -330,7 +393,6 @@
             }
         }
 
-        // ==================== FINANCIAL MANAGEMENT ====================
         async function openFinancialModal(userId) {
             currentFinancialId = userId;
             const financial = await fetchFinancial(userId);
@@ -356,11 +418,7 @@
                     const amount = parseFloat(amountInput);
                     if (!isNaN(amount)) {
                         let newBalance = action === 'set' ? amount : current.balance + amount;
-                        await callAPI('/financial/add-balance', 'POST', {
-                            userId,
-                            amount: newBalance - current.balance,
-                            description: `Admin ${action} balance`
-                        });
+                        await callAPI('/financial/add-balance', 'POST', { userId, amount: newBalance - current.balance, description: `Admin ${action} balance` });
                         updated = true;
                     }
                 }
@@ -376,34 +434,123 @@
             }
         }
 
-        // ==================== ADD ACCOUNT ====================
         async function addAccount() {
-            const name = prompt('Enter full name:');
-            if (!name) return;
-            const email = prompt('Enter email:');
-            if (!email) return;
-            const password = prompt('Enter password:');
-            if (!password) return;
+            const name = document.getElementById('addName').value.trim();
+            const email = document.getElementById('addEmail').value.trim();
+            const();
+            const email = document.getElementById('addEmail').value.trim();
+ password = document.getElementById('addPassword').value.trim();
+            if (!name || !email || !password) { showStatus('All fields required', 'error'); return; }
+            try {
+                const next            const password = document.getElementById('addPassword').value.trim();
+            if (!name || !email || !password) { showStatus('All fields required', 'error'); return; }
             try {
                 const nextId = await callAPI('/next-id');
                 const newId = nextId.nextId || String(Date.now());
+                let avatarUrl = null;
+                if (addAvatarFile) {
+                    // Upload avatar first? Actually we need account ID first. We'll create account then upload.
+                }
                 await callAPI('/create-account', 'POST', {
-                    id: newId,
-                    name,
-                    email,
-                    password,
-                    otpCode: '123456'
+                   Id = await callAPI('/next-id');
+                const newId = nextId.nextId || String(Date.now());
+                let avatarUrl = null;
+                if (addAvatarFile) {
+                    // Upload avatar first? Actually we need account ID first. We'll create account then upload.
+                }
+                await callAPI('/create-account', 'POST', {
+                    id: newId, name, email, password, otpCode: '123456'
                 });
+                if (addAvatarFile) {
+ id: newId, name, email, password, otpCode: '123456'
+                });
+                if (addAvatarFile) {
+                    const uploadedUrl = await uploadAvatar(newId, addAvatarFile);
+                }
                 showStatus(`Account ${newId} created!`, 'success');
+                document.getElementById('addAccountModal').style.display = 'none';
+                document.getElementById('addName').value                    const uploadedUrl = await uploadAvatar(newId, addAvatarFile);
+                }
+                showStatus(`Account ${newId} created!`, 'success');
+                document.getElementById('addAccountModal').style.display = 'none';
+                document.getElementById('addName').value = '';
+                document.getElementById('addEmail').value = '';
+                document.getElementById('addPassword').value = '';
+                addAvatarFile = null;
+                document.getElementById('addAvatarPreview').style.display = 'none';
+                loadAccounts();
+            } catch (error) {
+ = '';
+                document.getElementById('addEmail').value = '';
+                document.getElementById('addPassword').value = '';
+                addAvatarFile = null;
+                document.getElementById('addAvatarPreview').style.display = 'none';
                 loadAccounts();
             } catch (error) {
                 showStatus('Error: ' + error.message, 'error');
             }
         }
 
-        // ==================== AUTHENTICATION ====================
+        // Avatar preview handlers
+        function handleAddAvatar(file) {
+            if (!file) return                showStatus('Error: ' + error.message, 'error');
+            }
+        }
+
+        // Avatar preview handlers
+        function handleAddAvatar(file) {
+            if (!file) return;
+            addAvatarFile = file;
+            const reader = new FileReader();
+            reader.onload = e => {
+                const preview = document.getElementById('addAvatarPreview');
+                preview.src = e.target.result;
+                preview.style.display = 'block';
+            };
+            reader;
+            addAvatarFile = file;
+            const reader = new FileReader();
+            reader.onload = e => {
+                const preview = document.getElementById('addAvatarPreview');
+                preview.src = e.target.result;
+                preview.style.display = 'block';
+            };
+            reader.readAsDataURL(file);
+        }
+        function handleEditAvatar(file) {
+            if (!file) return;
+            editAvatarFile = file;
+            const reader = new FileReader();
+            reader.onload = e => {
+                document.getElementById('editAvatar.readAsDataURL(file);
+        }
+        function handleEditAvatar(file) {
+            if (!file) return;
+            editAvatarFile = file;
+            const reader = new FileReader();
+            reader.onload = e => {
+                document.getElementById('editAvatarPreview').src = e.target.result;
+            };
+            reader.readAsDataURL(file);
+        }
+
+        // Event listeners
+        document.getElementById('submitPassword').onclick = () => {
+            if (document.getElementById('passwordInput').value === ADMINPreview').src = e.target.result;
+            };
+            reader.readAsDataURL(file);
+        }
+
+        // Event listeners
         document.getElementById('submitPassword').onclick = () => {
             if (document.getElementById('passwordInput').value === ADMIN_PASSWORD) {
+                document.getElementById('passwordModal').style.display = 'none';
+                document.getElementById('dashboard').style.display = 'block';
+                loadAccounts();
+            } else {
+                document.getElementById('errorMessage').style.display = 'block';
+            }
+_PASSWORD) {
                 document.getElementById('passwordModal').style.display = 'none';
                 document.getElementById('dashboard').style.display = 'block';
                 loadAccounts();
@@ -413,13 +560,37 @@
         };
         document.getElementById('passwordInput').onkeypress = e => e.key === 'Enter' && document.getElementById('submitPassword').click();
 
-        // Event Listeners
         document.getElementById('refreshBtn').onclick = loadAccounts;
-        document.getElementById('addAccountBtn').onclick = addAccount;
+        document.getElementById('addAccountBtn').onclick = () => {
+            document.getElementById('add        };
+        document.getElementById('passwordInput').onkeypress = e => e.key === 'Enter' && document.getElementById('submitPassword').click();
+
+        document.getElementById('refreshBtn').onclick = loadAccounts;
+        document.getElementById('addAccountBtn').onclick = () => {
+            document.getElementById('addAccountModal').style.display = 'flex';
+        };
+        document.getElementById('closeAddModal').onclick = () => document.getElementById('addAccountModal').style.display = 'none';
+        document.getElementById('confirmAddAccount').onclick = addAccountAccountModal').style.display = 'flex';
+        };
+        document.getElementById('closeAddModal').onclick = () => document.getElementById('addAccountModal').style.display = 'none';
+        document.getElementById('confirmAddAccount').onclick = addAccount;
+        document.getElementById('closeEditModal').onclick = () => document.getElementById('editAccountModal').style.display = 'none';
+        document.getElementById('saveEditAccount').onclick = saveEditAccount;
+        document.getElementById('closeFinancialModal').onclick = () => document;
         document.getElementById('closeEditModal').onclick = () => document.getElementById('editAccountModal').style.display = 'none';
         document.getElementById('saveEditAccount').onclick = saveEditAccount;
         document.getElementById('closeFinancialModal').onclick = () => document.getElementById('financialModal').style.display = 'none';
         document.getElementById('saveFinancialChanges').onclick = saveFinancialChanges;
+
+        // Avatar upload triggers
+        document.getElementById('addAvatarUpload').onclick = () => document.getElementById('addAvatarInput.getElementById('financialModal').style.display = 'none';
+        document.getElementById('saveFinancialChanges').onclick = saveFinancialChanges;
+
+        // Avatar upload triggers
+        document.getElementById('addAvatarUpload').onclick = () => document.getElementById('addAvatarInput').click();
+        document.getElementById('addAvatarInput').onchange = e => handleAddAvatar(e.target.files[0]);
+        document.getElementById('editAvatarUpload').onclick = () => document.getElementById('editAvatarInput').click();
+        document.getElementById('editAvatarInput').onchange = e => handleEditAvatar(e.target.files[0]);
 
         window.openEditAccount = openEditAccount;
         window.openFinancialModal = openFinancialModal;

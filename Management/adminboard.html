@@ -150,6 +150,9 @@
         .qr-container { display: flex; justify-content: center; margin: 20px 0; }
         .qr-container canvas, .qr-container img { max-width: 100%; height: auto; border: 2px solid var(--primary); border-radius: 8px; padding: 5px; background: white; }
         .copy-btn { background: var(--primary); color: white; border: none; padding: 5px 10px; border-radius: 4px; cursor: pointer; font-size: 12px; }
+        .password-row { display: flex; align-items: center; gap: 10px; }
+        .password-row input { flex: 1; }
+        .toggle-pwd { background: none; border: none; color: var(--muted); cursor: pointer; padding: 0 10px; }
     </style>
 </head>
 <body>
@@ -194,7 +197,7 @@
             <div class="form-group">
                 <label>Current Password</label>
                 <div class="password-row">
-                    <input type="password" id="editCurrentPassword" readonly disabled>
+                    <input type="text" id="editCurrentPassword" readonly>
                     <button type="button" class="toggle-pwd" onclick="togglePasswordVisibility('editCurrentPassword')"><i class="fas fa-eye"></i></button>
                 </div>
             </div>
@@ -240,8 +243,10 @@
             <div id="qrCodeContainer" class="qr-container"></div>
             <div class="form-group">
                 <label>QR Data (BYPRO format)</label>
-                <input type="text" id="qrData" readonly style="font-size:12px; font-family:monospace;">
-                <button class="copy-btn" onclick="copyQRData()"><i class="fas fa-copy"></i> Copy</button>
+                <div class="password-row">
+                    <input type="text" id="qrData" readonly style="font-size:12px; font-family:monospace;">
+                    <button class="copy-btn" onclick="copyQRData()"><i class="fas fa-copy"></i> Copy</button>
+                </div>
             </div>
             <div class="modal-actions">
                 <button class="btn btn-danger" id="closeQRModal">Close</button>
@@ -265,11 +270,11 @@
         <div id="statusMessage" class="status"></div>
 
         <div class="table-container">
-             <table>
+            <table>
                 <thead>
                     <tr><th>Avatar</th><th>ID</th><th>Name</th><th>Email</th><th>Balance</th><th>Card Code</th><th>Status</th><th>Actions</th></tr>
                 </thead>
-                <tbody id="accountsTableBody"> <tr><td colspan="8" class="loading"><i class="fas fa-spinner fa-spin"></i> Loading...</td></tr> </tbody>
+                <tbody id="accountsTableBody"><tr><td colspan="8" class="loading"><i class="fas fa-spinner fa-spin"></i> Loading...</td></tr></tbody>
             </table>
         </div>
     </div>
@@ -317,19 +322,14 @@
         async function uploadAvatar(accountId, file) {
             const formData = new FormData();
             formData.append('avatar', file);
-            try {
-                const response = await fetch(`${API_BASE}/accounts/${accountId}/avatar`, {
-                    method: 'POST',
-                    headers: { 'x-api-key': INTERNAL_KEY },
-                    body: formData
-                });
-                const data = await response.json();
-                if (!data.success) throw new Error(data.error);
-                return data.avatarUrl;
-            } catch (error) {
-                console.error('Avatar upload error:', error);
-                throw error;
-            }
+            const response = await fetch(`${API_BASE}/accounts/${accountId}/avatar`, {
+                method: 'POST',
+                headers: { 'x-api-key': INTERNAL_KEY },
+                body: formData
+            });
+            const data = await response.json();
+            if (!data.success) throw new Error(data.error);
+            return data.avatarUrl;
         }
 
         async function loadAccounts() {
@@ -380,18 +380,14 @@
             }
         }
 
-        // Generate QR code for account
         async function generateQRCode(userId) {
             try {
-                // Fetch account details including password
                 const account = await callAPI(`/accounts/${userId}`);
                 if (!account.success) throw new Error(account.error);
                 const data = account.account;
                 const qrText = `BYPRO:${data.id}:${data.password}`;
-                // Clear previous QR
                 const container = document.getElementById('qrCodeContainer');
                 container.innerHTML = '';
-                // Generate QR using QRCode.js
                 new QRCode(container, {
                     text: qrText,
                     width: 200,
@@ -421,11 +417,10 @@
             document.getElementById('editId').value = id;
             document.getElementById('editName').value = account.name || '';
             document.getElementById('editEmail').value = account.email || '';
-            // Fetch full account details including password
             try {
                 const fullAccount = await callAPI(`/accounts/${id}`);
                 if (fullAccount.success && fullAccount.account) {
-                    document.getElementById('editCurrentPassword').value = fullAccount.account.password || '******';
+                    document.getElementById('editCurrentPassword').value = fullAccount.account.password || '';
                 } else {
                     document.getElementById('editCurrentPassword').value = 'Not available';
                 }
@@ -598,9 +593,7 @@
         document.getElementById('passwordInput').onkeypress = e => e.key === 'Enter' && document.getElementById('submitPassword').click();
 
         document.getElementById('refreshBtn').onclick = loadAccounts;
-        document.getElementById('addAccountBtn').onclick = () => {
-            document.getElementById('addAccountModal').style.display = 'flex';
-        };
+        document.getElementById('addAccountBtn').onclick = () => document.getElementById('addAccountModal').style.display = 'flex';
         document.getElementById('closeAddModal').onclick = () => document.getElementById('addAccountModal').style.display = 'none';
         document.getElementById('confirmAddAccount').onclick = addAccount;
         document.getElementById('closeEditModal').onclick = () => document.getElementById('editAccountModal').style.display = 'none';

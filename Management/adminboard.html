@@ -21,7 +21,6 @@
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
         body { background: var(--bg); color: var(--text); padding: 20px; min-height: 100vh; }
 
-        /* Password Modal */
         .password-modal {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             background: rgba(0,0,0,0.95); display: flex; justify-content: center;
@@ -46,7 +45,6 @@
         }
         .error { color: var(--danger); margin-top: 10px; display: none; }
 
-        /* Dashboard */
         .dashboard { display: none; }
         .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; flex-wrap: wrap; gap: 20px; }
         .stats { display: flex; gap: 20px; flex-wrap: wrap; }
@@ -109,7 +107,6 @@
         .dropdown-content button:hover { background: rgba(52,152,219,0.2); }
         .actions-dropdown:hover .dropdown-content { display: block; }
 
-        /* Modals */
         .modal {
             display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             background: rgba(0,0,0,0.95); z-index: 1001; justify-content: center; align-items: center;
@@ -231,7 +228,9 @@
 
         <div class="table-container">
             <table>
-                <thead><tr><th>Avatar</th><th>ID</th><th>Name</th><th>Email</th><th>Balance</th><th>Card Code</th><th>Status</th><th>Actions</th></tr></thead>
+                <thead>
+                    <tr><th>Avatar</th><th>ID</th><th>Name</th><th>Email</th><th>Balance</th><th>Card Code</th><th>Status</th><th>Actions</th></tr>
+                </thead>
                 <tbody id="accountsTableBody"><tr><td colspan="8" class="loading"><i class="fas fa-spinner fa-spin"></i> Loading...</td></tr></tbody>
             </table>
         </div>
@@ -361,8 +360,7 @@
             try {
                 await callAPI(`/accounts/${id}`, 'PUT', payload);
                 if (editAvatarFile) {
-                    const newAvatarUrl = await uploadAvatar(id, editAvatarFile);
-                    // Optionally update local data
+                    await uploadAvatar(id, editAvatarFile);
                 }
                 showStatus(`Account ${id} updated`, 'success');
                 document.getElementById('editAccountModal').style.display = 'none';
@@ -437,39 +435,16 @@
         async function addAccount() {
             const name = document.getElementById('addName').value.trim();
             const email = document.getElementById('addEmail').value.trim();
-            const();
-            const email = document.getElementById('addEmail').value.trim();
- password = document.getElementById('addPassword').value.trim();
-            if (!name || !email || !password) { showStatus('All fields required', 'error'); return; }
-            try {
-                const next            const password = document.getElementById('addPassword').value.trim();
+            const password = document.getElementById('addPassword').value.trim();
             if (!name || !email || !password) { showStatus('All fields required', 'error'); return; }
             try {
                 const nextId = await callAPI('/next-id');
                 const newId = nextId.nextId || String(Date.now());
-                let avatarUrl = null;
-                if (addAvatarFile) {
-                    // Upload avatar first? Actually we need account ID first. We'll create account then upload.
-                }
-                await callAPI('/create-account', 'POST', {
-                   Id = await callAPI('/next-id');
-                const newId = nextId.nextId || String(Date.now());
-                let avatarUrl = null;
-                if (addAvatarFile) {
-                    // Upload avatar first? Actually we need account ID first. We'll create account then upload.
-                }
                 await callAPI('/create-account', 'POST', {
                     id: newId, name, email, password, otpCode: '123456'
                 });
                 if (addAvatarFile) {
- id: newId, name, email, password, otpCode: '123456'
-                });
-                if (addAvatarFile) {
-                    const uploadedUrl = await uploadAvatar(newId, addAvatarFile);
-                }
-                showStatus(`Account ${newId} created!`, 'success');
-                document.getElementById('addAccountModal').style.display = 'none';
-                document.getElementById('addName').value                    const uploadedUrl = await uploadAvatar(newId, addAvatarFile);
+                    await uploadAvatar(newId, addAvatarFile);
                 }
                 showStatus(`Account ${newId} created!`, 'success');
                 document.getElementById('addAccountModal').style.display = 'none';
@@ -480,34 +455,12 @@
                 document.getElementById('addAvatarPreview').style.display = 'none';
                 loadAccounts();
             } catch (error) {
- = '';
-                document.getElementById('addEmail').value = '';
-                document.getElementById('addPassword').value = '';
-                addAvatarFile = null;
-                document.getElementById('addAvatarPreview').style.display = 'none';
-                loadAccounts();
-            } catch (error) {
                 showStatus('Error: ' + error.message, 'error');
             }
         }
 
-        // Avatar preview handlers
-        function handleAddAvatar(file) {
-            if (!file) return                showStatus('Error: ' + error.message, 'error');
-            }
-        }
-
-        // Avatar preview handlers
         function handleAddAvatar(file) {
             if (!file) return;
-            addAvatarFile = file;
-            const reader = new FileReader();
-            reader.onload = e => {
-                const preview = document.getElementById('addAvatarPreview');
-                preview.src = e.target.result;
-                preview.style.display = 'block';
-            };
-            reader;
             addAvatarFile = file;
             const reader = new FileReader();
             reader.onload = e => {
@@ -516,13 +469,6 @@
                 preview.style.display = 'block';
             };
             reader.readAsDataURL(file);
-        }
-        function handleEditAvatar(file) {
-            if (!file) return;
-            editAvatarFile = file;
-            const reader = new FileReader();
-            reader.onload = e => {
-                document.getElementById('editAvatar.readAsDataURL(file);
         }
         function handleEditAvatar(file) {
             if (!file) return;
@@ -534,14 +480,6 @@
             reader.readAsDataURL(file);
         }
 
-        // Event listeners
-        document.getElementById('submitPassword').onclick = () => {
-            if (document.getElementById('passwordInput').value === ADMINPreview').src = e.target.result;
-            };
-            reader.readAsDataURL(file);
-        }
-
-        // Event listeners
         document.getElementById('submitPassword').onclick = () => {
             if (document.getElementById('passwordInput').value === ADMIN_PASSWORD) {
                 document.getElementById('passwordModal').style.display = 'none';
@@ -550,19 +488,7 @@
             } else {
                 document.getElementById('errorMessage').style.display = 'block';
             }
-_PASSWORD) {
-                document.getElementById('passwordModal').style.display = 'none';
-                document.getElementById('dashboard').style.display = 'block';
-                loadAccounts();
-            } else {
-                document.getElementById('errorMessage').style.display = 'block';
-            }
         };
-        document.getElementById('passwordInput').onkeypress = e => e.key === 'Enter' && document.getElementById('submitPassword').click();
-
-        document.getElementById('refreshBtn').onclick = loadAccounts;
-        document.getElementById('addAccountBtn').onclick = () => {
-            document.getElementById('add        };
         document.getElementById('passwordInput').onkeypress = e => e.key === 'Enter' && document.getElementById('submitPassword').click();
 
         document.getElementById('refreshBtn').onclick = loadAccounts;
@@ -570,23 +496,12 @@ _PASSWORD) {
             document.getElementById('addAccountModal').style.display = 'flex';
         };
         document.getElementById('closeAddModal').onclick = () => document.getElementById('addAccountModal').style.display = 'none';
-        document.getElementById('confirmAddAccount').onclick = addAccountAccountModal').style.display = 'flex';
-        };
-        document.getElementById('closeAddModal').onclick = () => document.getElementById('addAccountModal').style.display = 'none';
         document.getElementById('confirmAddAccount').onclick = addAccount;
-        document.getElementById('closeEditModal').onclick = () => document.getElementById('editAccountModal').style.display = 'none';
-        document.getElementById('saveEditAccount').onclick = saveEditAccount;
-        document.getElementById('closeFinancialModal').onclick = () => document;
         document.getElementById('closeEditModal').onclick = () => document.getElementById('editAccountModal').style.display = 'none';
         document.getElementById('saveEditAccount').onclick = saveEditAccount;
         document.getElementById('closeFinancialModal').onclick = () => document.getElementById('financialModal').style.display = 'none';
         document.getElementById('saveFinancialChanges').onclick = saveFinancialChanges;
 
-        // Avatar upload triggers
-        document.getElementById('addAvatarUpload').onclick = () => document.getElementById('addAvatarInput.getElementById('financialModal').style.display = 'none';
-        document.getElementById('saveFinancialChanges').onclick = saveFinancialChanges;
-
-        // Avatar upload triggers
         document.getElementById('addAvatarUpload').onclick = () => document.getElementById('addAvatarInput').click();
         document.getElementById('addAvatarInput').onchange = e => handleAddAvatar(e.target.files[0]);
         document.getElementById('editAvatarUpload').onclick = () => document.getElementById('editAvatarInput').click();

@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>B.Y PRO - Admin Dashboard</title>
+    <title>B.Y PRO - Admin Dashboard (Full Integration)</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         :root {
@@ -95,7 +95,7 @@
         }
         .form-group { margin-bottom: 20px; }
         .form-group label { display: block; margin-bottom: 8px; color: var(--muted); }
-        .form-group input {
+        .form-group input, .form-group select {
             width: 100%; padding: 12px; background: rgba(255, 255, 255, 0.05);
             color: var(--text); border: 1px solid rgba(255, 255, 255, 0.1);
             border-radius: 6px;
@@ -109,27 +109,6 @@
         .loading { text-align: center; padding: 60px; }
         .fa-spin { animation: spin 1s linear infinite; }
         @keyframes spin { to { transform: rotate(360deg); } }
-
-        /* Block test section */
-        .test-block {
-            background: rgba(243, 156, 18, 0.1);
-            border: 1px solid var(--warning);
-            border-radius: var(--radius);
-            padding: 20px;
-            margin-bottom: 20px;
-        }
-        .test-block h3 { color: var(--warning); margin-bottom: 10px; }
-        .test-block input { background: rgba(255,255,255,0.05); padding: 10px; border-radius: 6px; border: 1px solid rgba(255,255,255,0.1); color: white; width: 200px; margin-right: 10px; }
-        .block-message {
-            background: rgba(243, 156, 18, 0.2);
-            color: var(--warning);
-            padding: 12px;
-            border-radius: 6px;
-            margin-top: 10px;
-            display: none;
-            font-weight: bold;
-            border-left: 4px solid var(--warning);
-        }
     </style>
 </head>
 <body>
@@ -145,23 +124,22 @@
     <!-- Edit Account Modal -->
     <div class="modal" id="editAccountModal">
         <div class="modal-content">
-            <h3><i class="fas fa-user-edit"></i> Edit Account (Local Only)</h3>
-            <div class="form-group"><label>ID (read-only)</label><input type="text" id="editId" readonly></div>
+            <h3><i class="fas fa-user-edit"></i> Edit Account</h3>
+            <div class="form-group"><label>ID</label><input type="text" id="editId" readonly></div>
             <div class="form-group"><label>Name</label><input type="text" id="editName"></div>
             <div class="form-group"><label>Email</label><input type="email" id="editEmail"></div>
-            <div class="form-group"><label>Password</label><input type="text" id="editPassword" placeholder="Leave empty to keep current"></div>
+            <div class="form-group"><label>New Password</label><input type="text" id="editPassword" placeholder="Leave empty to keep current"></div>
             <div class="modal-actions">
                 <button class="btn btn-danger" id="closeEditModal">Cancel</button>
-                <button class="btn btn-success" id="saveEditAccount">Save Changes (Local)</button>
+                <button class="btn btn-success" id="saveEditAccount">Save Changes</button>
             </div>
-            <p style="font-size: 12px; color: var(--warning); margin-top: 15px;"><i class="fas fa-info-circle"></i> Note: Changes are stored locally in your browser. To persist, server needs update endpoint.</p>
         </div>
     </div>
 
     <!-- Financial Modal -->
     <div class="modal" id="financialModal">
         <div class="modal-content">
-            <h3><i class="fas fa-wallet"></i> Financial Details (Live)</h3>
+            <h3><i class="fas fa-wallet"></i> Financial Details</h3>
             <div id="financialInfo"></div>
             <div class="form-group"><label>Update Balance ($)</label><input type="number" id="updateBalanceAmount" step="0.01" placeholder="Enter amount"></div>
             <div class="form-group"><label>Action</label><select id="balanceAction"><option value="add">Add to Balance</option><option value="set">Set New Balance</option></select></div>
@@ -187,15 +165,6 @@
 
         <button class="btn btn-success" id="addAccountBtn" style="margin-bottom: 20px;"><i class="fas fa-plus"></i> Add New Account</button>
 
-        <!-- Test Login Block Simulator -->
-        <div class="test-block">
-            <h3><i class="fas fa-ban"></i> Test Login Block (Simulate Login Attempt)</h3>
-            <p>Check if a blocked user can login. Enter account ID to test:</p>
-            <input type="text" id="testLoginId" placeholder="Account ID" style="width: 200px;">
-            <button class="btn btn-warning btn-sm" id="testLoginBtn"><i class="fas fa-sign-in-alt"></i> Simulate Login</button>
-            <div id="blockTestResult" class="block-message"></div>
-        </div>
-
         <div id="statusMessage" class="status"></div>
 
         <div class="table-container">
@@ -214,40 +183,32 @@
         const INTERNAL_KEY = 'bypro-internal-key-2025';
         const ADMIN_PASSWORD = '20070909';
 
-        // Storage keys for local simulations
-        const STORAGE_BLOCKED = 'bypro_admin_blocked';
-        const STORAGE_EDITED = 'bypro_admin_edited_accounts';
-        const STORAGE_DELETED = 'bypro_admin_deleted_accounts';
-
         let accountsData = [];
-        let financialCache = {};
-        let blockedAccounts = JSON.parse(localStorage.getItem(STORAGE_BLOCKED) || '[]');
-        let editedAccounts = JSON.parse(localStorage.getItem(STORAGE_EDITED) || '{}');
-        let deletedAccounts = JSON.parse(localStorage.getItem(STORAGE_DELETED) || '[]');
         let currentEditId = null;
         let currentFinancialId = null;
-
-        function saveBlocked() { localStorage.setItem(STORAGE_BLOCKED, JSON.stringify(blockedAccounts)); updateBlockedCount(); }
-        function saveEdited() { localStorage.setItem(STORAGE_EDITED, JSON.stringify(editedAccounts)); }
-        function saveDeleted() { localStorage.setItem(STORAGE_DELETED, JSON.stringify(deletedAccounts)); }
-
-        function updateBlockedCount() {
-            document.getElementById('blockedCount').textContent = blockedAccounts.length;
-        }
 
         function showStatus(msg, type) {
             const el = document.getElementById('statusMessage');
             el.textContent = msg;
             el.className = `status status-${type}`;
             el.style.display = 'block';
-            setTimeout(() => el.style.display = 'none', 4000);
+            setTimeout(() => el.style.display = 'none', 5000);
         }
 
         async function callAPI(endpoint, method = 'GET', data = null) {
-            const options = { method, headers: { 'Content-Type': 'application/json', 'x-api-key': INTERNAL_KEY } };
+            const options = {
+                method,
+                headers: {
+                    'Content-Type': 'application/json',
+                    'x-api-key': INTERNAL_KEY
+                }
+            };
             if (data) options.body = JSON.stringify(data);
             const response = await fetch(`${API_BASE}${endpoint}`, options);
-            if (!response.ok) throw new Error(`HTTP ${response.status}`);
+            if (!response.ok) {
+                const err = await response.json().catch(() => ({}));
+                throw new Error(err.error || `HTTP ${response.status}`);
+            }
             return await response.json();
         }
 
@@ -256,13 +217,17 @@
                 const result = await callAPI(`/financial/${userId}`);
                 if (result.success) return result.data;
             } catch (e) {}
-            return { id: userId, balance: 0, cardCode: 'Not set', transactions: [] };
+            return { balance: 0, cardCode: 'Not set', transactions: [] };
         }
 
         async function updateFinancial(userId, updates) {
             if (updates.balance !== undefined) {
                 const current = await fetchFinancial(userId);
-                await callAPI('/financial/add-balance', 'POST', { userId, amount: updates.balance - current.balance, description: 'Admin update' });
+                await callAPI('/financial/add-balance', 'POST', {
+                    userId,
+                    amount: updates.balance - current.balance,
+                    description: 'Admin update'
+                });
             }
             if (updates.cardCode) {
                 await callAPI('/financial/update-card', 'POST', { userId, cardCode: updates.cardCode });
@@ -273,52 +238,38 @@
             const tbody = document.getElementById('accountsTableBody');
             tbody.innerHTML = '<tr><td colspan="7" class="loading"><i class="fas fa-spinner fa-spin"></i> Loading...</td></tr>';
             try {
-                const authResult = await callAPI('/get-all-accounts');
-                let accounts = authResult.accounts || [];
-
-                // Apply local deletions
-                accounts = accounts.filter(acc => !deletedAccounts.includes(acc.id));
-
-                // Apply local edits
-                accounts = accounts.map(acc => {
-                    const edited = editedAccounts[acc.id];
-                    if (edited) return { ...acc, ...edited };
-                    return acc;
-                });
-
+                const result = await callAPI('/get-all-accounts');
+                let accounts = result.accounts || [];
                 let totalBalance = 0;
+                let blockedCount = 0;
                 for (const acc of accounts) {
                     const financial = await fetchFinancial(acc.id);
-                    financialCache[acc.id] = financial;
                     acc.balance = financial?.balance || 0;
                     acc.cardCode = financial?.cardCode || 'Not set';
                     totalBalance += acc.balance;
+                    if (acc.blocked) blockedCount++;
                 }
-
                 accountsData = accounts;
                 document.getElementById('totalAccounts').textContent = accounts.length;
                 document.getElementById('totalBalance').textContent = `$${totalBalance.toFixed(2)}`;
-                updateBlockedCount();
+                document.getElementById('blockedCount').textContent = blockedCount;
 
-                tbody.innerHTML = accounts.map(acc => {
-                    const isBlocked = blockedAccounts.includes(acc.id);
-                    return `
-                        <tr style="${isBlocked ? 'opacity: 0.6;' : ''}">
-                            <td><strong>${acc.id}</strong></td>
-                            <td>${acc.name || 'No Name'}</td>
-                            <td>${acc.email || 'No Email'}</td>
-                            <td style="color: var(--success);">$${(acc.balance || 0).toFixed(2)}</td>
-                            <td><code style="font-size: 11px;">${acc.cardCode || 'Not set'}</code></td>
-                            <td><span class="badge ${isBlocked ? 'badge-blocked' : 'badge-active'}">${isBlocked ? 'BLOCKED' : 'ACTIVE'}</span></td>
-                            <td>
-                                <button class="btn btn-primary btn-sm" onclick="openEditAccount('${acc.id}')"><i class="fas fa-edit"></i> Edit</button>
-                                <button class="btn btn-warning btn-sm" onclick="openFinancialModal('${acc.id}')"><i class="fas fa-wallet"></i> Finance</button>
-                                <button class="btn btn-danger btn-sm" onclick="toggleBlock('${acc.id}', ${!isBlocked})"><i class="fas ${isBlocked ? 'fa-unlock' : 'fa-ban'}"></i> ${isBlocked ? 'Unblock' : 'Block'}</button>
-                                <button class="btn btn-danger btn-sm" onclick="deleteAccount('${acc.id}')"><i class="fas fa-trash"></i> Delete</button>
-                            </td>
-                        </tr>
-                    `;
-                }).join('');
+                tbody.innerHTML = accounts.map(acc => `
+                    <tr>
+                        <td><strong>${acc.id}</strong></td>
+                        <td>${acc.name || 'No Name'}</td>
+                        <td>${acc.email || 'No Email'}</td>
+                        <td style="color: var(--success);">$${(acc.balance || 0).toFixed(2)}</td>
+                        <td><code style="font-size: 11px;">${acc.cardCode}</code></td>
+                        <td><span class="badge ${acc.blocked ? 'badge-blocked' : 'badge-active'}">${acc.blocked ? 'BLOCKED' : 'ACTIVE'}</span></td>
+                        <td>
+                            <button class="btn btn-primary btn-sm" onclick="openEditAccount('${acc.id}')"><i class="fas fa-edit"></i> Edit</button>
+                            <button class="btn btn-warning btn-sm" onclick="openFinancialModal('${acc.id}')"><i class="fas fa-wallet"></i> Finance</button>
+                            <button class="btn btn-danger btn-sm" onclick="toggleBlock('${acc.id}', ${!acc.blocked})"><i class="fas ${acc.blocked ? 'fa-unlock' : 'fa-ban'}"></i> ${acc.blocked ? 'Unblock' : 'Block'}</button>
+                            <button class="btn btn-danger btn-sm" onclick="deleteAccount('${acc.id}')"><i class="fas fa-trash"></i> Delete</button>
+                        </td>
+                    </tr>
+                `).join('');
             } catch (error) {
                 tbody.innerHTML = `<tr><td colspan="7" class="loading"><i class="fas fa-exclamation-triangle"></i> Error: ${error.message}</td></tr>`;
                 showStatus('Error: ' + error.message, 'error');
@@ -326,7 +277,7 @@
         }
 
         // ==================== ACCOUNT MANAGEMENT ====================
-        function openEditAccount(id) {
+        async function openEditAccount(id) {
             const account = accountsData.find(a => a.id === id);
             if (!account) return;
             currentEditId = id;
@@ -337,84 +288,45 @@
             document.getElementById('editAccountModal').style.display = 'flex';
         }
 
-        function saveEditAccount() {
+        async function saveEditAccount() {
             const id = currentEditId;
             const name = document.getElementById('editName').value.trim();
             const email = document.getElementById('editEmail').value.trim();
-            const newPassword = document.getElementById('editPassword').value.trim();
-
+            const password = document.getElementById('editPassword').value.trim();
             if (!name || !email) {
                 showStatus('Name and email are required', 'error');
                 return;
             }
-
-            const edited = { ...editedAccounts[id], name, email };
-            if (newPassword) edited.password = newPassword;
-            editedAccounts[id] = edited;
-            saveEdited();
-
-            showStatus(`Account ${id} updated locally. Changes will persist in this browser.`, 'success');
-            document.getElementById('editAccountModal').style.display = 'none';
-            loadAccounts();
+            const payload = { name, email };
+            if (password) payload.password = password;
+            try {
+                await callAPI(`/accounts/${id}`, 'PUT', payload);
+                showStatus(`Account ${id} updated successfully`, 'success');
+                document.getElementById('editAccountModal').style.display = 'none';
+                loadAccounts();
+            } catch (error) {
+                showStatus('Error: ' + error.message, 'error');
+            }
         }
 
-        function deleteAccount(id) {
-            if (!confirm(`⚠️ Are you sure you want to mark account ${id} as DELETED?\nThis will hide it from this dashboard and prevent login.`)) return;
-
-            if (!deletedAccounts.includes(id)) {
-                deletedAccounts.push(id);
-                saveDeleted();
+        async function deleteAccount(id) {
+            if (!confirm(`⚠️ Permanently delete account ${id}?\nThis action cannot be undone!`)) return;
+            try {
+                await callAPI(`/accounts/${id}`, 'DELETE');
+                showStatus(`Account ${id} deleted`, 'success');
+                loadAccounts();
+            } catch (error) {
+                showStatus('Error: ' + error.message, 'error');
             }
-            // Also remove from blocked and edited
-            blockedAccounts = blockedAccounts.filter(bid => bid !== id);
-            saveBlocked();
-            delete editedAccounts[id];
-            saveEdited();
-
-            showStatus(`Account ${id} marked as deleted. It will no longer appear.`, 'success');
-            loadAccounts();
         }
 
-        // ==================== BLOCK MANAGEMENT ====================
-        function toggleBlock(userId, block) {
-            if (block) {
-                if (!blockedAccounts.includes(userId)) {
-                    blockedAccounts.push(userId);
-                    showStatus(`⚠️ Account ${userId} BLOCKED. User will see warning on login.`, 'warning');
-                }
-            } else {
-                blockedAccounts = blockedAccounts.filter(id => id !== userId);
-                showStatus(`✅ Account ${userId} UNBLOCKED.`, 'success');
-            }
-            saveBlocked();
-            loadAccounts();
-        }
-
-        // Simulate login attempt to test block message
-        function testLoginBlock() {
-            const testId = document.getElementById('testLoginId').value.trim();
-            const resultDiv = document.getElementById('blockTestResult');
-            if (!testId) {
-                resultDiv.textContent = 'Please enter an account ID.';
-                resultDiv.style.display = 'block';
-                return;
-            }
-
-            if (blockedAccounts.includes(testId)) {
-                resultDiv.innerHTML = `
-                    <i class="fas fa-ban"></i> ⚠️ ACCOUNT ${testId} IS BLOCKED ⚠️<br>
-                    Access denied. Please contact administrator.
-                `;
-                resultDiv.style.display = 'block';
-            } else if (deletedAccounts.includes(testId)) {
-                resultDiv.innerHTML = `
-                    <i class="fas fa-trash"></i> ⚠️ ACCOUNT ${testId} HAS BEEN DELETED ⚠️<br>
-                    This account no longer exists.
-                `;
-                resultDiv.style.display = 'block';
-            } else {
-                resultDiv.innerHTML = `<i class="fas fa-check-circle"></i> Account ${testId} is ACTIVE. Login would succeed.`;
-                resultDiv.style.display = 'block';
+        async function toggleBlock(userId, block) {
+            try {
+                await callAPI(`/accounts/${userId}/block`, 'POST', { blocked: block });
+                showStatus(`Account ${userId} ${block ? 'BLOCKED' : 'UNBLOCKED'}`, 'success');
+                loadAccounts();
+            } catch (error) {
+                showStatus('Error: ' + error.message, 'error');
             }
         }
 
@@ -437,26 +349,26 @@
             const amountInput = document.getElementById('updateBalanceAmount').value;
             const action = document.getElementById('balanceAction').value;
             const newCardCode = document.getElementById('updateCardCode').value;
-
             try {
                 const current = await fetchFinancial(userId);
                 let updated = false;
-
                 if (amountInput) {
                     const amount = parseFloat(amountInput);
                     if (!isNaN(amount)) {
                         let newBalance = action === 'set' ? amount : current.balance + amount;
-                        await callAPI('/financial/add-balance', 'POST', { userId, amount: newBalance - current.balance, description: `Admin ${action} balance` });
+                        await callAPI('/financial/add-balance', 'POST', {
+                            userId,
+                            amount: newBalance - current.balance,
+                            description: `Admin ${action} balance`
+                        });
                         updated = true;
                     }
                 }
-
                 if (newCardCode && newCardCode !== current.cardCode) {
                     await callAPI('/financial/update-card', 'POST', { userId, cardCode: newCardCode });
                     updated = true;
                 }
-
-                if (updated) showStatus('Financial data updated!', 'success');
+                if (updated) showStatus('Financial data updated', 'success');
                 document.getElementById('financialModal').style.display = 'none';
                 loadAccounts();
             } catch (error) {
@@ -472,12 +384,17 @@
             if (!email) return;
             const password = prompt('Enter password:');
             if (!password) return;
-
             try {
                 const nextId = await callAPI('/next-id');
                 const newId = nextId.nextId || String(Date.now());
-                await callAPI('/create-account', 'POST', { id: newId, name, email, password, otpCode: '123456' });
-                showStatus(`✅ Account ${newId} created successfully!`, 'success');
+                await callAPI('/create-account', 'POST', {
+                    id: newId,
+                    name,
+                    email,
+                    password,
+                    otpCode: '123456'
+                });
+                showStatus(`Account ${newId} created!`, 'success');
                 loadAccounts();
             } catch (error) {
                 showStatus('Error: ' + error.message, 'error');
@@ -503,7 +420,6 @@
         document.getElementById('saveEditAccount').onclick = saveEditAccount;
         document.getElementById('closeFinancialModal').onclick = () => document.getElementById('financialModal').style.display = 'none';
         document.getElementById('saveFinancialChanges').onclick = saveFinancialChanges;
-        document.getElementById('testLoginBtn').onclick = testLoginBlock;
 
         window.openEditAccount = openEditAccount;
         window.openFinancialModal = openFinancialModal;

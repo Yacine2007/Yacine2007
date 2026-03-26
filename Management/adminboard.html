@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
     <title>B.Y PRO - Admin Dashboard</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
     <style>
         :root {
             --primary: #3498db;
@@ -21,7 +22,6 @@
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
         body { background: var(--bg); color: var(--text); padding: 20px; min-height: 100vh; }
 
-        /* Password Modal */
         .password-modal {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             background: rgba(0,0,0,0.95); display: flex; justify-content: center;
@@ -147,17 +147,9 @@
         .loading { text-align: center; padding: 60px; }
         .fa-spin { animation: spin 1s linear infinite; }
         @keyframes spin { to { transform: rotate(360deg); } }
-        .password-row {
-            display: flex; gap: 10px; align-items: center;
-        }
-        .password-row input {
-            flex: 1;
-        }
-        .toggle-pwd {
-            background: none; border: none; color: var(--muted); cursor: pointer;
-            padding: 0 10px;
-        }
-        .hidden { display: none; }
+        .qr-container { display: flex; justify-content: center; margin: 20px 0; }
+        .qr-container canvas, .qr-container img { max-width: 100%; height: auto; border: 2px solid var(--primary); border-radius: 8px; padding: 5px; background: white; }
+        .copy-btn { background: var(--primary); color: white; border: none; padding: 5px 10px; border-radius: 4px; cursor: pointer; font-size: 12px; }
     </style>
 </head>
 <body>
@@ -240,6 +232,23 @@
         </div>
     </div>
 
+    <!-- QR Code Modal -->
+    <div class="modal" id="qrModal">
+        <div class="modal-content">
+            <h3><i class="fas fa-qrcode"></i> Login QR Code</h3>
+            <p>Scan this QR code to login as this user</p>
+            <div id="qrCodeContainer" class="qr-container"></div>
+            <div class="form-group">
+                <label>QR Data (BYPRO format)</label>
+                <input type="text" id="qrData" readonly style="font-size:12px; font-family:monospace;">
+                <button class="copy-btn" onclick="copyQRData()"><i class="fas fa-copy"></i> Copy</button>
+            </div>
+            <div class="modal-actions">
+                <button class="btn btn-danger" id="closeQRModal">Close</button>
+            </div>
+        </div>
+    </div>
+
     <!-- Dashboard -->
     <div class="dashboard" id="dashboard">
         <div class="header">
@@ -258,7 +267,7 @@
         <div class="table-container">
              <table>
                 <thead>
-                    <tr><th>Avatar</th><th>ID</th><th>Name</th><th>Email</th><th>Balance</th><th>Card Code</th><th>Status</th><th>Actions</th> </tr>
+                    <tr><th>Avatar</th><th>ID</th><th>Name</th><th>Email</th><th>Balance</th><th>Card Code</th><th>Status</th><th>Actions</th></tr>
                 </thead>
                 <tbody id="accountsTableBody"> <tr><td colspan="8" class="loading"><i class="fas fa-spinner fa-spin"></i> Loading...</td></tr> </tbody>
             </table>
@@ -289,17 +298,12 @@
             if (!isFormData) options.headers['Content-Type'] = 'application/json';
             options.headers['x-api-key'] = INTERNAL_KEY;
             if (data) options.body = isFormData ? data : JSON.stringify(data);
-            try {
-                const response = await fetch(`${API_BASE}${endpoint}`, options);
-                if (!response.ok) {
-                    const err = await response.json().catch(() => ({}));
-                    throw new Error(err.error || `HTTP ${response.status}`);
-                }
-                return await response.json();
-            } catch (error) {
-                console.error(`API call failed: ${endpoint}`, error);
-                throw error;
+            const response = await fetch(`${API_BASE}${endpoint}`, options);
+            if (!response.ok) {
+                const err = await response.json().catch(() => ({}));
+                throw new Error(err.error || `HTTP ${response.status}`);
             }
+            return await response.json();
         }
 
         async function fetchFinancial(userId) {
@@ -324,7 +328,6 @@
                 return data.avatarUrl;
             } catch (error) {
                 console.error('Avatar upload error:', error);
-                showStatus('Failed to upload avatar: ' + error.message, 'error');
                 throw error;
             }
         }
@@ -363,6 +366,7 @@
                                 <div class="dropdown-content">
                                     <button onclick="openEditAccount('${acc.id}')"><i class="fas fa-edit"></i> Edit</button>
                                     <button onclick="openFinancialModal('${acc.id}')"><i class="fas fa-wallet"></i> Finance</button>
+                                    <button onclick="generateQRCode('${acc.id}')"><i class="fas fa-qrcode"></i> QR Code</button>
                                     <button onclick="toggleBlock('${acc.id}', ${!acc.blocked})"><i class="fas ${acc.blocked ? 'fa-unlock' : 'fa-ban'}"></i> ${acc.blocked ? 'Unblock' : 'Block'}</button>
                                     <button onclick="deleteAccount('${acc.id}')"><i class="fas fa-trash"></i> Delete</button>
                                 </div>
@@ -376,6 +380,40 @@
             }
         }
 
+        // Generate QR code for account
+        async function generateQRCode(userId) {
+            try {
+                // Fetch account details including password
+                const account = await callAPI(`/accounts/${userId}`);
+                if (!account.success) throw new Error(account.error);
+                const data = account.account;
+                const qrText = `BYPRO:${data.id}:${data.password}`;
+                // Clear previous QR
+                const container = document.getElementById('qrCodeContainer');
+                container.innerHTML = '';
+                // Generate QR using QRCode.js
+                new QRCode(container, {
+                    text: qrText,
+                    width: 200,
+                    height: 200,
+                    colorDark: "#000000",
+                    colorLight: "#ffffff",
+                    correctLevel: QRCode.CorrectLevel.H
+                });
+                document.getElementById('qrData').value = qrText;
+                document.getElementById('qrModal').style.display = 'flex';
+            } catch (error) {
+                showStatus('Error generating QR: ' + error.message, 'error');
+            }
+        }
+
+        function copyQRData() {
+            const data = document.getElementById('qrData');
+            data.select();
+            document.execCommand('copy');
+            showStatus('QR data copied to clipboard', 'success');
+        }
+
         async function openEditAccount(id) {
             const account = accountsData.find(a => a.id === id);
             if (!account) return;
@@ -383,7 +421,7 @@
             document.getElementById('editId').value = id;
             document.getElementById('editName').value = account.name || '';
             document.getElementById('editEmail').value = account.email || '';
-            // We need to get current password from server – it's not in accountsData for security. We can fetch full account details.
+            // Fetch full account details including password
             try {
                 const fullAccount = await callAPI(`/accounts/${id}`);
                 if (fullAccount.success && fullAccount.account) {
@@ -411,7 +449,11 @@
             try {
                 await callAPI(`/accounts/${id}`, 'PUT', payload);
                 if (editAvatarFile) {
-                    await uploadAvatar(id, editAvatarFile);
+                    try {
+                        await uploadAvatar(id, editAvatarFile);
+                    } catch (uploadErr) {
+                        showStatus('Account updated but avatar upload failed: ' + uploadErr.message, 'warning');
+                    }
                 }
                 showStatus(`Account ${id} updated`, 'success');
                 document.getElementById('editAccountModal').style.display = 'none';
@@ -495,7 +537,11 @@
                     id: newId, name, email, password, otpCode: '123456'
                 });
                 if (addAvatarFile) {
-                    await uploadAvatar(newId, addAvatarFile);
+                    try {
+                        await uploadAvatar(newId, addAvatarFile);
+                    } catch (uploadErr) {
+                        showStatus('Account created but avatar upload failed: ' + uploadErr.message, 'warning');
+                    }
                 }
                 showStatus(`Account ${newId} created!`, 'success');
                 document.getElementById('addAccountModal').style.display = 'none';
@@ -561,6 +607,7 @@
         document.getElementById('saveEditAccount').onclick = saveEditAccount;
         document.getElementById('closeFinancialModal').onclick = () => document.getElementById('financialModal').style.display = 'none';
         document.getElementById('saveFinancialChanges').onclick = saveFinancialChanges;
+        document.getElementById('closeQRModal').onclick = () => document.getElementById('qrModal').style.display = 'none';
 
         document.getElementById('addAvatarUpload').onclick = () => document.getElementById('addAvatarInput').click();
         document.getElementById('addAvatarInput').onchange = e => handleAddAvatar(e.target.files[0]);
@@ -571,6 +618,8 @@
         window.openFinancialModal = openFinancialModal;
         window.toggleBlock = toggleBlock;
         window.deleteAccount = deleteAccount;
+        window.generateQRCode = generateQRCode;
+        window.copyQRData = copyQRData;
         window.togglePasswordVisibility = togglePasswordVisibility;
     </script>
 </body>

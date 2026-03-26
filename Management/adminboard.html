@@ -8,7 +8,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif; }
-        body { background: #0a0a0a; min-height: 100vh; padding: 24px; }
+        body { background: #0a0a0a; min-height: 100vh; padding: 24px; color: white; }
         
         /* Password Modal */
         .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.95); display: flex; align-items: center; justify-content: center; z-index: 1000; backdrop-filter: blur(8px); }
@@ -39,19 +39,20 @@
         .table-container { background: #1a1a1a; border-radius: 24px; padding: 20px; overflow-x: auto; border: 1px solid #2a2a2a; }
         table { width: 100%; border-collapse: collapse; }
         th { text-align: left; padding: 16px 12px; color: #888; font-weight: 500; font-size: 13px; border-bottom: 1px solid #2a2a2a; }
-        td { padding: 14px 12px; border-bottom: 1px solid #2a2a2a; vertical-align: middle; }
+        td { padding: 14px 12px; border-bottom: 1px solid #2a2a2a; vertical-align: middle; color: white; }
         tr:hover { background: #222; }
         
-        .avatar { width: 40px; height: 40px; border-radius: 50%; object-fit: cover; border: 2px solid #2a6df4; background: #2c3e50; }
+        .avatar { width: 40px; height: 40px; border-radius: 50%; object-fit: cover; border: 2px solid #2a6df4; background: #2c3e50; cursor: pointer; transition: 0.2s; }
+        .avatar:hover { transform: scale(1.05); border-color: #fff; }
         .badge { display: inline-block; padding: 4px 10px; border-radius: 30px; font-size: 11px; font-weight: 600; }
         .badge-active { background: rgba(46,204,113,0.2); color: #2ecc71; }
         .badge-blocked { background: rgba(231,76,60,0.2); color: #e74c3c; }
         
-        /* Dropdown Menu (3 dots) */
+        /* Dropdown Menu - فوق كل العناصر */
         .dropdown { position: relative; display: inline-block; }
         .dropdown-btn { background: none; border: none; color: #888; cursor: pointer; font-size: 18px; padding: 8px; border-radius: 8px; transition: 0.2s; }
         .dropdown-btn:hover { background: #2a2a2a; color: white; }
-        .dropdown-menu { position: absolute; right: 0; top: 100%; background: #2a2a2a; border-radius: 16px; min-width: 160px; z-index: 100; box-shadow: 0 10px 25px rgba(0,0,0,0.3); display: none; overflow: hidden; border: 1px solid #3a3a3a; }
+        .dropdown-menu { position: fixed; background: #2a2a2a; border-radius: 16px; min-width: 170px; z-index: 9999; box-shadow: 0 10px 25px rgba(0,0,0,0.5); overflow: hidden; border: 1px solid #3a3a3a; display: none; }
         .dropdown-menu button { width: 100%; padding: 12px 16px; text-align: left; background: none; border: none; color: white; cursor: pointer; display: flex; align-items: center; gap: 10px; font-size: 13px; transition: 0.2s; }
         .dropdown-menu button:hover { background: #3a3a3a; }
         .dropdown-menu button i { width: 20px; color: #2a6df4; }
@@ -59,25 +60,31 @@
         
         /* Modal */
         .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); align-items: center; justify-content: center; z-index: 1100; backdrop-filter: blur(4px); }
-        .modal-content { background: #1a1a1a; border-radius: 32px; padding: 28px; width: 90%; max-width: 500px; max-height: 85vh; overflow-y: auto; border: 1px solid #2a6df4; }
+        .modal-content { background: #1a1a1a; border-radius: 32px; padding: 28px; width: 90%; max-width: 500px; max-height: 85vh; overflow-y: auto; border: 1px solid #2a6df4; color: white; }
         .modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; }
         .modal-header h3 { color: white; font-size: 20px; }
         .modal-header h3 i { color: #2a6df4; margin-right: 8px; }
         .close-modal { background: none; border: none; color: #888; font-size: 24px; cursor: pointer; }
         .form-group { margin-bottom: 20px; }
-        .form-group label { display: block; color: #888; font-size: 13px; margin-bottom: 8px; }
+        .form-group label { display: block; color: #aaa; font-size: 13px; margin-bottom: 8px; }
         .form-group input { width: 100%; padding: 12px 16px; background: #2a2a2a; border: 1px solid #3a3a3a; border-radius: 40px; color: white; font-size: 14px; outline: none; }
         .form-group input:focus { border-color: #2a6df4; }
-        .avatar-upload { border: 2px dashed #3a3a3a; border-radius: 20px; padding: 20px; text-align: center; cursor: pointer; transition: 0.2s; margin-top: 8px; }
-        .avatar-upload:hover { border-color: #2a6df4; background: #222; }
-        .avatar-preview { width: 80px; height: 80px; border-radius: 50%; object-fit: cover; margin: 12px auto; display: none; border: 2px solid #2a6df4; }
+        .form-group input[readonly] { background: #222; color: #888; cursor: not-allowed; }
+        
+        /* Avatar Upload - صورة دائرية فقط */
+        .avatar-upload-circle { display: flex; flex-direction: column; align-items: center; margin: 16px 0; }
+        .avatar-circle-preview { width: 100px; height: 100px; border-radius: 50%; object-fit: cover; border: 3px solid #2a6df4; background: #2a2a2a; cursor: pointer; transition: 0.2s; }
+        .avatar-circle-preview:hover { transform: scale(1.02); border-color: white; }
+        .avatar-upload-hint { font-size: 12px; color: #888; margin-top: 8px; cursor: pointer; text-align: center; }
+        .avatar-upload-hint i { color: #2a6df4; }
+        
         .btn-primary { background: linear-gradient(135deg, #2a6df4, #1a5be0); border: none; padding: 12px 24px; border-radius: 40px; color: white; font-weight: 600; cursor: pointer; width: 100%; transition: 0.2s; }
         .btn-primary:hover { transform: translateY(-2px); }
         .btn-secondary { background: #2a2a2a; border: none; padding: 10px 20px; border-radius: 40px; color: white; cursor: pointer; transition: 0.2s; }
         .btn-secondary:hover { background: #3a3a3a; }
         .flex-buttons { display: flex; gap: 12px; margin-top: 20px; }
         
-        /* Loading Spinner */
+        /* Loading */
         .loading-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); display: none; align-items: center; justify-content: center; z-index: 1200; backdrop-filter: blur(4px); }
         .spinner { width: 50px; height: 50px; border: 3px solid #2a2a2a; border-top-color: #2a6df4; border-radius: 50%; animation: spin 1s linear infinite; }
         @keyframes spin { to { transform: rotate(360deg); } }
@@ -87,6 +94,7 @@
         
         .status-msg { background: rgba(46,204,113,0.2); color: #2ecc71; padding: 12px; border-radius: 20px; text-align: center; margin-bottom: 20px; display: none; }
         .status-error { background: rgba(231,76,60,0.2); color: #e74c3c; }
+        .info-text { color: #2a6df4; font-size: 12px; margin-top: 4px; }
     </style>
 </head>
 <body>
@@ -118,9 +126,7 @@
 
         <div class="table-container">
             <table>
-                <thead>
-                    <tr><th>Avatar</th><th>ID</th><th>Name</th><th>Email</th><th>Balance</th><th>Card</th><th>Status</th><th></th></tr>
-                </thead>
+                <thead><tr><th>Avatar</th><th>ID</th><th>Name</th><th>Email</th><th>Balance</th><th>Card</th><th>Status</th><th></th></tr></thead>
                 <tbody id="accountsTableBody"><tr><td colspan="8" style="text-align:center; padding:40px;"><i class="fas fa-spinner fa-spin"></i> Loading...</td></tr></tbody>
             </table>
         </div>
@@ -133,11 +139,10 @@
             <div class="form-group"><label>Name</label><input type="text" id="addName"></div>
             <div class="form-group"><label>Email</label><input type="email" id="addEmail"></div>
             <div class="form-group"><label>Password</label><input type="text" id="addPassword"></div>
-            <div class="form-group">
-                <label>Avatar (optional)</label>
-                <div class="avatar-upload" id="addAvatarUpload"><i class="fas fa-cloud-upload-alt"></i> Click to upload</div>
+            <div class="avatar-upload-circle">
+                <img id="addAvatarPreview" class="avatar-circle-preview" src="https://i.ibb.co/SDxkt40s/user.png" onclick="document.getElementById('addAvatarInput').click()">
                 <input type="file" id="addAvatarInput" accept="image/*" style="display:none">
-                <img id="addAvatarPreview" class="avatar-preview">
+                <div class="avatar-upload-hint" onclick="document.getElementById('addAvatarInput').click()"><i class="fas fa-camera"></i> Click to change avatar</div>
             </div>
             <div class="flex-buttons"><button class="btn-secondary" onclick="closeModal('addModal')">Cancel</button><button class="btn-primary" id="confirmAdd">Create Account</button></div>
         </div>
@@ -147,15 +152,15 @@
     <div id="editModal" class="modal">
         <div class="modal-content">
             <div class="modal-header"><h3><i class="fas fa-edit"></i> Edit Account</h3><button class="close-modal" onclick="closeModal('editModal')">&times;</button></div>
-            <div class="form-group"><label>ID</label><input type="text" id="editId" readonly></div>
+            <div class="form-group"><label>ID</label><input type="text" id="editId" placeholder="ID"></div>
             <div class="form-group"><label>Name</label><input type="text" id="editName"></div>
             <div class="form-group"><label>Email</label><input type="email" id="editEmail"></div>
-            <div class="form-group"><label>New Password</label><input type="text" id="editPassword" placeholder="Leave empty to keep current"></div>
-            <div class="form-group">
-                <label>Avatar</label>
-                <div class="avatar-upload" id="editAvatarUpload"><i class="fas fa-cloud-upload-alt"></i> Change image</div>
+            <div class="form-group"><label>Password</label><input type="text" id="editPassword" placeholder="Current password shown below"></div>
+            <div class="form-group"><label>Current Password</label><input type="text" id="editCurrentPassword" readonly placeholder="Click 'Load' first"></div>
+            <div class="avatar-upload-circle">
+                <img id="editAvatarPreview" class="avatar-circle-preview" src="https://i.ibb.co/SDxkt40s/user.png" onclick="document.getElementById('editAvatarInput').click()">
                 <input type="file" id="editAvatarInput" accept="image/*" style="display:none">
-                <img id="editAvatarPreview" class="avatar-preview">
+                <div class="avatar-upload-hint" onclick="document.getElementById('editAvatarInput').click()"><i class="fas fa-camera"></i> Click to change avatar</div>
             </div>
             <div class="flex-buttons"><button class="btn-secondary" onclick="closeModal('editModal')">Cancel</button><button class="btn-primary" id="saveEdit">Save Changes</button></div>
         </div>
@@ -183,9 +188,8 @@
         </div>
     </div>
 
-    <!-- Loading Overlay -->
+    <!-- Loading -->
     <div id="loadingOverlay" class="loading-overlay"><div class="spinner"></div></div>
-
     <div id="toast" class="toast"></div>
 
     <script>
@@ -207,10 +211,7 @@
             setTimeout(() => toast.style.display = 'none', 3000);
         }
 
-        function showLoading(show) {
-            document.getElementById('loadingOverlay').style.display = show ? 'flex' : 'none';
-        }
-
+        function showLoading(show) { document.getElementById('loadingOverlay').style.display = show ? 'flex' : 'none'; }
         function showStatus(msg, isError = false) {
             const el = document.getElementById('statusMessage');
             el.textContent = msg;
@@ -234,8 +235,7 @@
         }
 
         async function uploadAvatar(accountId, file) {
-            const formData = new FormData();
-            formData.append('avatar', file);
+            const formData = new FormData(); formData.append('avatar', file);
             const response = await fetch(`${API_BASE}/accounts/${accountId}/avatar`, {
                 method: 'POST', headers: { 'x-api-key': INTERNAL_KEY }, body: formData
             });
@@ -265,7 +265,7 @@
                 const tbody = document.getElementById('accountsTableBody');
                 tbody.innerHTML = accounts.map(acc => `
                     <tr>
-                        <td><img class="avatar" src="${acc.avatar || 'https://i.ibb.co/SDxkt40s/user.png'}" onerror="this.src='https://i.ibb.co/SDxkt40s/user.png'"></td>
+                        <td><img class="avatar" src="${acc.avatar || 'https://i.ibb.co/SDxkt40s/user.png'}" onerror="this.src='https://i.ibb.co/SDxkt40s/user.png'" onclick="openEditAvatar('${acc.id}')"></td>
                         <td><strong>${acc.id}</strong></td>
                         <td>${acc.name || 'No Name'}</td>
                         <td>${acc.email || 'No Email'}</td>
@@ -274,10 +274,10 @@
                         <td><span class="badge ${acc.blocked ? 'badge-blocked' : 'badge-active'}">${acc.blocked ? 'BLOCKED' : 'ACTIVE'}</span></td>
                         <td>
                             <div class="dropdown">
-                                <button class="dropdown-btn" onclick="toggleDropdown(this)"><i class="fas fa-ellipsis-v"></i></button>
+                                <button class="dropdown-btn" onclick="toggleDropdown(this, event)"><i class="fas fa-ellipsis-v"></i></button>
                                 <div class="dropdown-menu">
-                                    <button onclick="openEdit('${acc.id}')"><i class="fas fa-edit"></i> Edit</button>
-                                    <button onclick="openFinancial('${acc.id}')"><i class="fas fa-wallet"></i> Finance</button>
+                                    <button onclick="openEdit('${acc.id}')"><i class="fas fa-edit"></i> Edit Account</button>
+                                    <button onclick="openFinancial('${acc.id}')"><i class="fas fa-wallet"></i> Financial</button>
                                     <button onclick="generateQR('${acc.id}')"><i class="fas fa-qrcode"></i> QR Code</button>
                                     <button onclick="toggleBlock('${acc.id}', ${!acc.blocked})"><i class="fas ${acc.blocked ? 'fa-unlock' : 'fa-ban'}"></i> ${acc.blocked ? 'Unblock' : 'Block'}</button>
                                     <button onclick="deleteAccount('${acc.id}')"><i class="fas fa-trash"></i> Delete</button>
@@ -286,16 +286,19 @@
                         </td>
                     </tr>
                 `).join('');
-            } catch (error) {
-                showStatus('Error: ' + error.message, true);
-                document.getElementById('accountsTableBody').innerHTML = `<tr><td colspan="8" style="text-align:center; padding:40px;">Error: ${error.message}</td></tr>`;
-            } finally { showLoading(false); }
+            } catch (error) { showStatus('Error: ' + error.message, true); }
+            finally { showLoading(false); }
         }
 
-        function toggleDropdown(btn) {
+        function toggleDropdown(btn, event) {
+            event.stopPropagation();
             const dropdown = btn.closest('.dropdown');
             document.querySelectorAll('.dropdown').forEach(d => { if (d !== dropdown) d.classList.remove('show'); });
             dropdown.classList.toggle('show');
+            const menu = dropdown.querySelector('.dropdown-menu');
+            const rect = btn.getBoundingClientRect();
+            menu.style.top = rect.bottom + window.scrollY + 'px';
+            menu.style.left = rect.left + window.scrollX - menu.offsetWidth + rect.width + 'px';
         }
         document.addEventListener('click', (e) => {
             if (!e.target.closest('.dropdown')) document.querySelectorAll('.dropdown').forEach(d => d.classList.remove('show'));
@@ -310,13 +313,18 @@
             document.getElementById('editEmail').value = acc.email || '';
             document.getElementById('editPassword').value = '';
             document.getElementById('editAvatarPreview').src = acc.avatar || 'https://i.ibb.co/SDxkt40s/user.png';
-            document.getElementById('editAvatarPreview').style.display = 'block';
             editAvatarFile = null;
+            try {
+                const full = await callAPI(`/accounts/${id}`);
+                if (full.success && full.account) {
+                    document.getElementById('editCurrentPassword').value = full.account.password || 'Not available';
+                } else { document.getElementById('editCurrentPassword').value = 'Not available'; }
+            } catch { document.getElementById('editCurrentPassword').value = 'Error loading'; }
             document.getElementById('editModal').style.display = 'flex';
         }
 
         async function saveEdit() {
-            const id = currentEditId;
+            const id = document.getElementById('editId').value.trim();
             const name = document.getElementById('editName').value.trim();
             const email = document.getElementById('editEmail').value.trim();
             const newPassword = document.getElementById('editPassword').value.trim();
@@ -419,27 +427,27 @@
                 document.getElementById('addEmail').value = '';
                 document.getElementById('addPassword').value = '';
                 addAvatarFile = null;
-                document.getElementById('addAvatarPreview').style.display = 'none';
+                document.getElementById('addAvatarPreview').src = 'https://i.ibb.co/SDxkt40s/user.png';
                 loadAccounts();
             } catch (error) { showStatus('Error: ' + error.message, true); }
             finally { showLoading(false); }
         }
 
-        function handleAvatarUpload(inputId, previewId, fileVar) {
+        function handleAvatarUpload(inputId, previewId, isAdd) {
             const file = document.getElementById(inputId).files[0];
             if (!file) return;
             if (!file.type.match('image.*')) { showStatus('Select an image file', true); return; }
             if (file.size > 5*1024*1024) { showStatus('Max 5MB', true); return; }
-            if (inputId === 'addAvatarInput') addAvatarFile = file;
+            if (isAdd) addAvatarFile = file;
             else editAvatarFile = file;
             const reader = new FileReader();
-            reader.onload = e => { document.getElementById(previewId).src = e.target.result; document.getElementById(previewId).style.display = 'block'; };
+            reader.onload = e => { document.getElementById(previewId).src = e.target.result; };
             reader.readAsDataURL(file);
         }
 
         function closeModal(id) { document.getElementById(id).style.display = 'none'; }
+        function openEditAvatar(id) { openEdit(id); }
 
-        // Event Listeners
         document.getElementById('submitPassword').onclick = () => {
             if (document.getElementById('passwordInput').value === ADMIN_PASSWORD) {
                 document.getElementById('passwordModal').style.display = 'none';
@@ -453,10 +461,8 @@
         document.getElementById('confirmAdd').onclick = addAccount;
         document.getElementById('saveEdit').onclick = saveEdit;
         document.getElementById('saveFinancial').onclick = saveFinancial;
-        document.getElementById('addAvatarUpload').onclick = () => document.getElementById('addAvatarInput').click();
-        document.getElementById('addAvatarInput').onchange = () => handleAvatarUpload('addAvatarInput', 'addAvatarPreview', 'add');
-        document.getElementById('editAvatarUpload').onclick = () => document.getElementById('editAvatarInput').click();
-        document.getElementById('editAvatarInput').onchange = () => handleAvatarUpload('editAvatarInput', 'editAvatarPreview', 'edit');
+        document.getElementById('addAvatarInput').onchange = () => handleAvatarUpload('addAvatarInput', 'addAvatarPreview', true);
+        document.getElementById('editAvatarInput').onchange = () => handleAvatarUpload('editAvatarInput', 'editAvatarPreview', false);
     </script>
 </body>
 </html>

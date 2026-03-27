@@ -48,7 +48,7 @@
         .badge-active { background: rgba(46,204,113,0.2); color: #2ecc71; }
         .badge-blocked { background: rgba(231,76,60,0.2); color: #e74c3c; }
         
-        /* Dropdown Menu - فوق كل العناصر */
+        /* Dropdown Menu */
         .dropdown { position: relative; display: inline-block; }
         .dropdown-btn { background: none; border: none; color: #888; cursor: pointer; font-size: 18px; padding: 8px; border-radius: 8px; transition: 0.2s; }
         .dropdown-btn:hover { background: #2a2a2a; color: white; }
@@ -69,36 +69,22 @@
         .form-group label { display: block; color: #aaa; font-size: 13px; margin-bottom: 8px; }
         .form-group input { width: 100%; padding: 12px 16px; background: #2a2a2a; border: 1px solid #3a3a3a; border-radius: 40px; color: white; font-size: 14px; outline: none; }
         .form-group input:focus { border-color: #2a6df4; }
-        .form-group input[readonly] { background: #222; color: #888; cursor: not-allowed; }
-        
-        /* Avatar Upload - صورة دائرية فقط */
         .avatar-upload-circle { display: flex; flex-direction: column; align-items: center; margin: 16px 0; }
-        .avatar-circle-preview { width: 100px; height: 100px; border-radius: 50%; object-fit: cover; border: 3px solid #2a6df4; background: #2a2a2a; cursor: pointer; transition: 0.2s; }
-        .avatar-circle-preview:hover { transform: scale(1.02); border-color: white; }
-        .avatar-upload-hint { font-size: 12px; color: #888; margin-top: 8px; cursor: pointer; text-align: center; }
-        .avatar-upload-hint i { color: #2a6df4; }
-        
+        .avatar-circle-preview { width: 100px; height: 100px; border-radius: 50%; object-fit: cover; border: 3px solid #2a6df4; background: #2a2a2a; cursor: pointer; }
         .btn-primary { background: linear-gradient(135deg, #2a6df4, #1a5be0); border: none; padding: 12px 24px; border-radius: 40px; color: white; font-weight: 600; cursor: pointer; width: 100%; transition: 0.2s; }
-        .btn-primary:hover { transform: translateY(-2px); }
-        .btn-secondary { background: #2a2a2a; border: none; padding: 10px 20px; border-radius: 40px; color: white; cursor: pointer; transition: 0.2s; }
-        .btn-secondary:hover { background: #3a3a3a; }
+        .btn-secondary { background: #2a2a2a; border: none; padding: 10px 20px; border-radius: 40px; color: white; cursor: pointer; }
         .flex-buttons { display: flex; gap: 12px; margin-top: 20px; }
         
-        /* Loading */
         .loading-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); display: none; align-items: center; justify-content: center; z-index: 1200; backdrop-filter: blur(4px); }
         .spinner { width: 50px; height: 50px; border: 3px solid #2a2a2a; border-top-color: #2a6df4; border-radius: 50%; animation: spin 1s linear infinite; }
         @keyframes spin { to { transform: rotate(360deg); } }
-        
         .toast { position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%); background: #2a6df4; color: white; padding: 12px 24px; border-radius: 40px; font-size: 14px; z-index: 1300; display: none; animation: fadeInUp 0.3s ease; }
         @keyframes fadeInUp { from { opacity: 0; transform: translateX(-50%) translateY(20px); } to { opacity: 1; transform: translateX(-50%) translateY(0); } }
-        
         .status-msg { background: rgba(46,204,113,0.2); color: #2ecc71; padding: 12px; border-radius: 20px; text-align: center; margin-bottom: 20px; display: none; }
         .status-error { background: rgba(231,76,60,0.2); color: #e74c3c; }
-        .info-text { color: #2a6df4; font-size: 12px; margin-top: 4px; }
     </style>
 </head>
 <body>
-    <!-- Password Modal -->
     <div id="passwordModal" class="modal-overlay">
         <div class="password-box">
             <h2><i class="fas fa-lock"></i> Admin Access</h2>
@@ -109,7 +95,6 @@
         </div>
     </div>
 
-    <!-- Dashboard -->
     <div id="dashboard" class="dashboard">
         <div class="header">
             <h1><i class="fas fa-users-cog"></i> B.Y PRO Account Management</h1>
@@ -132,7 +117,7 @@
         </div>
     </div>
 
-    <!-- Add Account Modal -->
+    <!-- Add Modal -->
     <div id="addModal" class="modal">
         <div class="modal-content">
             <div class="modal-header"><h3><i class="fas fa-user-plus"></i> Add Account</h3><button class="close-modal" onclick="closeModal('addModal')">&times;</button></div>
@@ -142,25 +127,25 @@
             <div class="avatar-upload-circle">
                 <img id="addAvatarPreview" class="avatar-circle-preview" src="https://i.ibb.co/SDxkt40s/user.png" onclick="document.getElementById('addAvatarInput').click()">
                 <input type="file" id="addAvatarInput" accept="image/*" style="display:none">
-                <div class="avatar-upload-hint" onclick="document.getElementById('addAvatarInput').click()"><i class="fas fa-camera"></i> Click to change avatar</div>
+                <div style="font-size:12px; color:#888; margin-top:8px; cursor:pointer;" onclick="document.getElementById('addAvatarInput').click()"><i class="fas fa-camera"></i> Click to change avatar</div>
             </div>
             <div class="flex-buttons"><button class="btn-secondary" onclick="closeModal('addModal')">Cancel</button><button class="btn-primary" id="confirmAdd">Create Account</button></div>
         </div>
     </div>
 
-    <!-- Edit Account Modal -->
+    <!-- Edit Modal -->
     <div id="editModal" class="modal">
         <div class="modal-content">
             <div class="modal-header"><h3><i class="fas fa-edit"></i> Edit Account</h3><button class="close-modal" onclick="closeModal('editModal')">&times;</button></div>
-            <div class="form-group"><label>ID</label><input type="text" id="editId" placeholder="ID"></div>
+            <div class="form-group"><label>ID</label><input type="text" id="editId"></div>
             <div class="form-group"><label>Name</label><input type="text" id="editName"></div>
             <div class="form-group"><label>Email</label><input type="email" id="editEmail"></div>
-            <div class="form-group"><label>Password</label><input type="text" id="editPassword" placeholder="Current password shown below"></div>
-            <div class="form-group"><label>Current Password</label><input type="text" id="editCurrentPassword" readonly placeholder="Click 'Load' first"></div>
+            <div class="form-group"><label>Password</label><input type="text" id="editPassword" placeholder="Leave empty to keep current"></div>
+            <div class="form-group"><label>Current Password</label><input type="text" id="editCurrentPassword" readonly></div>
             <div class="avatar-upload-circle">
                 <img id="editAvatarPreview" class="avatar-circle-preview" src="https://i.ibb.co/SDxkt40s/user.png" onclick="document.getElementById('editAvatarInput').click()">
                 <input type="file" id="editAvatarInput" accept="image/*" style="display:none">
-                <div class="avatar-upload-hint" onclick="document.getElementById('editAvatarInput').click()"><i class="fas fa-camera"></i> Click to change avatar</div>
+                <div style="font-size:12px; color:#888; margin-top:8px; cursor:pointer;" onclick="document.getElementById('editAvatarInput').click()"><i class="fas fa-camera"></i> Change avatar</div>
             </div>
             <div class="flex-buttons"><button class="btn-secondary" onclick="closeModal('editModal')">Cancel</button><button class="btn-primary" id="saveEdit">Save Changes</button></div>
         </div>
@@ -188,7 +173,6 @@
         </div>
     </div>
 
-    <!-- Loading -->
     <div id="loadingOverlay" class="loading-overlay"><div class="spinner"></div></div>
     <div id="toast" class="toast"></div>
 
@@ -244,6 +228,38 @@
             return data.avatarUrl;
         }
 
+        function createDropdownMenu(accountId, isBlocked) {
+            const dropdownDiv = document.createElement('div');
+            dropdownDiv.className = 'dropdown';
+            
+            const dropdownBtn = document.createElement('button');
+            dropdownBtn.className = 'dropdown-btn';
+            dropdownBtn.innerHTML = '<i class="fas fa-ellipsis-v"></i>';
+            dropdownBtn.onclick = (event) => {
+                event.stopPropagation();
+                document.querySelectorAll('.dropdown').forEach(d => { if (d !== dropdownDiv) d.classList.remove('show'); });
+                dropdownDiv.classList.toggle('show');
+                const menu = dropdownDiv.querySelector('.dropdown-menu');
+                const rect = dropdownBtn.getBoundingClientRect();
+                menu.style.top = rect.bottom + window.scrollY + 'px';
+                menu.style.left = rect.left + window.scrollX - menu.offsetWidth + rect.width + 'px';
+            };
+            
+            const menuDiv = document.createElement('div');
+            menuDiv.className = 'dropdown-menu';
+            menuDiv.innerHTML = `
+                <button onclick="openEdit('${accountId}')"><i class="fas fa-edit"></i> Edit Account</button>
+                <button onclick="openFinancial('${accountId}')"><i class="fas fa-wallet"></i> Financial</button>
+                <button onclick="generateQR('${accountId}')"><i class="fas fa-qrcode"></i> QR Code</button>
+                <button onclick="toggleBlock('${accountId}', ${!isBlocked})"><i class="fas ${isBlocked ? 'fa-unlock' : 'fa-ban'}"></i> ${isBlocked ? 'Unblock' : 'Block'}</button>
+                <button onclick="deleteAccount('${accountId}')"><i class="fas fa-trash"></i> Delete</button>
+            `;
+            
+            dropdownDiv.appendChild(dropdownBtn);
+            dropdownDiv.appendChild(menuDiv);
+            return dropdownDiv;
+        }
+
         async function loadAccounts() {
             showLoading(true);
             try {
@@ -263,45 +279,63 @@
                 document.getElementById('blockedCount').textContent = blocked;
 
                 const tbody = document.getElementById('accountsTableBody');
-                tbody.innerHTML = accounts.map(acc => `
-                    <tr>
-                        <td><img class="avatar" src="${acc.avatar || 'https://i.ibb.co/SDxkt40s/user.png'}" onerror="this.src='https://i.ibb.co/SDxkt40s/user.png'" onclick="openEditAvatar('${acc.id}')"></td>
-                        <td><strong>${acc.id}</strong></td>
-                        <td>${acc.name || 'No Name'}</td>
-                        <td>${acc.email || 'No Email'}</td>
-                        <td style="color:#2ecc71;">$${(acc.balance || 0).toFixed(2)}</td>
-                        <td><code style="font-size:11px;">${acc.cardCode}</code></td>
-                        <td><span class="badge ${acc.blocked ? 'badge-blocked' : 'badge-active'}">${acc.blocked ? 'BLOCKED' : 'ACTIVE'}</span></td>
-                        <td>
-                            <div class="dropdown">
-                                <button class="dropdown-btn" onclick="toggleDropdown(this, event)"><i class="fas fa-ellipsis-v"></i></button>
-                                <div class="dropdown-menu">
-                                    <button onclick="openEdit('${acc.id}')"><i class="fas fa-edit"></i> Edit Account</button>
-                                    <button onclick="openFinancial('${acc.id}')"><i class="fas fa-wallet"></i> Financial</button>
-                                    <button onclick="generateQR('${acc.id}')"><i class="fas fa-qrcode"></i> QR Code</button>
-                                    <button onclick="toggleBlock('${acc.id}', ${!acc.blocked})"><i class="fas ${acc.blocked ? 'fa-unlock' : 'fa-ban'}"></i> ${acc.blocked ? 'Unblock' : 'Block'}</button>
-                                    <button onclick="deleteAccount('${acc.id}')"><i class="fas fa-trash"></i> Delete</button>
-                                </div>
-                            </div>
-                        </td>
-                    </tr>
-                `).join('');
-            } catch (error) { showStatus('Error: ' + error.message, true); }
-            finally { showLoading(false); }
+                tbody.innerHTML = '';
+                accounts.forEach(acc => {
+                    const row = document.createElement('tr');
+                    
+                    const avatarCell = document.createElement('td');
+                    const avatarImg = document.createElement('img');
+                    avatarImg.className = 'avatar';
+                    avatarImg.src = acc.avatar || 'https://i.ibb.co/SDxkt40s/user.png';
+                    avatarImg.onerror = () => avatarImg.src = 'https://i.ibb.co/SDxkt40s/user.png';
+                    avatarImg.onclick = () => openEdit(acc.id);
+                    avatarCell.appendChild(avatarImg);
+                    row.appendChild(avatarCell);
+                    
+                    const idCell = document.createElement('td');
+                    idCell.innerHTML = `<strong>${acc.id}</strong>`;
+                    row.appendChild(idCell);
+                    
+                    const nameCell = document.createElement('td');
+                    nameCell.textContent = acc.name || 'No Name';
+                    row.appendChild(nameCell);
+                    
+                    const emailCell = document.createElement('td');
+                    emailCell.textContent = acc.email || 'No Email';
+                    row.appendChild(emailCell);
+                    
+                    const balanceCell = document.createElement('td');
+                    balanceCell.style.color = '#2ecc71';
+                    balanceCell.textContent = `$${(acc.balance || 0).toFixed(2)}`;
+                    row.appendChild(balanceCell);
+                    
+                    const cardCell = document.createElement('td');
+                    cardCell.innerHTML = `<code style="font-size:11px;">${acc.cardCode}</code>`;
+                    row.appendChild(cardCell);
+                    
+                    const statusCell = document.createElement('td');
+                    const badgeSpan = document.createElement('span');
+                    badgeSpan.className = `badge ${acc.blocked ? 'badge-blocked' : 'badge-active'}`;
+                    badgeSpan.textContent = acc.blocked ? 'BLOCKED' : 'ACTIVE';
+                    statusCell.appendChild(badgeSpan);
+                    row.appendChild(statusCell);
+                    
+                    const actionsCell = document.createElement('td');
+                    actionsCell.appendChild(createDropdownMenu(acc.id, acc.blocked));
+                    row.appendChild(actionsCell);
+                    
+                    tbody.appendChild(row);
+                });
+            } catch (error) {
+                showStatus('Error: ' + error.message, true);
+                document.getElementById('accountsTableBody').innerHTML = `<tr><td colspan="8" style="text-align:center; padding:40px;">Error: ${error.message}</td></tr>`;
+            } finally { showLoading(false); }
         }
 
-        function toggleDropdown(btn, event) {
-            event.stopPropagation();
-            const dropdown = btn.closest('.dropdown');
-            document.querySelectorAll('.dropdown').forEach(d => { if (d !== dropdown) d.classList.remove('show'); });
-            dropdown.classList.toggle('show');
-            const menu = dropdown.querySelector('.dropdown-menu');
-            const rect = btn.getBoundingClientRect();
-            menu.style.top = rect.bottom + window.scrollY + 'px';
-            menu.style.left = rect.left + window.scrollX - menu.offsetWidth + rect.width + 'px';
-        }
-        document.addEventListener('click', (e) => {
-            if (!e.target.closest('.dropdown')) document.querySelectorAll('.dropdown').forEach(d => d.classList.remove('show'));
+        document.addEventListener('click', function(e) {
+            if (!e.target.closest('.dropdown')) {
+                document.querySelectorAll('.dropdown').forEach(d => d.classList.remove('show'));
+            }
         });
 
         async function openEdit(id) {
@@ -446,7 +480,6 @@
         }
 
         function closeModal(id) { document.getElementById(id).style.display = 'none'; }
-        function openEditAvatar(id) { openEdit(id); }
 
         document.getElementById('submitPassword').onclick = () => {
             if (document.getElementById('passwordInput').value === ADMIN_PASSWORD) {

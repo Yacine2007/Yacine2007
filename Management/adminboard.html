@@ -132,13 +132,14 @@
         <button class="btn-add" id="addAccountBtn"><i class="fas fa-plus"></i> Add New Account</button>
 
         <div class="table-wrapper">
-            <table>
-                <thead><tr><th>Avatar</th><th>ID</th><th>Name</th><th>Email</th><th>Balance</th><th>Card</th><th>Status</th><th></th></tr></thead>
-                <tbody id="accountsTable"><tr><td colspan="8" style="text-align:center; padding:60px;"><i class="fas fa-spinner fa-spin"></i> Loading...</td></tr></tbody>
+             <table>
+                <thead> <tr><th>Avatar</th><th>ID</th><th>Name</th><th>Email</th><th>Balance</th><th>Card</th><th>Status</th><th></th></tr> </thead>
+                <tbody id="accountsTable"> <tr><td colspan="8" style="text-align:center; padding:60px;"><i class="fas fa-spinner fa-spin"></i> Loading...</td></tr> </tbody>
             </table>
         </div>
     </div>
 
+    <!-- Popup for account actions -->
     <div id="accountPopup" class="popup-overlay">
         <div class="popup-container">
             <div class="popup-header"><h3><i class="fas fa-user-circle"></i> <span id="popupUserId">Account</span></h3><button class="popup-close" onclick="closePopup()">&times;</button></div>
@@ -151,16 +152,17 @@
                     <div class="detail-row"><span class="detail-label"><i class="fas fa-lock"></i> Status</span><span class="detail-value" id="popupStatus">-</span></div>
                 </div>
                 <div class="popup-actions">
-                    <button class="popup-action-btn" onclick="openEditFromPopup()"><i class="fas fa-edit"></i> Edit Account</button>
-                    <button class="popup-action-btn" onclick="openFinancialFromPopup()"><i class="fas fa-wallet"></i> Financial Details</button>
-                    <button class="popup-action-btn" onclick="generateQRFromPopup()"><i class="fas fa-qrcode"></i> Generate QR Code</button>
-                    <button class="popup-action-btn warning" id="popupBlockBtn" onclick="toggleBlockFromPopup()"><i class="fas fa-ban"></i> Block Account</button>
-                    <button class="popup-action-btn danger" onclick="deleteFromPopup()"><i class="fas fa-trash"></i> Delete Account</button>
+                    <button class="popup-action-btn" id="popupEditBtn"><i class="fas fa-edit"></i> Edit Account</button>
+                    <button class="popup-action-btn" id="popupFinancialBtn"><i class="fas fa-wallet"></i> Financial Details</button>
+                    <button class="popup-action-btn" id="popupQRBtn"><i class="fas fa-qrcode"></i> Generate QR Code</button>
+                    <button class="popup-action-btn warning" id="popupBlockBtn"><i class="fas fa-ban"></i> Block Account</button>
+                    <button class="popup-action-btn danger" id="popupDeleteBtn"><i class="fas fa-trash"></i> Delete Account</button>
                 </div>
             </div>
         </div>
     </div>
 
+    <!-- Confirm Modal -->
     <div id="confirmModal" class="confirm-overlay">
         <div class="confirm-container">
             <i class="fas fa-exclamation-triangle"></i>
@@ -170,6 +172,7 @@
         </div>
     </div>
 
+    <!-- Add Modal -->
     <div id="addModal" class="modal-overlay">
         <div class="modal-container">
             <div class="modal-header"><h3><i class="fas fa-user-plus"></i> Add Account</h3><button class="modal-close" onclick="closeModal('addModal')">&times;</button></div>
@@ -185,6 +188,7 @@
         </div>
     </div>
 
+    <!-- Edit Modal -->
     <div id="editModal" class="modal-overlay">
         <div class="modal-container">
             <div class="modal-header"><h3><i class="fas fa-edit"></i> Edit Account</h3><button class="modal-close" onclick="closeModal('editModal')">&times;</button></div>
@@ -201,6 +205,7 @@
         </div>
     </div>
 
+    <!-- Financial Modal -->
     <div id="financialModal" class="modal-overlay">
         <div class="modal-container">
             <div class="modal-header"><h3><i class="fas fa-wallet"></i> Financial Details</h3><button class="modal-close" onclick="closeModal('financialModal')">&times;</button></div>
@@ -212,6 +217,7 @@
         </div>
     </div>
 
+    <!-- QR Modal -->
     <div id="qrModal" class="modal-overlay">
         <div class="modal-container">
             <div class="modal-header"><h3><i class="fas fa-qrcode"></i> Login QR Code</h3><button class="modal-close" onclick="closeModal('qrModal')">&times;</button></div>
@@ -315,16 +321,23 @@
                 processed.forEach(acc => {
                     const row = document.createElement('tr');
                     row.innerHTML = `
-                        <td><img class="avatar-img" src="${acc.avatar}" onerror="this.src='https://i.ibb.co/SDxkt40s/user.png'">${acc.id ? '' : ''}</td>
+                        <td><img class="avatar-img" src="${acc.avatar}" onerror="this.src='https://i.ibb.co/SDxkt40s/user.png'"></td>
                         <td><strong>${acc.id}</strong></td>
                         <td>${acc.name}</td>
                         <td>${acc.email}</td>
                         <td style="color:#2ecc71;">$${acc.balance.toFixed(2)}</td>
                         <td><code style="font-size:11px;">${acc.cardCode}</code></td>
                         <td><span class="badge ${acc.blocked ? 'badge-blocked' : 'badge-active'}">${acc.blocked ? 'BLOCKED' : 'ACTIVE'}</span></td>
-                        <td><button class="action-btn" onclick="openAccountPopup('${acc.id}')"><i class="fas fa-ellipsis-v"></i></button></td>
+                        <td><button class="action-btn" data-id="${acc.id}"><i class="fas fa-ellipsis-v"></i></button></td>
                     `;
                     tbody.appendChild(row);
+                });
+                // Attach event listeners to the newly created buttons
+                document.querySelectorAll('.action-btn').forEach(btn => {
+                    btn.onclick = (e) => {
+                        const id = btn.getAttribute('data-id');
+                        openAccountPopup(id);
+                    };
                 });
             } catch (error) {
                 document.getElementById('accountsTable').innerHTML = `<tr><td colspan="8" style="text-align:center; padding:60px;">Error: ${error.message}</td></tr>`;
@@ -332,7 +345,7 @@
             } finally { showLoading(false); }
         }
 
-        window.openAccountPopup = async (userId) => {
+        function openAccountPopup(userId) {
             const account = allAccounts.find(a => a.id === userId);
             if (!account) return;
             currentPopupAccount = account;
@@ -346,17 +359,64 @@
             const blockBtn = document.getElementById('popupBlockBtn');
             blockBtn.innerHTML = account.blocked ? '<i class="fas fa-unlock"></i> Unblock Account' : '<i class="fas fa-ban"></i> Block Account';
             document.getElementById('accountPopup').style.display = 'flex';
+        }
+
+        // Fixed popup action handlers (save ID before closing)
+        document.getElementById('popupEditBtn').onclick = () => {
+            if (currentPopupAccount) {
+                const id = currentPopupAccount.id;
+                closePopup();
+                openEditAccount(id);
+            } else {
+                showToast('Please select an account first', true);
+            }
         };
-        
-        window.openEditFromPopup = () => { if (currentPopupAccount) { closePopup(); openEditAccount(currentPopupAccount.id); } else { showToast('Please select an account first', true); } };
-        window.openFinancialFromPopup = () => { if (currentPopupAccount) { closePopup(); openFinancialModal(currentPopupAccount.id); } else { showToast('Please select an account first', true); } };
-        window.generateQRFromPopup = () => { if (currentPopupAccount) { closePopup(); generateQRCode(currentPopupAccount.id); } else { showToast('Please select an account first', true); } };
-        
-        window.toggleBlockFromPopup = async () => { if (!currentPopupAccount) return; const newBlock = !currentPopupAccount.blocked; showLoading(true); try { await callAPI(`/accounts/${currentPopupAccount.id}/block`, 'POST', { blocked: newBlock }); showToast(`Account ${currentPopupAccount.id} ${newBlock ? 'BLOCKED' : 'UNBLOCKED'}`, false); closePopup(); loadAccounts(); } catch (error) { showToast(error.message, true); } finally { showLoading(false); } };
-        
-        window.deleteFromPopup = async () => { if (!currentPopupAccount) return; showConfirm('Delete Account', `⚠️ Permanently delete account ${currentPopupAccount.id}? This cannot be undone.`, async () => { showLoading(true); try { await callAPI(`/accounts/${currentPopupAccount.id}`, 'DELETE'); showToast(`Account ${currentPopupAccount.id} deleted`, false); closePopup(); loadAccounts(); } catch (error) { showToast(error.message, true); } finally { showLoading(false); } }); };
-        
-        window.openEditAccount = async (id) => {
+        document.getElementById('popupFinancialBtn').onclick = () => {
+            if (currentPopupAccount) {
+                const id = currentPopupAccount.id;
+                closePopup();
+                openFinancialModal(id);
+            } else {
+                showToast('Please select an account first', true);
+            }
+        };
+        document.getElementById('popupQRBtn').onclick = () => {
+            if (currentPopupAccount) {
+                const id = currentPopupAccount.id;
+                closePopup();
+                generateQRCode(id);
+            } else {
+                showToast('Please select an account first', true);
+            }
+        };
+        document.getElementById('popupBlockBtn').onclick = async () => {
+            if (!currentPopupAccount) return;
+            const newBlock = !currentPopupAccount.blocked;
+            showLoading(true);
+            try {
+                await callAPI(`/accounts/${currentPopupAccount.id}/block`, 'POST', { blocked: newBlock });
+                showToast(`Account ${currentPopupAccount.id} ${newBlock ? 'BLOCKED' : 'UNBLOCKED'}`, false);
+                closePopup();
+                loadAccounts();
+            } catch (error) { showToast(error.message, true); }
+            finally { showLoading(false); }
+        };
+        document.getElementById('popupDeleteBtn').onclick = () => {
+            if (!currentPopupAccount) return;
+            showConfirm('Delete Account', `⚠️ Permanently delete account ${currentPopupAccount.id}? This cannot be undone.`, async () => {
+                showLoading(true);
+                try {
+                    await callAPI(`/accounts/${currentPopupAccount.id}`, 'DELETE');
+                    showToast(`Account ${currentPopupAccount.id} deleted`, false);
+                    closePopup();
+                    loadAccounts();
+                } catch (error) { showToast(error.message, true); }
+                finally { showLoading(false); }
+            });
+        };
+
+        // Edit account functions
+        async function openEditAccount(id) {
             const acc = allAccounts.find(a => a.id === id);
             if (!acc) return;
             currentEditId = id;
@@ -367,8 +427,7 @@
             document.getElementById('editAvatarPreview').src = acc.avatar;
             editAvatarFile = null;
             document.getElementById('editModal').style.display = 'flex';
-        };
-        
+        }
         window.saveEditAccount = async () => {
             const id = document.getElementById('editId').value.trim();
             const name = document.getElementById('editName').value.trim();
@@ -387,8 +446,10 @@
             } catch (error) { showToast(error.message, true); }
             finally { showLoading(false); }
         };
-        
-        window.openFinancialModal = async (userId) => {
+        document.getElementById('saveEditBtn').onclick = window.saveEditAccount;
+
+        // Financial functions
+        async function openFinancialModal(userId) {
             currentFinancialId = userId;
             const financial = await fetchFinancial(userId);
             document.getElementById('financialInfo').innerHTML = `
@@ -401,8 +462,7 @@
             document.getElementById('financialAmount').value = '';
             document.getElementById('financialCardCode').value = financial?.cardCode || '';
             document.getElementById('financialModal').style.display = 'flex';
-        };
-        
+        }
         window.saveFinancialChanges = async () => {
             const userId = currentFinancialId;
             const amount = parseFloat(document.getElementById('financialAmount').value);
@@ -424,8 +484,10 @@
             } catch (error) { showToast(error.message, true); }
             finally { showLoading(false); }
         };
-        
-        window.generateQRCode = async (userId) => {
+        document.getElementById('saveFinancialBtn').onclick = window.saveFinancialChanges;
+
+        // QR code
+        async function generateQRCode(userId) {
             try {
                 const account = await callAPI(`/accounts/${userId}`);
                 const qrText = `BYPRO:${account.account.id}:${account.account.password}`;
@@ -435,10 +497,10 @@
                 document.getElementById('qrDataText').value = qrText;
                 document.getElementById('qrModal').style.display = 'flex';
             } catch (error) { showToast('Error generating QR: ' + error.message, true); }
-        };
-        
+        }
         window.copyQRData = () => { const data = document.getElementById('qrDataText'); data.select(); document.execCommand('copy'); showToast('QR data copied'); };
-        
+
+        // Add account (with avatar upload fallback)
         window.addNewAccount = async () => {
             const name = document.getElementById('addName')?.value.trim() || '';
             const email = document.getElementById('addEmail')?.value.trim() || '';
@@ -457,7 +519,9 @@
                 const result = await response.json();
                 if (result.success) {
                     const newId = result.account.id;
-                    if (addAvatarFile) { try { await uploadAvatar(newId, addAvatarFile); } catch (e) { console.warn('Avatar upload failed:', e); } }
+                    if (addAvatarFile) {
+                        try { await uploadAvatar(newId, addAvatarFile); } catch (e) { console.warn('Avatar upload failed:', e); showToast('Avatar upload failed, but account created.', false); }
+                    }
                     showToast(`✅ Account ${newId} created!`, false);
                     closeModal('addModal');
                     document.getElementById('addName').value = '';
@@ -466,24 +530,28 @@
                     addAvatarFile = null;
                     document.getElementById('addAvatarPreview').src = 'https://i.ibb.co/SDxkt40s/user.png';
                     loadAccounts();
-                } else { showToast(result.error || 'Failed to create account', true); }
-            } catch (error) { showToast('Error creating account: ' + error.message, true); }
-            finally { showLoading(false); }
+                } else {
+                    showToast(result.error || 'Failed to create account', true);
+                }
+            } catch (error) {
+                showToast('Error creating account: ' + error.message, true);
+            } finally { showLoading(false); }
         };
-        
+
         function handleAddAvatar(file) { if (!file) return; if (!file.type.match('image.*')) { showToast('Select an image file', true); return; } if (file.size > 5*1024*1024) { showToast('Max 5MB', true); return; } addAvatarFile = file; const reader = new FileReader(); reader.onload = e => { document.getElementById('addAvatarPreview').src = e.target.result; }; reader.readAsDataURL(file); }
         function handleEditAvatar(file) { if (!file) return; if (!file.type.match('image.*')) { showToast('Select an image file', true); return; } if (file.size > 5*1024*1024) { showToast('Max 5MB', true); return; } editAvatarFile = file; const reader = new FileReader(); reader.onload = e => { document.getElementById('editAvatarPreview').src = e.target.result; }; reader.readAsDataURL(file); }
-        
+
         document.getElementById('loginAdminBtn').onclick = () => {
-            if (document.getElementById('adminPassword').value === ADMIN_PWD) { document.getElementById('passwordOverlay').style.display = 'none'; document.getElementById('dashboard').style.display = 'block'; loadAccounts(); }
-            else { document.getElementById('passwordError').style.display = 'block'; }
+            if (document.getElementById('adminPassword').value === ADMIN_PWD) {
+                document.getElementById('passwordOverlay').style.display = 'none';
+                document.getElementById('dashboard').style.display = 'block';
+                loadAccounts();
+            } else { document.getElementById('passwordError').style.display = 'block'; }
         };
         document.getElementById('adminPassword').onkeypress = e => e.key === 'Enter' && document.getElementById('loginAdminBtn').click();
         document.getElementById('refreshBtn').onclick = loadAccounts;
         document.getElementById('addAccountBtn').onclick = () => document.getElementById('addModal').style.display = 'flex';
         document.getElementById('confirmAddBtn').onclick = () => window.addNewAccount();
-        document.getElementById('saveEditBtn').onclick = window.saveEditAccount;
-        document.getElementById('saveFinancialBtn').onclick = window.saveFinancialChanges;
         document.getElementById('addAvatarFile').onchange = e => handleAddAvatar(e.target.files[0]);
         document.getElementById('editAvatarFile').onchange = e => handleEditAvatar(e.target.files[0]);
     </script>

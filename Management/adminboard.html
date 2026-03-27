@@ -573,10 +573,6 @@
             border-color: #2a6df4;
         }
         
-        .form-field input:active, .form-field input:focus {
-            background: #2a2a2a;
-        }
-        
         .avatar-upload-area {
             display: flex;
             flex-direction: column;
@@ -713,7 +709,7 @@
         <div class="password-card">
             <h2><i class="fas fa-lock"></i> Admin Access</h2>
             <p>Enter admin password to access the system</p>
-            <input type="password" id="adminPassword" placeholder="Password" autocomplete="off">
+            <input type="password" id="adminPassword" placeholder="Password">
             <button id="loginAdminBtn">Access Dashboard</button>
             <div id="passwordError" class="error-text">Incorrect password</div>
         </div>
@@ -734,12 +730,12 @@
         <button class="btn-add" id="addAccountBtn"><i class="fas fa-plus"></i> Add New Account</button>
 
         <div class="table-wrapper">
-             <table>
+            <table>
                 <thead>
-                     <tr><th>Avatar</th><th>ID</th><th>Name</th><th>Email</th><th>Balance</th><th>Card</th><th>Status</th><th></th></tr>
+                    <tr><th>Avatar</th><th>ID</th><th>Name</th><th>Email</th><th>Balance</th><th>Card</th><th>Status</th><th></th></tr>
                 </thead>
                 <tbody id="accountsTable"><tr><td colspan="8" style="text-align:center; padding:60px;"><i class="fas fa-spinner fa-spin"></i> Loading...</td></tr></tbody>
-             </table>
+            </table>
         </div>
     </div>
 
@@ -786,9 +782,9 @@
     <div id="addModal" class="modal-overlay">
         <div class="modal-container">
             <div class="modal-header"><h3><i class="fas fa-user-plus"></i> Add Account</h3><button class="modal-close" onclick="closeModal('addModal')">&times;</button></div>
-            <div class="form-field"><label>Name</label><input type="text" id="addName" placeholder="Enter full name" autocomplete="off"></div>
-            <div class="form-field"><label>Email</label><input type="email" id="addEmail" placeholder="Enter email address" autocomplete="off"></div>
-            <div class="form-field"><label>Password</label><input type="text" id="addPassword" placeholder="Create a password" autocomplete="new-password"></div>
+            <div class="form-field"><label>Name</label><input type="text" id="addName" placeholder="Enter full name"></div>
+            <div class="form-field"><label>Email</label><input type="email" id="addEmail" placeholder="Enter email address"></div>
+            <div class="form-field"><label>Password</label><input type="text" id="addPassword" placeholder="Create a password"></div>
             <div class="avatar-upload-area">
                 <img id="addAvatarPreview" class="avatar-preview-circle" src="https://i.ibb.co/SDxkt40s/user.png" onclick="document.getElementById('addAvatarFile').click()">
                 <input type="file" id="addAvatarFile" accept="image/*" style="display:none">
@@ -803,9 +799,9 @@
         <div class="modal-container">
             <div class="modal-header"><h3><i class="fas fa-edit"></i> Edit Account</h3><button class="modal-close" onclick="closeModal('editModal')">&times;</button></div>
             <div class="form-field"><label>ID</label><input type="text" id="editId" readonly></div>
-            <div class="form-field"><label>Name</label><input type="text" id="editName" autocomplete="off"></div>
-            <div class="form-field"><label>Email</label><input type="email" id="editEmail" autocomplete="off"></div>
-            <div class="form-field"><label>New Password</label><input type="text" id="editNewPwd" placeholder="Leave empty to keep current" autocomplete="new-password"></div>
+            <div class="form-field"><label>Name</label><input type="text" id="editName"></div>
+            <div class="form-field"><label>Email</label><input type="email" id="editEmail"></div>
+            <div class="form-field"><label>New Password</label><input type="text" id="editNewPwd" placeholder="Leave empty to keep current"></div>
             <div class="avatar-upload-area">
                 <img id="editAvatarPreview" class="avatar-preview-circle" src="https://i.ibb.co/SDxkt40s/user.png" onclick="document.getElementById('editAvatarFile').click()">
                 <input type="file" id="editAvatarFile" accept="image/*" style="display:none">
@@ -822,7 +818,7 @@
             <div id="financialInfo"></div>
             <div class="form-field"><label>Update Balance ($)</label><input type="number" id="financialAmount" step="0.01"></div>
             <div class="form-field"><label>Action</label><select id="financialAction"><option value="add">Add to Balance</option><option value="set">Set New Balance</option></select></div>
-            <div class="form-field"><label>Card Code</label><input type="text" id="financialCardCode" autocomplete="off"></div>
+            <div class="form-field"><label>Card Code</label><input type="text" id="financialCardCode"></div>
             <div class="flex-row"><button class="btn-secondary" onclick="closeModal('financialModal')">Cancel</button><button class="btn-primary" id="saveFinancialBtn">Save Changes</button></div>
         </div>
     </div>
@@ -908,23 +904,13 @@
         }
 
         async function uploadAvatar(accountId, file) {
-            if (!file) return null;
-            const formData = new FormData();
-            formData.append('avatar', file);
-            try {
-                const response = await fetch(`${API_BASE}/accounts/${accountId}/avatar`, {
-                    method: 'POST',
-                    headers: { 'x-api-key': INTERNAL_KEY },
-                    body: formData
-                });
-                const data = await response.json();
-                if (data.success) return data.avatarUrl;
-                console.warn('Avatar upload failed:', data.error);
-                return null;
-            } catch (error) {
-                console.warn('Avatar upload error:', error);
-                return null;
-            }
+            const formData = new FormData(); formData.append('avatar', file);
+            const response = await fetch(`${API_BASE}/accounts/${accountId}/avatar`, {
+                method: 'POST', headers: { 'x-api-key': INTERNAL_KEY }, body: formData
+            });
+            const data = await response.json();
+            if (!data.success) throw new Error(data.error);
+            return data.avatarUrl;
         }
 
         async function loadAccounts() {
@@ -1171,15 +1157,14 @@
                 
                 if (result.success) {
                     const newId = result.account.id;
-                    showToast(`✅ Account ${newId} created!`, false);
-                    
-                    // Upload avatar in background (don't wait)
                     if (addAvatarFile) {
-                        uploadAvatar(newId, addAvatarFile).catch(err => {
-                            console.warn('Avatar upload error:', err);
-                        });
+                        try {
+                            await uploadAvatar(newId, addAvatarFile);
+                        } catch (uploadErr) {
+                            console.warn('Avatar upload failed:', uploadErr);
+                        }
                     }
-                    
+                    showToast(`✅ Account ${newId} created successfully!`, false);
                     closeModal('addModal');
                     
                     if (nameInput) nameInput.value = '';
@@ -1240,13 +1225,6 @@
         document.getElementById('saveFinancialBtn').onclick = window.saveFinancialChanges;
         document.getElementById('addAvatarFile').onchange = e => handleAddAvatar(e.target.files[0]);
         document.getElementById('editAvatarFile').onchange = e => handleEditAvatar(e.target.files[0]);
-        
-        // Fix for password field - ensure it's not readonly
-        const passwordField = document.getElementById('addPassword');
-        if (passwordField) {
-            passwordField.removeAttribute('readonly');
-            passwordField.disabled = false;
-        }
     </script>
 </body>
 </html>

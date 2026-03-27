@@ -730,9 +730,9 @@
         <button class="btn-add" id="addAccountBtn"><i class="fas fa-plus"></i> Add New Account</button>
 
         <div class="table-wrapper">
-             <table>
+            <table>
                 <thead>
-                     <tr><th>Avatar</th><th>ID</th><th>Name</th><th>Email</th><th>Balance</th><th>Card</th><th>Status</th><th></th></tr>
+                    <tr><th>Avatar</th><th>ID</th><th>Name</th><th>Email</th><th>Balance</th><th>Card</th><th>Status</th><th></th></tr>
                 </thead>
                 <tbody id="accountsTable"><tr><td colspan="8" style="text-align:center; padding:60px;"><i class="fas fa-spinner fa-spin"></i> Loading...</td></tr></tbody>
             </table>
@@ -765,7 +765,7 @@
         </div>
     </div>
 
-    <!-- Confirm Modal (Custom Alert) -->
+    <!-- Confirm Modal -->
     <div id="confirmModal" class="confirm-overlay">
         <div class="confirm-container">
             <i class="fas fa-exclamation-triangle"></i>
@@ -782,9 +782,9 @@
     <div id="addModal" class="modal-overlay">
         <div class="modal-container">
             <div class="modal-header"><h3><i class="fas fa-user-plus"></i> Add Account</h3><button class="modal-close" onclick="closeModal('addModal')">&times;</button></div>
-            <div class="form-field"><label>Name</label><input type="text" id="addName"></div>
-            <div class="form-field"><label>Email</label><input type="email" id="addEmail"></div>
-            <div class="form-field"><label>Password</label><input type="text" id="addPassword"></div>
+            <div class="form-field"><label>Name</label><input type="text" id="addName" placeholder="Enter full name"></div>
+            <div class="form-field"><label>Email</label><input type="email" id="addEmail" placeholder="Enter email address"></div>
+            <div class="form-field"><label>Password</label><input type="text" id="addPassword" placeholder="Create a password"></div>
             <div class="avatar-upload-area">
                 <img id="addAvatarPreview" class="avatar-preview-circle" src="https://i.ibb.co/SDxkt40s/user.png" onclick="document.getElementById('addAvatarFile').click()">
                 <input type="file" id="addAvatarFile" accept="image/*" style="display:none">
@@ -871,7 +871,6 @@
             currentPopupAccount = null;
         }
 
-        // Custom confirm dialog
         function showConfirm(title, message, onConfirm) {
             const modal = document.getElementById('confirmModal');
             document.getElementById('confirmTitle').textContent = title;
@@ -884,7 +883,6 @@
             document.getElementById('confirmModal').style.display = 'none';
             confirmCallback = null;
         };
-        
         document.getElementById('confirmOkBtn').onclick = () => {
             document.getElementById('confirmModal').style.display = 'none';
             if (confirmCallback) confirmCallback();
@@ -906,8 +904,7 @@
         }
 
         async function uploadAvatar(accountId, file) {
-            const formData = new FormData();
-            formData.append('avatar', file);
+            const formData = new FormData(); formData.append('avatar', file);
             const response = await fetch(`${API_BASE}/accounts/${accountId}/avatar`, {
                 method: 'POST', headers: { 'x-api-key': INTERNAL_KEY }, body: formData
             });
@@ -1127,16 +1124,25 @@
             showToast('QR data copied');
         };
         
-        // ==================== Add Account (Fixed - uses correct endpoint) ====================
+        // ==================== Add Account (FIXED) ====================
         window.addNewAccount = async () => {
-            const name = document.getElementById('addName').value.trim();
-            const email = document.getElementById('addEmail').value.trim();
-            const password = document.getElementById('addPassword').value.trim();
-            if (!name || !email || !password) { showToast('All fields required', true); return; }
+            const nameInput = document.getElementById('addName');
+            const emailInput = document.getElementById('addEmail');
+            const passwordInput = document.getElementById('addPassword');
+            
+            const name = nameInput ? nameInput.value.trim() : '';
+            const email = emailInput ? emailInput.value.trim() : '';
+            const password = passwordInput ? passwordInput.value.trim() : '';
+            
+            console.log('Add account - Name:', name, 'Email:', email, 'Password length:', password.length);
+            
+            if (!name) { showToast('Name is required', true); nameInput?.focus(); return; }
+            if (!email) { showToast('Email is required', true); emailInput?.focus(); return; }
+            if (!password) { showToast('Password is required', true); passwordInput?.focus(); return; }
+            if (password.length < 6) { showToast('Password must be at least 6 characters', true); return; }
             
             showLoading(true);
             try {
-                // Use the correct create-account endpoint
                 const response = await fetch(`${API_BASE}/create-account`, {
                     method: 'POST',
                     headers: {
@@ -1147,24 +1153,34 @@
                 });
                 
                 const result = await response.json();
+                console.log('API Response:', result);
                 
                 if (result.success) {
                     const newId = result.account.id;
-                    if (addAvatarFile) await uploadAvatar(newId, addAvatarFile);
-                    showToast(`Account ${newId} created!`, false);
+                    if (addAvatarFile) {
+                        try {
+                            await uploadAvatar(newId, addAvatarFile);
+                        } catch (uploadErr) {
+                            console.warn('Avatar upload failed:', uploadErr);
+                        }
+                    }
+                    showToast(`✅ Account ${newId} created successfully!`, false);
                     closeModal('addModal');
-                    document.getElementById('addName').value = '';
-                    document.getElementById('addEmail').value = '';
-                    document.getElementById('addPassword').value = '';
+                    
+                    if (nameInput) nameInput.value = '';
+                    if (emailInput) emailInput.value = '';
+                    if (passwordInput) passwordInput.value = '';
                     addAvatarFile = null;
-                    document.getElementById('addAvatarPreview').src = 'https://i.ibb.co/SDxkt40s/user.png';
+                    const avatarPreview = document.getElementById('addAvatarPreview');
+                    if (avatarPreview) avatarPreview.src = 'https://i.ibb.co/SDxkt40s/user.png';
+                    
                     loadAccounts();
                 } else {
                     showToast(result.error || 'Failed to create account', true);
                 }
             } catch (error) {
                 console.error('Create account error:', error);
-                showToast('Error creating account. Please try again.', true);
+                showToast('Error creating account: ' + (error.message || 'Server error'), true);
             } finally {
                 showLoading(false);
             }
@@ -1204,7 +1220,7 @@
         document.getElementById('adminPassword').onkeypress = e => e.key === 'Enter' && document.getElementById('loginAdminBtn').click();
         document.getElementById('refreshBtn').onclick = loadAccounts;
         document.getElementById('addAccountBtn').onclick = () => document.getElementById('addModal').style.display = 'flex';
-        document.getElementById('confirmAddBtn').onclick = addNewAccount;
+        document.getElementById('confirmAddBtn').onclick = () => window.addNewAccount();
         document.getElementById('saveEditBtn').onclick = window.saveEditAccount;
         document.getElementById('saveFinancialBtn').onclick = window.saveFinancialChanges;
         document.getElementById('addAvatarFile').onchange = e => handleAddAvatar(e.target.files[0]);

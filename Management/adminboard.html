@@ -7,704 +7,107 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-        }
-        
-        body {
-            background: #0a0a0a;
-            min-height: 100vh;
-            padding: 20px;
-        }
-        
-        /* Custom Scrollbar */
-        ::-webkit-scrollbar {
-            width: 6px;
-            height: 6px;
-        }
-        
-        ::-webkit-scrollbar-track {
-            background: #1a1a1a;
-            border-radius: 10px;
-        }
-        
-        ::-webkit-scrollbar-thumb {
-            background: #2a6df4;
-            border-radius: 10px;
-        }
-        
-        ::-webkit-scrollbar-thumb:hover {
-            background: #1a5be0;
-        }
-        
-        /* Password Modal */
-        .password-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0,0,0,0.95);
-            backdrop-filter: blur(12px);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            z-index: 2000;
-        }
-        
-        .password-card {
-            background: #1a1a1a;
-            padding: 40px;
-            border-radius: 32px;
-            width: 90%;
-            max-width: 400px;
-            text-align: center;
-            border: 1px solid rgba(42,109,244,0.3);
-        }
-        
-        .password-card h2 {
-            color: #2a6df4;
-            margin-bottom: 8px;
-        }
-        
-        .password-card p {
-            color: #888;
-            margin-bottom: 24px;
-        }
-        
-        .password-card input {
-            width: 100%;
-            padding: 14px 18px;
-            background: #2a2a2a;
-            border: 1px solid #3a3a3a;
-            border-radius: 40px;
-            color: white;
-            font-size: 16px;
-            margin-bottom: 16px;
-            outline: none;
-        }
-        
-        .password-card input:focus {
-            border-color: #2a6df4;
-        }
-        
-        .password-card button {
-            width: 100%;
-            padding: 14px;
-            background: linear-gradient(135deg, #2a6df4, #1a5be0);
-            border: none;
-            border-radius: 40px;
-            color: white;
-            font-weight: 600;
-            cursor: pointer;
-        }
-        
-        .error-text {
-            color: #e74c3c;
-            margin-top: 12px;
-            display: none;
-        }
-        
-        /* Dashboard */
-        .dashboard {
-            display: none;
-            animation: fadeIn 0.3s ease;
-        }
-        
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-        
-        /* Header */
-        .admin-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 24px;
-            flex-wrap: wrap;
-            gap: 16px;
-        }
-        
-        .admin-header h1 {
-            font-size: 20px;
-            font-weight: 500;
-            color: white;
-        }
-        
-        .admin-header h1 i {
-            color: #2a6df4;
-            margin-right: 8px;
-        }
-        
-        /* Stats */
-        .stats-container {
-            display: flex;
-            gap: 12px;
-        }
-        
-        .stat-item {
-            background: #1a1a1a;
-            padding: 12px 20px;
-            border-radius: 24px;
-            text-align: center;
-            border: 1px solid #2a2a2a;
-        }
-        
-        .stat-item h4 {
-            font-size: 11px;
-            color: #888;
-            text-transform: uppercase;
-            margin-bottom: 4px;
-        }
-        
-        .stat-item .stat-value {
-            font-size: 22px;
-            font-weight: 600;
-            color: white;
-        }
-        
-        /* Buttons */
-        .btn-refresh {
-            background: #2a2a2a;
-            border: none;
-            padding: 10px 20px;
-            border-radius: 40px;
-            color: white;
-            cursor: pointer;
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            transition: 0.2s;
-        }
-        
-        .btn-refresh:hover {
-            background: #2a6df4;
-        }
-        
-        .btn-add {
-            background: linear-gradient(135deg, #2a6df4, #1a5be0);
-            border: none;
-            padding: 12px 24px;
-            border-radius: 40px;
-            color: white;
-            font-weight: 600;
-            cursor: pointer;
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            margin-bottom: 20px;
-            transition: 0.2s;
-        }
-        
-        .btn-add:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 5px 20px rgba(42,109,244,0.3);
-        }
-        
-        /* Table */
-        .table-wrapper {
-            background: #1a1a1a;
-            border-radius: 24px;
-            padding: 20px;
-            overflow-x: auto;
-            border: 1px solid #2a2a2a;
-        }
-        
-        table {
-            width: 100%;
-            border-collapse: collapse;
-        }
-        
-        th {
-            text-align: left;
-            padding: 16px 12px;
-            color: #888;
-            font-weight: 500;
-            font-size: 13px;
-            border-bottom: 1px solid #2a2a2a;
-        }
-        
-        td {
-            padding: 14px 12px;
-            border-bottom: 1px solid #2a2a2a;
-            vertical-align: middle;
-            color: white;
-        }
-        
-        tr:hover {
-            background: #222;
-        }
-        
-        /* Avatar */
-        .avatar-img {
-            width: 42px;
-            height: 42px;
-            border-radius: 50%;
-            object-fit: cover;
-            border: 2px solid #2a6df4;
-            cursor: pointer;
-        }
-        
-        /* Badge */
-        .badge {
-            display: inline-block;
-            padding: 4px 12px;
-            border-radius: 30px;
-            font-size: 11px;
-            font-weight: 600;
-        }
-        
-        .badge-active {
-            background: rgba(46,204,113,0.2);
-            color: #2ecc71;
-        }
-        
-        .badge-blocked {
-            background: rgba(231,76,60,0.2);
-            color: #e74c3c;
-        }
-        
-        /* Action Button */
-        .action-btn {
-            background: none;
-            border: none;
-            color: #888;
-            cursor: pointer;
-            font-size: 18px;
-            padding: 8px 12px;
-            border-radius: 8px;
-            transition: 0.2s;
-        }
-        
-        .action-btn:hover {
-            background: #2a2a2a;
-            color: white;
-        }
-        
-        /* Popup Menu */
-        .popup-overlay {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0,0,0,0.85);
-            backdrop-filter: blur(8px);
-            align-items: center;
-            justify-content: center;
-            z-index: 3000;
-        }
-        
-        .popup-container {
-            background: #1a1a1a;
-            border-radius: 32px;
-            width: 90%;
-            max-width: 450px;
-            max-height: 85vh;
-            overflow-y: auto;
-            border: 1px solid #2a6df4;
-            animation: popupFadeIn 0.2s ease;
-        }
-        
-        .popup-container::-webkit-scrollbar {
-            width: 4px;
-        }
-        
-        @keyframes popupFadeIn {
-            from { opacity: 0; transform: scale(0.95); }
-            to { opacity: 1; transform: scale(1); }
-        }
-        
-        .popup-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 20px 24px;
-            border-bottom: 1px solid #2a2a2a;
-        }
-        
-        .popup-header h3 {
-            color: white;
-            font-size: 18px;
-        }
-        
-        .popup-header h3 i {
-            color: #2a6df4;
-            margin-right: 8px;
-        }
-        
-        .popup-close {
-            background: none;
-            border: none;
-            color: #888;
-            font-size: 24px;
-            cursor: pointer;
-        }
-        
-        .popup-body {
-            padding: 20px 24px;
-        }
-        
-        .user-detail {
-            background: #2a2a2a;
-            border-radius: 20px;
-            padding: 16px;
-            margin-bottom: 20px;
-        }
-        
-        .detail-row {
-            display: flex;
-            justify-content: space-between;
-            padding: 10px 0;
-            border-bottom: 1px solid #3a3a3a;
-        }
-        
-        .detail-row:last-child {
-            border-bottom: none;
-        }
-        
-        .detail-label {
-            color: #888;
-            font-size: 13px;
-        }
-        
-        .detail-value {
-            color: white;
-            font-weight: 500;
-        }
-        
-        .popup-actions {
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-        }
-        
-        .popup-action-btn {
-            padding: 14px 20px;
-            background: #2a2a2a;
-            border: none;
-            border-radius: 40px;
-            color: white;
-            font-size: 14px;
-            font-weight: 500;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 10px;
-            transition: 0.2s;
-        }
-        
-        .popup-action-btn:hover {
-            background: #3a3a3a;
-        }
-        
-        .popup-action-btn.danger {
-            color: #e74c3c;
-        }
-        
-        .popup-action-btn.danger:hover {
-            background: rgba(231,76,60,0.2);
-        }
-        
-        .popup-action-btn.warning {
-            color: #f39c12;
-        }
-        
-        /* Confirm Modal (Custom Alert) */
-        .confirm-overlay {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0,0,0,0.85);
-            backdrop-filter: blur(8px);
-            align-items: center;
-            justify-content: center;
-            z-index: 3500;
-        }
-        
-        .confirm-container {
-            background: #1a1a1a;
-            border-radius: 32px;
-            width: 90%;
-            max-width: 380px;
-            padding: 28px;
-            text-align: center;
-            border: 1px solid #2a6df4;
-            animation: popupFadeIn 0.2s ease;
-        }
-        
-        .confirm-container i {
-            font-size: 48px;
-            color: #f39c12;
-            margin-bottom: 16px;
-        }
-        
-        .confirm-container h3 {
-            color: white;
-            margin-bottom: 12px;
-        }
-        
-        .confirm-container p {
-            color: #888;
-            margin-bottom: 24px;
-            font-size: 14px;
-        }
-        
-        .confirm-buttons {
-            display: flex;
-            gap: 12px;
-        }
-        
-        .confirm-buttons button {
-            flex: 1;
-            padding: 12px;
-            border: none;
-            border-radius: 40px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: 0.2s;
-        }
-        
-        .confirm-cancel {
-            background: #2a2a2a;
-            color: white;
-        }
-        
-        .confirm-cancel:hover {
-            background: #3a3a3a;
-        }
-        
-        .confirm-ok {
-            background: #e74c3c;
-            color: white;
-        }
-        
-        .confirm-ok:hover {
-            background: #c0392b;
-        }
-        
-        /* Modals */
-        .modal-overlay {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0,0,0,0.9);
-            backdrop-filter: blur(8px);
-            align-items: center;
-            justify-content: center;
-            z-index: 4000;
-        }
-        
-        .modal-container {
-            background: #1a1a1a;
-            border-radius: 32px;
-            padding: 28px;
-            width: 90%;
-            max-width: 500px;
-            max-height: 85vh;
-            overflow-y: auto;
-            border: 1px solid #2a6df4;
-        }
-        
-        .modal-container::-webkit-scrollbar {
-            width: 4px;
-        }
-        
-        .modal-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 24px;
-        }
-        
-        .modal-header h3 {
-            color: white;
-            font-size: 20px;
-        }
-        
-        .modal-header h3 i {
-            color: #2a6df4;
-            margin-right: 8px;
-        }
-        
-        .modal-close {
-            background: none;
-            border: none;
-            color: #888;
-            font-size: 24px;
-            cursor: pointer;
-        }
-        
-        .form-field {
-            margin-bottom: 20px;
-        }
-        
-        .form-field label {
-            display: block;
-            color: #aaa;
-            font-size: 13px;
-            margin-bottom: 8px;
-        }
-        
-        .form-field input {
-            width: 100%;
-            padding: 12px 16px;
-            background: #2a2a2a;
-            border: 1px solid #3a3a3a;
-            border-radius: 40px;
-            color: white;
-            font-size: 14px;
-            outline: none;
-        }
-        
-        .form-field input:focus {
-            border-color: #2a6df4;
-        }
-        
-        .avatar-upload-area {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            margin: 16px 0;
-        }
-        
-        .avatar-preview-circle {
-            width: 100px;
-            height: 100px;
-            border-radius: 50%;
-            object-fit: cover;
-            border: 3px solid #2a6df4;
-            background: #2a2a2a;
-            cursor: pointer;
-        }
-        
-        .avatar-hint {
-            font-size: 12px;
-            color: #888;
-            margin-top: 8px;
-            cursor: pointer;
-        }
-        
-        .btn-primary {
-            background: linear-gradient(135deg, #2a6df4, #1a5be0);
-            border: none;
-            padding: 12px 24px;
-            border-radius: 40px;
-            color: white;
-            font-weight: 600;
-            cursor: pointer;
-            width: 100%;
-        }
-        
-        .btn-secondary {
-            background: #2a2a2a;
-            border: none;
-            padding: 10px 20px;
-            border-radius: 40px;
-            color: white;
-            cursor: pointer;
-        }
-        
-        .flex-row {
-            display: flex;
-            gap: 12px;
-            margin-top: 20px;
-        }
-        
-        /* Toast */
-        .toast-message {
-            position: fixed;
-            bottom: 30px;
-            left: 50%;
-            transform: translateX(-50%);
-            background: #2ecc71;
-            color: white;
-            padding: 12px 24px;
-            border-radius: 40px;
-            font-size: 14px;
-            z-index: 5000;
-            display: none;
-            animation: toastSlideUp 0.3s ease;
-        }
-        
-        .toast-error {
-            background: #e74c3c;
-        }
-        
-        @keyframes toastSlideUp {
-            from { opacity: 0; transform: translateX(-50%) translateY(20px); }
-            to { opacity: 1; transform: translateX(-50%) translateY(0); }
-        }
-        
-        /* Loading */
-        .loading-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0,0,0,0.7);
-            display: none;
-            align-items: center;
-            justify-content: center;
-            z-index: 6000;
-        }
-        
-        .loading-spinner {
-            width: 50px;
-            height: 50px;
-            border: 3px solid #2a2a2a;
-            border-top-color: #2a6df4;
-            border-radius: 50%;
-            animation: spin 1s linear infinite;
-        }
-        
-        @keyframes spin {
-            to { transform: rotate(360deg); }
-        }
-        
-        .info-box {
-            background: #2a2a2a;
-            border-radius: 20px;
-            padding: 16px;
-            margin-bottom: 16px;
-        }
-        
-        .info-row {
-            display: flex;
-            justify-content: space-between;
-            padding: 8px 0;
-            border-bottom: 1px solid #3a3a3a;
-        }
-        
-        .info-row:last-child {
-            border-bottom: none;
-        }
-        
-        .info-label {
-            color: #888;
-        }
-        
-        .info-value {
-            color: #2ecc71;
-            font-weight: 500;
-        }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif; }
+        body { background: #0a0a0a; min-height: 100vh; padding: 20px; }
+        
+        ::-webkit-scrollbar { width: 6px; height: 6px; }
+        ::-webkit-scrollbar-track { background: #1a1a1a; border-radius: 10px; }
+        ::-webkit-scrollbar-thumb { background: #2a6df4; border-radius: 10px; }
+        
+        .password-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.95); backdrop-filter: blur(12px); display: flex; align-items: center; justify-content: center; z-index: 2000; }
+        .password-card { background: #1a1a1a; padding: 40px; border-radius: 32px; width: 90%; max-width: 400px; text-align: center; border: 1px solid rgba(42,109,244,0.3); }
+        .password-card h2 { color: #2a6df4; margin-bottom: 8px; }
+        .password-card p { color: #888; margin-bottom: 24px; }
+        .password-card input { width: 100%; padding: 14px 18px; background: #2a2a2a; border: 1px solid #3a3a3a; border-radius: 40px; color: white; font-size: 16px; margin-bottom: 16px; outline: none; }
+        .password-card input:focus { border-color: #2a6df4; }
+        .password-card button { width: 100%; padding: 14px; background: linear-gradient(135deg, #2a6df4, #1a5be0); border: none; border-radius: 40px; color: white; font-weight: 600; cursor: pointer; }
+        .error-text { color: #e74c3c; margin-top: 12px; display: none; }
+        
+        .dashboard { display: none; animation: fadeIn 0.3s ease; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        
+        .admin-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; flex-wrap: wrap; gap: 16px; }
+        .admin-header h1 { font-size: 20px; font-weight: 500; color: white; }
+        .admin-header h1 i { color: #2a6df4; margin-right: 8px; }
+        .stats-container { display: flex; gap: 12px; }
+        .stat-item { background: #1a1a1a; padding: 12px 20px; border-radius: 24px; text-align: center; border: 1px solid #2a2a2a; }
+        .stat-item h4 { font-size: 11px; color: #888; text-transform: uppercase; margin-bottom: 4px; }
+        .stat-item .stat-value { font-size: 22px; font-weight: 600; color: white; }
+        
+        .btn-refresh { background: #2a2a2a; border: none; padding: 10px 20px; border-radius: 40px; color: white; cursor: pointer; display: inline-flex; align-items: center; gap: 8px; transition: 0.2s; }
+        .btn-refresh:hover { background: #2a6df4; }
+        .btn-add { background: linear-gradient(135deg, #2a6df4, #1a5be0); border: none; padding: 12px 24px; border-radius: 40px; color: white; font-weight: 600; cursor: pointer; display: inline-flex; align-items: center; gap: 8px; margin-bottom: 20px; transition: 0.2s; }
+        .btn-add:hover { transform: translateY(-2px); box-shadow: 0 5px 20px rgba(42,109,244,0.3); }
+        
+        .table-wrapper { background: #1a1a1a; border-radius: 24px; padding: 20px; overflow-x: auto; border: 1px solid #2a2a2a; }
+        table { width: 100%; border-collapse: collapse; }
+        th { text-align: left; padding: 16px 12px; color: #888; font-weight: 500; font-size: 13px; border-bottom: 1px solid #2a2a2a; }
+        td { padding: 14px 12px; border-bottom: 1px solid #2a2a2a; vertical-align: middle; color: white; }
+        tr:hover { background: #222; }
+        .avatar-img { width: 42px; height: 42px; border-radius: 50%; object-fit: cover; border: 2px solid #2a6df4; cursor: pointer; }
+        .badge { display: inline-block; padding: 4px 12px; border-radius: 30px; font-size: 11px; font-weight: 600; }
+        .badge-active { background: rgba(46,204,113,0.2); color: #2ecc71; }
+        .badge-blocked { background: rgba(231,76,60,0.2); color: #e74c3c; }
+        .action-btn { background: none; border: none; color: #888; cursor: pointer; font-size: 18px; padding: 8px 12px; border-radius: 8px; transition: 0.2s; }
+        .action-btn:hover { background: #2a2a2a; color: white; }
+        
+        .popup-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); backdrop-filter: blur(8px); align-items: center; justify-content: center; z-index: 3000; }
+        .popup-container { background: #1a1a1a; border-radius: 32px; width: 90%; max-width: 450px; max-height: 85vh; overflow-y: auto; border: 1px solid #2a6df4; animation: popupFadeIn 0.2s ease; }
+        .popup-header { display: flex; justify-content: space-between; align-items: center; padding: 20px 24px; border-bottom: 1px solid #2a2a2a; }
+        .popup-header h3 { color: white; font-size: 18px; }
+        .popup-header h3 i { color: #2a6df4; margin-right: 8px; }
+        .popup-close { background: none; border: none; color: #888; font-size: 24px; cursor: pointer; }
+        .popup-body { padding: 20px 24px; }
+        .user-detail { background: #2a2a2a; border-radius: 20px; padding: 16px; margin-bottom: 20px; }
+        .detail-row { display: flex; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid #3a3a3a; }
+        .detail-row:last-child { border-bottom: none; }
+        .detail-label { color: #888; font-size: 13px; }
+        .detail-value { color: white; font-weight: 500; }
+        .popup-actions { display: flex; flex-direction: column; gap: 10px; }
+        .popup-action-btn { padding: 14px 20px; background: #2a2a2a; border: none; border-radius: 40px; color: white; font-size: 14px; font-weight: 500; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 10px; transition: 0.2s; }
+        .popup-action-btn:hover { background: #3a3a3a; }
+        .popup-action-btn.danger { color: #e74c3c; }
+        .popup-action-btn.warning { color: #f39c12; }
+        
+        .confirm-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); backdrop-filter: blur(8px); align-items: center; justify-content: center; z-index: 3500; }
+        .confirm-container { background: #1a1a1a; border-radius: 32px; width: 90%; max-width: 380px; padding: 28px; text-align: center; border: 1px solid #2a6df4; animation: popupFadeIn 0.2s ease; }
+        .confirm-container i { font-size: 48px; color: #f39c12; margin-bottom: 16px; }
+        .confirm-container h3 { color: white; margin-bottom: 12px; }
+        .confirm-container p { color: #888; margin-bottom: 24px; font-size: 14px; }
+        .confirm-buttons { display: flex; gap: 12px; }
+        .confirm-cancel { background: #2a2a2a; color: white; }
+        .confirm-ok { background: #e74c3c; color: white; }
+        
+        .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); backdrop-filter: blur(8px); align-items: center; justify-content: center; z-index: 4000; }
+        .modal-container { background: #1a1a1a; border-radius: 32px; padding: 28px; width: 90%; max-width: 500px; max-height: 85vh; overflow-y: auto; border: 1px solid #2a6df4; }
+        .modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; }
+        .modal-header h3 { color: white; font-size: 20px; }
+        .modal-close { background: none; border: none; color: #888; font-size: 24px; cursor: pointer; }
+        .form-field { margin-bottom: 20px; }
+        .form-field label { display: block; color: #aaa; font-size: 13px; margin-bottom: 8px; }
+        .form-field input { width: 100%; padding: 12px 16px; background: #2a2a2a; border: 1px solid #3a3a3a; border-radius: 40px; color: white; font-size: 14px; outline: none; }
+        .form-field input:focus { border-color: #2a6df4; }
+        .avatar-upload-area { display: flex; flex-direction: column; align-items: center; margin: 16px 0; }
+        .avatar-preview-circle { width: 100px; height: 100px; border-radius: 50%; object-fit: cover; border: 3px solid #2a6df4; background: #2a2a2a; cursor: pointer; }
+        .avatar-hint { font-size: 12px; color: #888; margin-top: 8px; cursor: pointer; }
+        .btn-primary { background: linear-gradient(135deg, #2a6df4, #1a5be0); border: none; padding: 12px 24px; border-radius: 40px; color: white; font-weight: 600; cursor: pointer; width: 100%; }
+        .btn-secondary { background: #2a2a2a; border: none; padding: 10px 20px; border-radius: 40px; color: white; cursor: pointer; }
+        .flex-row { display: flex; gap: 12px; margin-top: 20px; }
+        
+        .toast-message { position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%); background: #2ecc71; color: white; padding: 12px 24px; border-radius: 40px; font-size: 14px; z-index: 5000; display: none; animation: toastSlideUp 0.3s ease; }
+        .toast-error { background: #e74c3c; }
+        @keyframes toastSlideUp { from { opacity: 0; transform: translateX(-50%) translateY(20px); } to { opacity: 1; transform: translateX(-50%) translateY(0); } }
+        
+        .loading-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); display: none; align-items: center; justify-content: center; z-index: 6000; }
+        .loading-spinner { width: 50px; height: 50px; border: 3px solid #2a2a2a; border-top-color: #2a6df4; border-radius: 50%; animation: spin 1s linear infinite; }
+        @keyframes spin { to { transform: rotate(360deg); } }
+        .info-box { background: #2a2a2a; border-radius: 20px; padding: 16px; margin-bottom: 16px; }
+        .info-row { display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid #3a3a3a; }
+        .info-label { color: #888; }
+        .info-value { color: #2ecc71; font-weight: 500; }
     </style>
 </head>
 <body>
-    <!-- Password Modal -->
     <div id="passwordOverlay" class="password-overlay">
         <div class="password-card">
             <h2><i class="fas fa-lock"></i> Admin Access</h2>
@@ -715,7 +118,6 @@
         </div>
     </div>
 
-    <!-- Dashboard -->
     <div id="dashboard" class="dashboard">
         <div class="admin-header">
             <h1><i class="fas fa-users-cog"></i> B.Y PRO Account Management</h1>
@@ -731,21 +133,15 @@
 
         <div class="table-wrapper">
             <table>
-                <thead>
-                    <tr><th>Avatar</th><th>ID</th><th>Name</th><th>Email</th><th>Balance</th><th>Card</th><th>Status</th><th></th></tr>
-                </thead>
+                <thead><tr><th>Avatar</th><th>ID</th><th>Name</th><th>Email</th><th>Balance</th><th>Card</th><th>Status</th><th></th></tr></thead>
                 <tbody id="accountsTable"><tr><td colspan="8" style="text-align:center; padding:60px;"><i class="fas fa-spinner fa-spin"></i> Loading...</td></tr></tbody>
             </table>
         </div>
     </div>
 
-    <!-- Account Popup -->
     <div id="accountPopup" class="popup-overlay">
         <div class="popup-container">
-            <div class="popup-header">
-                <h3><i class="fas fa-user-circle"></i> <span id="popupUserId">Account</span></h3>
-                <button class="popup-close" onclick="closePopup()">&times;</button>
-            </div>
+            <div class="popup-header"><h3><i class="fas fa-user-circle"></i> <span id="popupUserId">Account</span></h3><button class="popup-close" onclick="closePopup()">&times;</button></div>
             <div class="popup-body">
                 <div class="user-detail">
                     <div class="detail-row"><span class="detail-label"><i class="fas fa-user"></i> Name</span><span class="detail-value" id="popupName">-</span></div>
@@ -765,20 +161,15 @@
         </div>
     </div>
 
-    <!-- Confirm Modal -->
     <div id="confirmModal" class="confirm-overlay">
         <div class="confirm-container">
             <i class="fas fa-exclamation-triangle"></i>
             <h3 id="confirmTitle">Confirm Action</h3>
             <p id="confirmMessage">Are you sure you want to proceed?</p>
-            <div class="confirm-buttons">
-                <button class="confirm-cancel" id="confirmCancelBtn">Cancel</button>
-                <button class="confirm-ok" id="confirmOkBtn">Confirm</button>
-            </div>
+            <div class="confirm-buttons"><button class="confirm-cancel" id="confirmCancelBtn">Cancel</button><button class="confirm-ok" id="confirmOkBtn">Confirm</button></div>
         </div>
     </div>
 
-    <!-- Add Modal -->
     <div id="addModal" class="modal-overlay">
         <div class="modal-container">
             <div class="modal-header"><h3><i class="fas fa-user-plus"></i> Add Account</h3><button class="modal-close" onclick="closeModal('addModal')">&times;</button></div>
@@ -794,7 +185,6 @@
         </div>
     </div>
 
-    <!-- Edit Modal -->
     <div id="editModal" class="modal-overlay">
         <div class="modal-container">
             <div class="modal-header"><h3><i class="fas fa-edit"></i> Edit Account</h3><button class="modal-close" onclick="closeModal('editModal')">&times;</button></div>
@@ -811,7 +201,6 @@
         </div>
     </div>
 
-    <!-- Financial Modal -->
     <div id="financialModal" class="modal-overlay">
         <div class="modal-container">
             <div class="modal-header"><h3><i class="fas fa-wallet"></i> Financial Details</h3><button class="modal-close" onclick="closeModal('financialModal')">&times;</button></div>
@@ -823,7 +212,6 @@
         </div>
     </div>
 
-    <!-- QR Modal -->
     <div id="qrModal" class="modal-overlay">
         <div class="modal-container">
             <div class="modal-header"><h3><i class="fas fa-qrcode"></i> Login QR Code</h3><button class="modal-close" onclick="closeModal('qrModal')">&times;</button></div>
@@ -849,7 +237,6 @@
         let editAvatarFile = null;
         let confirmCallback = null;
 
-        // ==================== UI Helpers ====================
         function showToast(msg, isError = false) {
             const toast = document.getElementById('toastMessage');
             toast.textContent = msg;
@@ -858,18 +245,9 @@
             setTimeout(() => toast.style.display = 'none', 3000);
         }
 
-        function showLoading(show) {
-            document.getElementById('loadingOverlay').style.display = show ? 'flex' : 'none';
-        }
-
-        function closeModal(id) {
-            document.getElementById(id).style.display = 'none';
-        }
-
-        function closePopup() {
-            document.getElementById('accountPopup').style.display = 'none';
-            currentPopupAccount = null;
-        }
+        function showLoading(show) { document.getElementById('loadingOverlay').style.display = show ? 'flex' : 'none'; }
+        function closeModal(id) { document.getElementById(id).style.display = 'none'; }
+        function closePopup() { document.getElementById('accountPopup').style.display = 'none'; currentPopupAccount = null; }
 
         function showConfirm(title, message, onConfirm) {
             const modal = document.getElementById('confirmModal');
@@ -878,16 +256,8 @@
             confirmCallback = onConfirm;
             modal.style.display = 'flex';
         }
-
-        document.getElementById('confirmCancelBtn').onclick = () => {
-            document.getElementById('confirmModal').style.display = 'none';
-            confirmCallback = null;
-        };
-        document.getElementById('confirmOkBtn').onclick = () => {
-            document.getElementById('confirmModal').style.display = 'none';
-            if (confirmCallback) confirmCallback();
-            confirmCallback = null;
-        };
+        document.getElementById('confirmCancelBtn').onclick = () => { document.getElementById('confirmModal').style.display = 'none'; confirmCallback = null; };
+        document.getElementById('confirmOkBtn').onclick = () => { document.getElementById('confirmModal').style.display = 'none'; if (confirmCallback) confirmCallback(); confirmCallback = null; };
 
         async function callAPI(endpoint, method = 'GET', data = null, isFormData = false) {
             const options = { method, headers: {} };
@@ -945,7 +315,7 @@
                 processed.forEach(acc => {
                     const row = document.createElement('tr');
                     row.innerHTML = `
-                        <td><img class="avatar-img" src="${acc.avatar}" onerror="this.src='https://i.ibb.co/SDxkt40s/user.png'"></td>
+                        <td><img class="avatar-img" src="${acc.avatar}" onerror="this.src='https://i.ibb.co/SDxkt40s/user.png'">${acc.id ? '' : ''}</td>
                         <td><strong>${acc.id}</strong></td>
                         <td>${acc.name}</td>
                         <td>${acc.email}</td>
@@ -962,12 +332,10 @@
             } finally { showLoading(false); }
         }
 
-        // ==================== Popup Actions ====================
         window.openAccountPopup = async (userId) => {
             const account = allAccounts.find(a => a.id === userId);
             if (!account) return;
             currentPopupAccount = account;
-            
             document.getElementById('popupUserId').textContent = `ID: ${account.id}`;
             document.getElementById('popupName').textContent = account.name;
             document.getElementById('popupEmail').textContent = account.email;
@@ -975,65 +343,19 @@
             document.getElementById('popupBalance').textContent = `$${account.balance.toFixed(2)}`;
             document.getElementById('popupStatus').textContent = account.blocked ? 'BLOCKED' : 'ACTIVE';
             document.getElementById('popupStatus').style.color = account.blocked ? '#e74c3c' : '#2ecc71';
-            
             const blockBtn = document.getElementById('popupBlockBtn');
-            if (account.blocked) {
-                blockBtn.innerHTML = '<i class="fas fa-unlock"></i> Unblock Account';
-                blockBtn.classList.remove('warning');
-            } else {
-                blockBtn.innerHTML = '<i class="fas fa-ban"></i> Block Account';
-                blockBtn.classList.add('warning');
-            }
-            
+            blockBtn.innerHTML = account.blocked ? '<i class="fas fa-unlock"></i> Unblock Account' : '<i class="fas fa-ban"></i> Block Account';
             document.getElementById('accountPopup').style.display = 'flex';
         };
         
-        window.openEditFromPopup = () => {
-            if (!currentPopupAccount) return;
-            closePopup();
-            openEditAccount(currentPopupAccount.id);
-        };
+        window.openEditFromPopup = () => { if (currentPopupAccount) { closePopup(); openEditAccount(currentPopupAccount.id); } else { showToast('Please select an account first', true); } };
+        window.openFinancialFromPopup = () => { if (currentPopupAccount) { closePopup(); openFinancialModal(currentPopupAccount.id); } else { showToast('Please select an account first', true); } };
+        window.generateQRFromPopup = () => { if (currentPopupAccount) { closePopup(); generateQRCode(currentPopupAccount.id); } else { showToast('Please select an account first', true); } };
         
-        window.openFinancialFromPopup = () => {
-            if (!currentPopupAccount) return;
-            closePopup();
-            openFinancialModal(currentPopupAccount.id);
-        };
+        window.toggleBlockFromPopup = async () => { if (!currentPopupAccount) return; const newBlock = !currentPopupAccount.blocked; showLoading(true); try { await callAPI(`/accounts/${currentPopupAccount.id}/block`, 'POST', { blocked: newBlock }); showToast(`Account ${currentPopupAccount.id} ${newBlock ? 'BLOCKED' : 'UNBLOCKED'}`, false); closePopup(); loadAccounts(); } catch (error) { showToast(error.message, true); } finally { showLoading(false); } };
         
-        window.generateQRFromPopup = () => {
-            if (!currentPopupAccount) return;
-            closePopup();
-            generateQRCode(currentPopupAccount.id);
-        };
+        window.deleteFromPopup = async () => { if (!currentPopupAccount) return; showConfirm('Delete Account', `⚠️ Permanently delete account ${currentPopupAccount.id}? This cannot be undone.`, async () => { showLoading(true); try { await callAPI(`/accounts/${currentPopupAccount.id}`, 'DELETE'); showToast(`Account ${currentPopupAccount.id} deleted`, false); closePopup(); loadAccounts(); } catch (error) { showToast(error.message, true); } finally { showLoading(false); } }); };
         
-        window.toggleBlockFromPopup = async () => {
-            if (!currentPopupAccount) return;
-            const newBlock = !currentPopupAccount.blocked;
-            showLoading(true);
-            try {
-                await callAPI(`/accounts/${currentPopupAccount.id}/block`, 'POST', { blocked: newBlock });
-                showToast(`Account ${currentPopupAccount.id} ${newBlock ? 'BLOCKED' : 'UNBLOCKED'}`, false);
-                closePopup();
-                loadAccounts();
-            } catch (error) { showToast(error.message, true); }
-            finally { showLoading(false); }
-        };
-        
-        window.deleteFromPopup = async () => {
-            if (!currentPopupAccount) return;
-            showConfirm('Delete Account', `⚠️ Permanently delete account ${currentPopupAccount.id}? This cannot be undone.`, async () => {
-                showLoading(true);
-                try {
-                    await callAPI(`/accounts/${currentPopupAccount.id}`, 'DELETE');
-                    showToast(`Account ${currentPopupAccount.id} deleted`, false);
-                    closePopup();
-                    loadAccounts();
-                } catch (error) { showToast(error.message, true); }
-                finally { showLoading(false); }
-            });
-        };
-        
-        // ==================== Edit Account ====================
         window.openEditAccount = async (id) => {
             const acc = allAccounts.find(a => a.id === id);
             if (!acc) return;
@@ -1066,7 +388,6 @@
             finally { showLoading(false); }
         };
         
-        // ==================== Financial ====================
         window.openFinancialModal = async (userId) => {
             currentFinancialId = userId;
             const financial = await fetchFinancial(userId);
@@ -1104,7 +425,6 @@
             finally { showLoading(false); }
         };
         
-        // ==================== QR Code ====================
         window.generateQRCode = async (userId) => {
             try {
                 const account = await callAPI(`/accounts/${userId}`);
@@ -1117,105 +437,46 @@
             } catch (error) { showToast('Error generating QR: ' + error.message, true); }
         };
         
-        window.copyQRData = () => {
-            const data = document.getElementById('qrDataText');
-            data.select();
-            document.execCommand('copy');
-            showToast('QR data copied');
-        };
+        window.copyQRData = () => { const data = document.getElementById('qrDataText'); data.select(); document.execCommand('copy'); showToast('QR data copied'); };
         
-        // ==================== Add Account (FIXED) ====================
         window.addNewAccount = async () => {
-            const nameInput = document.getElementById('addName');
-            const emailInput = document.getElementById('addEmail');
-            const passwordInput = document.getElementById('addPassword');
-            
-            const name = nameInput ? nameInput.value.trim() : '';
-            const email = emailInput ? emailInput.value.trim() : '';
-            const password = passwordInput ? passwordInput.value.trim() : '';
-            
-            console.log('Add account - Name:', name, 'Email:', email, 'Password length:', password.length);
-            
-            if (!name) { showToast('Name is required', true); nameInput?.focus(); return; }
-            if (!email) { showToast('Email is required', true); emailInput?.focus(); return; }
-            if (!password) { showToast('Password is required', true); passwordInput?.focus(); return; }
+            const name = document.getElementById('addName')?.value.trim() || '';
+            const email = document.getElementById('addEmail')?.value.trim() || '';
+            const password = document.getElementById('addPassword')?.value.trim() || '';
+            if (!name) { showToast('Name is required', true); return; }
+            if (!email) { showToast('Email is required', true); return; }
+            if (!password) { showToast('Password is required', true); return; }
             if (password.length < 6) { showToast('Password must be at least 6 characters', true); return; }
-            
             showLoading(true);
             try {
                 const response = await fetch(`${API_BASE}/create-account`, {
                     method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'x-api-key': INTERNAL_KEY
-                    },
+                    headers: { 'Content-Type': 'application/json', 'x-api-key': INTERNAL_KEY },
                     body: JSON.stringify({ name, email, password })
                 });
-                
                 const result = await response.json();
-                console.log('API Response:', result);
-                
                 if (result.success) {
                     const newId = result.account.id;
-                    if (addAvatarFile) {
-                        try {
-                            await uploadAvatar(newId, addAvatarFile);
-                        } catch (uploadErr) {
-                            console.warn('Avatar upload failed:', uploadErr);
-                        }
-                    }
-                    showToast(`✅ Account ${newId} created successfully!`, false);
+                    if (addAvatarFile) { try { await uploadAvatar(newId, addAvatarFile); } catch (e) { console.warn('Avatar upload failed:', e); } }
+                    showToast(`✅ Account ${newId} created!`, false);
                     closeModal('addModal');
-                    
-                    if (nameInput) nameInput.value = '';
-                    if (emailInput) emailInput.value = '';
-                    if (passwordInput) passwordInput.value = '';
+                    document.getElementById('addName').value = '';
+                    document.getElementById('addEmail').value = '';
+                    document.getElementById('addPassword').value = '';
                     addAvatarFile = null;
-                    const avatarPreview = document.getElementById('addAvatarPreview');
-                    if (avatarPreview) avatarPreview.src = 'https://i.ibb.co/SDxkt40s/user.png';
-                    
+                    document.getElementById('addAvatarPreview').src = 'https://i.ibb.co/SDxkt40s/user.png';
                     loadAccounts();
-                } else {
-                    showToast(result.error || 'Failed to create account', true);
-                }
-            } catch (error) {
-                console.error('Create account error:', error);
-                showToast('Error creating account: ' + (error.message || 'Server error'), true);
-            } finally {
-                showLoading(false);
-            }
+                } else { showToast(result.error || 'Failed to create account', true); }
+            } catch (error) { showToast('Error creating account: ' + error.message, true); }
+            finally { showLoading(false); }
         };
         
-        // ==================== Avatar Handlers ====================
-        function handleAddAvatar(file) {
-            if (!file) return;
-            if (!file.type.match('image.*')) { showToast('Select an image file', true); return; }
-            if (file.size > 5*1024*1024) { showToast('Max 5MB', true); return; }
-            addAvatarFile = file;
-            const reader = new FileReader();
-            reader.onload = e => { document.getElementById('addAvatarPreview').src = e.target.result; };
-            reader.readAsDataURL(file);
-        }
+        function handleAddAvatar(file) { if (!file) return; if (!file.type.match('image.*')) { showToast('Select an image file', true); return; } if (file.size > 5*1024*1024) { showToast('Max 5MB', true); return; } addAvatarFile = file; const reader = new FileReader(); reader.onload = e => { document.getElementById('addAvatarPreview').src = e.target.result; }; reader.readAsDataURL(file); }
+        function handleEditAvatar(file) { if (!file) return; if (!file.type.match('image.*')) { showToast('Select an image file', true); return; } if (file.size > 5*1024*1024) { showToast('Max 5MB', true); return; } editAvatarFile = file; const reader = new FileReader(); reader.onload = e => { document.getElementById('editAvatarPreview').src = e.target.result; }; reader.readAsDataURL(file); }
         
-        function handleEditAvatar(file) {
-            if (!file) return;
-            if (!file.type.match('image.*')) { showToast('Select an image file', true); return; }
-            if (file.size > 5*1024*1024) { showToast('Max 5MB', true); return; }
-            editAvatarFile = file;
-            const reader = new FileReader();
-            reader.onload = e => { document.getElementById('editAvatarPreview').src = e.target.result; };
-            reader.readAsDataURL(file);
-        }
-        
-        // ==================== Event Listeners ====================
         document.getElementById('loginAdminBtn').onclick = () => {
-            if (document.getElementById('adminPassword').value === ADMIN_PWD) {
-                document.getElementById('passwordOverlay').style.display = 'none';
-                document.getElementById('dashboard').style.display = 'block';
-                loadAccounts();
-            } else {
-                document.getElementById('passwordError').style.display = 'block';
-            }
+            if (document.getElementById('adminPassword').value === ADMIN_PWD) { document.getElementById('passwordOverlay').style.display = 'none'; document.getElementById('dashboard').style.display = 'block'; loadAccounts(); }
+            else { document.getElementById('passwordError').style.display = 'block'; }
         };
         document.getElementById('adminPassword').onkeypress = e => e.key === 'Enter' && document.getElementById('loginAdminBtn').click();
         document.getElementById('refreshBtn').onclick = loadAccounts;

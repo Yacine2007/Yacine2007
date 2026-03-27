@@ -20,6 +20,26 @@
             padding: 20px;
         }
         
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        
+        ::-webkit-scrollbar-track {
+            background: #1a1a1a;
+            border-radius: 10px;
+        }
+        
+        ::-webkit-scrollbar-thumb {
+            background: #2a6df4;
+            border-radius: 10px;
+        }
+        
+        ::-webkit-scrollbar-thumb:hover {
+            background: #1a5be0;
+        }
+        
         /* Password Modal */
         .password-overlay {
             position: fixed;
@@ -229,6 +249,25 @@
             cursor: pointer;
         }
         
+        /* Badge */
+        .badge {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 30px;
+            font-size: 11px;
+            font-weight: 600;
+        }
+        
+        .badge-active {
+            background: rgba(46,204,113,0.2);
+            color: #2ecc71;
+        }
+        
+        .badge-blocked {
+            background: rgba(231,76,60,0.2);
+            color: #e74c3c;
+        }
+        
         /* Action Button */
         .action-btn {
             background: none;
@@ -246,7 +285,7 @@
             color: white;
         }
         
-        /* Popup Menu (منتصف الشاشة) */
+        /* Popup Menu */
         .popup-overlay {
             display: none;
             position: fixed;
@@ -270,6 +309,10 @@
             overflow-y: auto;
             border: 1px solid #2a6df4;
             animation: popupFadeIn 0.2s ease;
+        }
+        
+        .popup-container::-webkit-scrollbar {
+            width: 4px;
         }
         
         @keyframes popupFadeIn {
@@ -301,10 +344,6 @@
             color: #888;
             font-size: 24px;
             cursor: pointer;
-        }
-        
-        .popup-close:hover {
-            color: white;
         }
         
         .popup-body {
@@ -339,16 +378,10 @@
             font-weight: 500;
         }
         
-        .detail-value i {
-            color: #2a6df4;
-            margin-right: 5px;
-        }
-        
         .popup-actions {
             display: flex;
             flex-direction: column;
             gap: 10px;
-            margin-top: 20px;
         }
         
         .popup-action-btn {
@@ -383,6 +416,82 @@
             color: #f39c12;
         }
         
+        /* Confirm Modal (Custom Alert) */
+        .confirm-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.85);
+            backdrop-filter: blur(8px);
+            align-items: center;
+            justify-content: center;
+            z-index: 3500;
+        }
+        
+        .confirm-container {
+            background: #1a1a1a;
+            border-radius: 32px;
+            width: 90%;
+            max-width: 380px;
+            padding: 28px;
+            text-align: center;
+            border: 1px solid #2a6df4;
+            animation: popupFadeIn 0.2s ease;
+        }
+        
+        .confirm-container i {
+            font-size: 48px;
+            color: #f39c12;
+            margin-bottom: 16px;
+        }
+        
+        .confirm-container h3 {
+            color: white;
+            margin-bottom: 12px;
+        }
+        
+        .confirm-container p {
+            color: #888;
+            margin-bottom: 24px;
+            font-size: 14px;
+        }
+        
+        .confirm-buttons {
+            display: flex;
+            gap: 12px;
+        }
+        
+        .confirm-buttons button {
+            flex: 1;
+            padding: 12px;
+            border: none;
+            border-radius: 40px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+        
+        .confirm-cancel {
+            background: #2a2a2a;
+            color: white;
+        }
+        
+        .confirm-cancel:hover {
+            background: #3a3a3a;
+        }
+        
+        .confirm-ok {
+            background: #e74c3c;
+            color: white;
+        }
+        
+        .confirm-ok:hover {
+            background: #c0392b;
+        }
+        
         /* Modals */
         .modal-overlay {
             display: none;
@@ -407,6 +516,10 @@
             max-height: 85vh;
             overflow-y: auto;
             border: 1px solid #2a6df4;
+        }
+        
+        .modal-container::-webkit-scrollbar {
+            width: 4px;
         }
         
         .modal-header {
@@ -510,7 +623,7 @@
             margin-top: 20px;
         }
         
-        /* Toast & Loading */
+        /* Toast */
         .toast-message {
             position: fixed;
             bottom: 30px;
@@ -523,12 +636,19 @@
             font-size: 14px;
             z-index: 5000;
             display: none;
+            animation: toastSlideUp 0.3s ease;
         }
         
         .toast-error {
             background: #e74c3c;
         }
         
+        @keyframes toastSlideUp {
+            from { opacity: 0; transform: translateX(-50%) translateY(20px); }
+            to { opacity: 1; transform: translateX(-50%) translateY(0); }
+        }
+        
+        /* Loading */
         .loading-overlay {
             position: fixed;
             top: 0;
@@ -555,22 +675,31 @@
             to { transform: rotate(360deg); }
         }
         
-        .badge {
-            display: inline-block;
-            padding: 4px 12px;
-            border-radius: 30px;
-            font-size: 11px;
-            font-weight: 600;
+        .info-box {
+            background: #2a2a2a;
+            border-radius: 20px;
+            padding: 16px;
+            margin-bottom: 16px;
         }
         
-        .badge-active {
-            background: rgba(46,204,113,0.2);
+        .info-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 8px 0;
+            border-bottom: 1px solid #3a3a3a;
+        }
+        
+        .info-row:last-child {
+            border-bottom: none;
+        }
+        
+        .info-label {
+            color: #888;
+        }
+        
+        .info-value {
             color: #2ecc71;
-        }
-        
-        .badge-blocked {
-            background: rgba(231,76,60,0.2);
-            color: #e74c3c;
+            font-weight: 500;
         }
     </style>
 </head>
@@ -601,14 +730,16 @@
         <button class="btn-add" id="addAccountBtn"><i class="fas fa-plus"></i> Add New Account</button>
 
         <div class="table-wrapper">
-            <table>
-                <thead><tr><th>Avatar</th><th>ID</th><th>Name</th><th>Email</th><th>Balance</th><th>Card</th><th>Status</th><th></th></tr></thead>
+             <table>
+                <thead>
+                     <tr><th>Avatar</th><th>ID</th><th>Name</th><th>Email</th><th>Balance</th><th>Card</th><th>Status</th><th></th></tr>
+                </thead>
                 <tbody id="accountsTable"><tr><td colspan="8" style="text-align:center; padding:60px;"><i class="fas fa-spinner fa-spin"></i> Loading...</td></tr></tbody>
             </table>
         </div>
     </div>
 
-    <!-- Account Actions Popup (منتصف الشاشة) -->
+    <!-- Account Popup -->
     <div id="accountPopup" class="popup-overlay">
         <div class="popup-container">
             <div class="popup-header">
@@ -619,7 +750,7 @@
                 <div class="user-detail">
                     <div class="detail-row"><span class="detail-label"><i class="fas fa-user"></i> Name</span><span class="detail-value" id="popupName">-</span></div>
                     <div class="detail-row"><span class="detail-label"><i class="fas fa-envelope"></i> Email</span><span class="detail-value" id="popupEmail">-</span></div>
-                    <div class="detail-row"><span class="detail-label"><i class="fas fa-credit-card"></i> Card Code</span><span class="detail-value" id="popupCard">-</span></div>
+                    <div class="detail-row"><span class="detail-label"><i class="fas fa-credit-card"></i> Card</span><span class="detail-value" id="popupCard">-</span></div>
                     <div class="detail-row"><span class="detail-label"><i class="fas fa-wallet"></i> Balance</span><span class="detail-value" id="popupBalance">$0</span></div>
                     <div class="detail-row"><span class="detail-label"><i class="fas fa-lock"></i> Status</span><span class="detail-value" id="popupStatus">-</span></div>
                 </div>
@@ -630,6 +761,19 @@
                     <button class="popup-action-btn warning" id="popupBlockBtn" onclick="toggleBlockFromPopup()"><i class="fas fa-ban"></i> Block Account</button>
                     <button class="popup-action-btn danger" onclick="deleteFromPopup()"><i class="fas fa-trash"></i> Delete Account</button>
                 </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Confirm Modal (Custom Alert) -->
+    <div id="confirmModal" class="confirm-overlay">
+        <div class="confirm-container">
+            <i class="fas fa-exclamation-triangle"></i>
+            <h3 id="confirmTitle">Confirm Action</h3>
+            <p id="confirmMessage">Are you sure you want to proceed?</p>
+            <div class="confirm-buttons">
+                <button class="confirm-cancel" id="confirmCancelBtn">Cancel</button>
+                <button class="confirm-ok" id="confirmOkBtn">Confirm</button>
             </div>
         </div>
     </div>
@@ -703,7 +847,9 @@
         let currentFinancialId = null;
         let addAvatarFile = null;
         let editAvatarFile = null;
+        let confirmCallback = null;
 
+        // ==================== UI Helpers ====================
         function showToast(msg, isError = false) {
             const toast = document.getElementById('toastMessage');
             toast.textContent = msg;
@@ -724,6 +870,26 @@
             document.getElementById('accountPopup').style.display = 'none';
             currentPopupAccount = null;
         }
+
+        // Custom confirm dialog
+        function showConfirm(title, message, onConfirm) {
+            const modal = document.getElementById('confirmModal');
+            document.getElementById('confirmTitle').textContent = title;
+            document.getElementById('confirmMessage').textContent = message;
+            confirmCallback = onConfirm;
+            modal.style.display = 'flex';
+        }
+
+        document.getElementById('confirmCancelBtn').onclick = () => {
+            document.getElementById('confirmModal').style.display = 'none';
+            confirmCallback = null;
+        };
+        
+        document.getElementById('confirmOkBtn').onclick = () => {
+            document.getElementById('confirmModal').style.display = 'none';
+            if (confirmCallback) confirmCallback();
+            confirmCallback = null;
+        };
 
         async function callAPI(endpoint, method = 'GET', data = null, isFormData = false) {
             const options = { method, headers: {} };
@@ -795,6 +961,7 @@
                 });
             } catch (error) {
                 document.getElementById('accountsTable').innerHTML = `<tr><td colspan="8" style="text-align:center; padding:60px;">Error: ${error.message}</td></tr>`;
+                showToast('Error loading accounts', true);
             } finally { showLoading(false); }
         }
 
@@ -857,15 +1024,16 @@
         
         window.deleteFromPopup = async () => {
             if (!currentPopupAccount) return;
-            if (!confirm(`⚠️ Permanently delete account ${currentPopupAccount.id}? This cannot be undone.`)) return;
-            showLoading(true);
-            try {
-                await callAPI(`/accounts/${currentPopupAccount.id}`, 'DELETE');
-                showToast(`Account ${currentPopupAccount.id} deleted`, false);
-                closePopup();
-                loadAccounts();
-            } catch (error) { showToast(error.message, true); }
-            finally { showLoading(false); }
+            showConfirm('Delete Account', `⚠️ Permanently delete account ${currentPopupAccount.id}? This cannot be undone.`, async () => {
+                showLoading(true);
+                try {
+                    await callAPI(`/accounts/${currentPopupAccount.id}`, 'DELETE');
+                    showToast(`Account ${currentPopupAccount.id} deleted`, false);
+                    closePopup();
+                    loadAccounts();
+                } catch (error) { showToast(error.message, true); }
+                finally { showLoading(false); }
+            });
         };
         
         // ==================== Edit Account ====================
@@ -906,10 +1074,10 @@
             currentFinancialId = userId;
             const financial = await fetchFinancial(userId);
             document.getElementById('financialInfo').innerHTML = `
-                <div style="background:#2a2a2a; border-radius:20px; padding:16px; margin-bottom:16px;">
-                    <div class="detail-row"><span class="detail-label">💰 Balance</span><span style="color:#2ecc71;">$${(financial?.balance || 0).toFixed(2)}</span></div>
-                    <div class="detail-row"><span class="detail-label">💳 Card Code</span><span><code>${financial?.cardCode || 'Not set'}</code></span></div>
-                    <div class="detail-row"><span class="detail-label">📅 Last Transaction</span><span>${financial?.transactions?.[0]?.description || 'None'}</span></div>
+                <div class="info-box">
+                    <div class="info-row"><span class="info-label">💰 Balance</span><span class="info-value">$${(financial?.balance || 0).toFixed(2)}</span></div>
+                    <div class="info-row"><span class="info-label">💳 Card Code</span><span class="info-value"><code>${financial?.cardCode || 'Not set'}</code></span></div>
+                    <div class="info-row"><span class="info-label">📅 Last Transaction</span><span class="info-value">${financial?.transactions?.[0]?.description || 'None'}</span></div>
                 </div>
             `;
             document.getElementById('financialAmount').value = '';
@@ -959,27 +1127,47 @@
             showToast('QR data copied');
         };
         
-        // ==================== Add Account ====================
+        // ==================== Add Account (Fixed - uses correct endpoint) ====================
         window.addNewAccount = async () => {
             const name = document.getElementById('addName').value.trim();
             const email = document.getElementById('addEmail').value.trim();
             const password = document.getElementById('addPassword').value.trim();
             if (!name || !email || !password) { showToast('All fields required', true); return; }
+            
             showLoading(true);
             try {
-                const result = await callAPI('/create-account', 'POST', { name, email, password });
-                const newId = result.account.id;
-                if (addAvatarFile) await uploadAvatar(newId, addAvatarFile);
-                showToast(`Account ${newId} created!`, false);
-                closeModal('addModal');
-                document.getElementById('addName').value = '';
-                document.getElementById('addEmail').value = '';
-                document.getElementById('addPassword').value = '';
-                addAvatarFile = null;
-                document.getElementById('addAvatarPreview').src = 'https://i.ibb.co/SDxkt40s/user.png';
-                loadAccounts();
-            } catch (error) { showToast(error.message, true); }
-            finally { showLoading(false); }
+                // Use the correct create-account endpoint
+                const response = await fetch(`${API_BASE}/create-account`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'x-api-key': INTERNAL_KEY
+                    },
+                    body: JSON.stringify({ name, email, password })
+                });
+                
+                const result = await response.json();
+                
+                if (result.success) {
+                    const newId = result.account.id;
+                    if (addAvatarFile) await uploadAvatar(newId, addAvatarFile);
+                    showToast(`Account ${newId} created!`, false);
+                    closeModal('addModal');
+                    document.getElementById('addName').value = '';
+                    document.getElementById('addEmail').value = '';
+                    document.getElementById('addPassword').value = '';
+                    addAvatarFile = null;
+                    document.getElementById('addAvatarPreview').src = 'https://i.ibb.co/SDxkt40s/user.png';
+                    loadAccounts();
+                } else {
+                    showToast(result.error || 'Failed to create account', true);
+                }
+            } catch (error) {
+                console.error('Create account error:', error);
+                showToast('Error creating account. Please try again.', true);
+            } finally {
+                showLoading(false);
+            }
         };
         
         // ==================== Avatar Handlers ====================

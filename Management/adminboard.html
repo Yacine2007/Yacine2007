@@ -3,124 +3,490 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-    <title>B.Y PRO Admin Panel</title>
+    <title>B.Y PRO Admin | Compact Panel</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif; }
-        body { background: #0a0a0a; min-height: 100vh; padding: 20px; }
-        
-        ::-webkit-scrollbar { width: 6px; height: 6px; }
-        ::-webkit-scrollbar-track { background: #1a1a1a; border-radius: 10px; }
-        ::-webkit-scrollbar-thumb { background: #2a6df4; border-radius: 10px; }
-        
-        .password-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.95); backdrop-filter: blur(12px); display: flex; align-items: center; justify-content: center; z-index: 2000; }
-        .password-card { background: #1a1a1a; padding: 40px; border-radius: 32px; width: 90%; max-width: 400px; text-align: center; border: 1px solid rgba(42,109,244,0.3); }
-        .password-card h2 { color: #2a6df4; margin-bottom: 8px; }
-        .password-card p { color: #888; margin-bottom: 24px; }
-        .password-card input { width: 100%; padding: 14px 18px; background: #2a2a2a; border: 1px solid #3a3a3a; border-radius: 40px; color: white; font-size: 16px; margin-bottom: 16px; outline: none; }
-        .password-card input:focus { border-color: #2a6df4; }
-        .password-card button { width: 100%; padding: 14px; background: linear-gradient(135deg, #2a6df4, #1a5be0); border: none; border-radius: 40px; color: white; font-weight: 600; cursor: pointer; }
-        .error-text { color: #e74c3c; margin-top: 12px; display: none; }
-        
-        .dashboard { display: none; animation: fadeIn 0.3s ease; }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-        
-        .admin-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; flex-wrap: wrap; gap: 16px; }
-        .admin-header h1 { font-size: 20px; font-weight: 500; color: white; }
-        .admin-header h1 i { color: #2a6df4; margin-right: 8px; }
-        .stats-container { display: flex; gap: 12px; }
-        .stat-item { background: #1a1a1a; padding: 12px 20px; border-radius: 24px; text-align: center; border: 1px solid #2a2a2a; }
-        .stat-item h4 { font-size: 11px; color: #888; text-transform: uppercase; margin-bottom: 4px; }
-        .stat-item .stat-value { font-size: 22px; font-weight: 600; color: white; }
-        
-        .btn-refresh { background: #2a2a2a; border: none; padding: 10px 20px; border-radius: 40px; color: white; cursor: pointer; display: inline-flex; align-items: center; gap: 8px; transition: 0.2s; }
-        .btn-refresh:hover { background: #2a6df4; }
-        .btn-add { background: linear-gradient(135deg, #2a6df4, #1a5be0); border: none; padding: 12px 24px; border-radius: 40px; color: white; font-weight: 600; cursor: pointer; display: inline-flex; align-items: center; gap: 8px; margin-bottom: 20px; transition: 0.2s; }
-        .btn-add:hover { transform: translateY(-2px); box-shadow: 0 5px 20px rgba(42,109,244,0.3); }
-        
-        .table-wrapper { background: #1a1a1a; border-radius: 24px; padding: 20px; overflow-x: auto; border: 1px solid #2a2a2a; }
-        table { width: 100%; border-collapse: collapse; }
-        th { text-align: left; padding: 16px 12px; color: #888; font-weight: 500; font-size: 13px; border-bottom: 1px solid #2a2a2a; }
-        td { padding: 14px 12px; border-bottom: 1px solid #2a2a2a; vertical-align: middle; color: white; }
-        tr:hover { background: #222; }
-        .avatar-img { width: 42px; height: 42px; border-radius: 50%; object-fit: cover; border: 2px solid #2a6df4; cursor: pointer; }
-        .badge { display: inline-block; padding: 4px 12px; border-radius: 30px; font-size: 11px; font-weight: 600; }
-        .badge-active { background: rgba(46,204,113,0.2); color: #2ecc71; }
-        .badge-blocked { background: rgba(231,76,60,0.2); color: #e74c3c; }
-        .action-btn { background: none; border: none; color: #888; cursor: pointer; font-size: 18px; padding: 8px 12px; border-radius: 8px; transition: 0.2s; }
-        .action-btn:hover { background: #2a2a2a; color: white; }
-        
-        .popup-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); backdrop-filter: blur(8px); align-items: center; justify-content: center; z-index: 3000; }
-        .popup-container { background: #1a1a1a; border-radius: 32px; width: 90%; max-width: 450px; max-height: 85vh; overflow-y: auto; border: 1px solid #2a6df4; animation: popupFadeIn 0.2s ease; }
-        .popup-header { display: flex; justify-content: space-between; align-items: center; padding: 20px 24px; border-bottom: 1px solid #2a2a2a; }
-        .popup-header h3 { color: white; font-size: 18px; }
-        .popup-header h3 i { color: #2a6df4; margin-right: 8px; }
-        .popup-close { background: none; border: none; color: #888; font-size: 24px; cursor: pointer; }
-        .popup-body { padding: 20px 24px; }
-        .user-detail { background: #2a2a2a; border-radius: 20px; padding: 16px; margin-bottom: 20px; }
-        .detail-row { display: flex; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid #3a3a3a; }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+        }
+
+        body {
+            background: #0a0a0a;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        ::-webkit-scrollbar {
+            width: 5px;
+            height: 5px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #1a1a1a;
+            border-radius: 8px;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #2a6df4;
+            border-radius: 8px;
+        }
+
+        /* dashboard only - no password overlay */
+        .dashboard {
+            animation: fadeIn 0.25s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(6px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* compact header & stats */
+        .admin-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+
+        .admin-header h1 {
+            font-size: 18px;
+            font-weight: 500;
+            color: white;
+            letter-spacing: -0.2px;
+        }
+
+        .admin-header h1 i {
+            color: #2a6df4;
+            margin-right: 6px;
+            font-size: 18px;
+        }
+
+        .stats-container {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .stat-item {
+            background: #121212;
+            padding: 6px 14px;
+            border-radius: 28px;
+            text-align: center;
+            border: 1px solid #252525;
+        }
+
+        .stat-item h4 {
+            font-size: 10px;
+            color: #888;
+            text-transform: uppercase;
+            letter-spacing: 0.3px;
+            margin-bottom: 2px;
+        }
+
+        .stat-item .stat-value {
+            font-size: 18px;
+            font-weight: 600;
+            color: white;
+            line-height: 1.2;
+        }
+
+        .btn-refresh {
+            background: #1e1e1e;
+            border: 1px solid #2c2c2c;
+            padding: 6px 14px;
+            border-radius: 32px;
+            color: #ddd;
+            cursor: pointer;
+            font-size: 13px;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            transition: 0.2s;
+        }
+
+        .btn-refresh:hover {
+            background: #2a6df4;
+            border-color: #2a6df4;
+            color: white;
+        }
+
+        .btn-add {
+            background: linear-gradient(135deg, #2a6df4, #1a5be0);
+            border: none;
+            padding: 7px 16px;
+            border-radius: 32px;
+            color: white;
+            font-weight: 500;
+            font-size: 13px;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            margin-bottom: 18px;
+            transition: 0.2s;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.2);
+        }
+
+        .btn-add:hover {
+            transform: translateY(-1px);
+            filter: brightness(1.05);
+        }
+
+        /* table wrapper - less padding */
+        .table-wrapper {
+            background: #111111;
+            border-radius: 20px;
+            padding: 12px 0px;
+            overflow-x: auto;
+            border: 1px solid #222;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th {
+            text-align: left;
+            padding: 12px 12px;
+            color: #888;
+            font-weight: 500;
+            font-size: 12px;
+            border-bottom: 1px solid #232323;
+        }
+
+        td {
+            padding: 10px 12px;
+            border-bottom: 1px solid #1f1f1f;
+            vertical-align: middle;
+            color: #efefef;
+            font-size: 13px;
+        }
+
+        tr:hover {
+            background: #181818;
+        }
+
+        .avatar-img {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 1.5px solid #2a6df4;
+            cursor: pointer;
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 3px 10px;
+            border-radius: 30px;
+            font-size: 10px;
+            font-weight: 600;
+        }
+        .badge-active {
+            background: rgba(46,204,113,0.18);
+            color: #2ecc71;
+        }
+        .badge-blocked {
+            background: rgba(231,76,60,0.18);
+            color: #e74c3c;
+        }
+
+        .action-btn {
+            background: none;
+            border: none;
+            color: #aaa;
+            cursor: pointer;
+            font-size: 16px;
+            padding: 6px 10px;
+            border-radius: 8px;
+            transition: 0.15s;
+        }
+        .action-btn:hover {
+            background: #252525;
+            color: white;
+        }
+
+        /* popups & modals - tighter spacing */
+        .popup-overlay, .modal-overlay, .confirm-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.88);
+            backdrop-filter: blur(6px);
+            align-items: center;
+            justify-content: center;
+            z-index: 3000;
+        }
+
+        .popup-container, .modal-container, .confirm-container {
+            background: #121212;
+            border-radius: 24px;
+            width: 90%;
+            max-width: 420px;
+            max-height: 85vh;
+            overflow-y: auto;
+            border: 1px solid #2a6df4;
+            animation: popupFadeIn 0.2s ease;
+        }
+
+        @keyframes popupFadeIn {
+            from { opacity: 0; transform: scale(0.96); }
+            to { opacity: 1; transform: scale(1); }
+        }
+
+        .popup-header, .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 14px 20px;
+            border-bottom: 1px solid #252525;
+        }
+
+        .popup-header h3, .modal-header h3 {
+            color: white;
+            font-size: 16px;
+            font-weight: 500;
+        }
+
+        .popup-header h3 i, .modal-header h3 i {
+            color: #2a6df4;
+            margin-right: 6px;
+        }
+
+        .popup-close, .modal-close {
+            background: none;
+            border: none;
+            color: #888;
+            font-size: 22px;
+            cursor: pointer;
+            line-height: 1;
+        }
+
+        .popup-body {
+            padding: 16px 20px;
+        }
+
+        .user-detail {
+            background: #1a1a1a;
+            border-radius: 18px;
+            padding: 12px 14px;
+            margin-bottom: 18px;
+        }
+
+        .detail-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 7px 0;
+            border-bottom: 1px solid #292929;
+            font-size: 13px;
+        }
         .detail-row:last-child { border-bottom: none; }
-        .detail-label { color: #888; font-size: 13px; }
-        .detail-value { color: white; font-weight: 500; }
-        .popup-actions { display: flex; flex-direction: column; gap: 10px; }
-        .popup-action-btn { padding: 14px 20px; background: #2a2a2a; border: none; border-radius: 40px; color: white; font-size: 14px; font-weight: 500; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 10px; transition: 0.2s; }
-        .popup-action-btn:hover { background: #3a3a3a; }
+        .detail-label { color: #888; font-size: 12px; }
+        .detail-value { color: #f0f0f0; font-weight: 500; }
+
+        .popup-actions {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+        .popup-action-btn {
+            padding: 9px 12px;
+            background: #202020;
+            border: none;
+            border-radius: 40px;
+            color: white;
+            font-size: 13px;
+            font-weight: 500;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            transition: 0.15s;
+        }
+        .popup-action-btn:hover { background: #2c2c2c; }
         .popup-action-btn.danger { color: #e74c3c; }
         .popup-action-btn.warning { color: #f39c12; }
-        
-        .confirm-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); backdrop-filter: blur(8px); align-items: center; justify-content: center; z-index: 3500; }
-        .confirm-container { background: #1a1a1a; border-radius: 32px; width: 90%; max-width: 380px; padding: 28px; text-align: center; border: 1px solid #2a6df4; animation: popupFadeIn 0.2s ease; }
-        .confirm-container i { font-size: 48px; color: #f39c12; margin-bottom: 16px; }
-        .confirm-container h3 { color: white; margin-bottom: 12px; }
-        .confirm-container p { color: #888; margin-bottom: 24px; font-size: 14px; }
-        .confirm-buttons { display: flex; gap: 12px; }
+
+        .confirm-container {
+            text-align: center;
+            padding: 24px 20px;
+        }
+        .confirm-container i {
+            font-size: 40px;
+            color: #f39c12;
+            margin-bottom: 12px;
+        }
+        .confirm-container h3 {
+            font-size: 18px;
+            margin-bottom: 8px;
+        }
+        .confirm-container p {
+            font-size: 13px;
+            color: #aaa;
+            margin-bottom: 20px;
+        }
+        .confirm-buttons {
+            display: flex;
+            gap: 10px;
+        }
+        .confirm-cancel, .confirm-ok {
+            flex: 1;
+            padding: 8px 12px;
+            border-radius: 40px;
+            border: none;
+            font-weight: 500;
+            cursor: pointer;
+        }
         .confirm-cancel { background: #2a2a2a; color: white; }
         .confirm-ok { background: #e74c3c; color: white; }
-        
-        .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); backdrop-filter: blur(8px); align-items: center; justify-content: center; z-index: 4000; }
-        .modal-container { background: #1a1a1a; border-radius: 32px; padding: 28px; width: 90%; max-width: 500px; max-height: 85vh; overflow-y: auto; border: 1px solid #2a6df4; }
-        .modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; }
-        .modal-header h3 { color: white; font-size: 20px; }
-        .modal-close { background: none; border: none; color: #888; font-size: 24px; cursor: pointer; }
-        .form-field { margin-bottom: 20px; }
-        .form-field label { display: block; color: #aaa; font-size: 13px; margin-bottom: 8px; }
-        .form-field input { width: 100%; padding: 12px 16px; background: #2a2a2a; border: 1px solid #3a3a3a; border-radius: 40px; color: white; font-size: 14px; outline: none; }
-        .form-field input:focus { border-color: #2a6df4; }
-        .avatar-upload-area { display: flex; flex-direction: column; align-items: center; margin: 16px 0; }
-        .avatar-preview-circle { width: 100px; height: 100px; border-radius: 50%; object-fit: cover; border: 3px solid #2a6df4; background: #2a2a2a; cursor: pointer; }
-        .avatar-hint { font-size: 12px; color: #888; margin-top: 8px; cursor: pointer; }
-        .btn-primary { background: linear-gradient(135deg, #2a6df4, #1a5be0); border: none; padding: 12px 24px; border-radius: 40px; color: white; font-weight: 600; cursor: pointer; width: 100%; }
-        .btn-secondary { background: #2a2a2a; border: none; padding: 10px 20px; border-radius: 40px; color: white; cursor: pointer; }
-        .flex-row { display: flex; gap: 12px; margin-top: 20px; }
-        
-        .toast-message { position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%); background: #2ecc71; color: white; padding: 12px 24px; border-radius: 40px; font-size: 14px; z-index: 5000; display: none; animation: toastSlideUp 0.3s ease; }
-        .toast-error { background: #e74c3c; }
-        @keyframes toastSlideUp { from { opacity: 0; transform: translateX(-50%) translateY(20px); } to { opacity: 1; transform: translateX(-50%) translateY(0); } }
-        
-        .loading-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); display: none; align-items: center; justify-content: center; z-index: 6000; }
-        .loading-spinner { width: 50px; height: 50px; border: 3px solid #2a2a2a; border-top-color: #2a6df4; border-radius: 50%; animation: spin 1s linear infinite; }
-        @keyframes spin { to { transform: rotate(360deg); } }
-        .info-box { background: #2a2a2a; border-radius: 20px; padding: 16px; margin-bottom: 16px; }
-        .info-row { display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid #3a3a3a; }
+
+        /* compact form fields */
+        .form-field {
+            margin-bottom: 14px;
+        }
+        .form-field label {
+            display: block;
+            color: #aaa;
+            font-size: 12px;
+            margin-bottom: 5px;
+        }
+        .form-field input, .form-field select {
+            width: 100%;
+            padding: 8px 14px;
+            background: #1e1e1e;
+            border: 1px solid #2f2f2f;
+            border-radius: 32px;
+            color: white;
+            font-size: 13px;
+            outline: none;
+        }
+        .form-field input:focus, .form-field select:focus {
+            border-color: #2a6df4;
+        }
+
+        .avatar-upload-area {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin: 8px 0 12px;
+        }
+        .avatar-preview-circle {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 2px solid #2a6df4;
+            background: #1a1a1a;
+            cursor: pointer;
+        }
+        .avatar-hint {
+            font-size: 11px;
+            color: #888;
+            margin-top: 6px;
+            cursor: pointer;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #2a6df4, #1a5be0);
+            border: none;
+            padding: 8px 14px;
+            border-radius: 32px;
+            color: white;
+            font-weight: 500;
+            cursor: pointer;
+            font-size: 13px;
+        }
+        .btn-secondary {
+            background: #262626;
+            border: none;
+            padding: 8px 14px;
+            border-radius: 32px;
+            color: #ddd;
+            cursor: pointer;
+            font-size: 13px;
+        }
+        .flex-row {
+            display: flex;
+            gap: 12px;
+            margin-top: 16px;
+        }
+
+        .info-box {
+            background: #1a1a1a;
+            border-radius: 18px;
+            padding: 12px;
+            margin-bottom: 16px;
+        }
+        .info-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 6px 0;
+            font-size: 13px;
+            border-bottom: 1px solid #2a2a2a;
+        }
         .info-label { color: #888; }
         .info-value { color: #2ecc71; font-weight: 500; }
+
+        .toast-message {
+            position: fixed;
+            bottom: 24px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #2ecc71;
+            color: white;
+            padding: 8px 18px;
+            border-radius: 40px;
+            font-size: 13px;
+            z-index: 5000;
+            display: none;
+            animation: toastUp 0.2s ease;
+            box-shadow: 0 3px 12px rgba(0,0,0,0.3);
+        }
+        .toast-error { background: #e74c3c; }
+        @keyframes toastUp {
+            from { opacity: 0; transform: translateX(-50%) translateY(12px); }
+            to { opacity: 1; transform: translateX(-50%) translateY(0); }
+        }
+
+        .loading-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.7);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 6000;
+        }
+        .loading-spinner {
+            width: 36px;
+            height: 36px;
+            border: 3px solid #2a2a2a;
+            border-top-color: #2a6df4;
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+        }
+        @keyframes spin { to { transform: rotate(360deg); } }
     </style>
 </head>
 <body>
-    <div id="passwordOverlay" class="password-overlay">
-        <div class="password-card">
-            <h2><i class="fas fa-lock"></i> Admin Access</h2>
-            <p>Enter admin password to access the system</p>
-            <input type="password" id="adminPassword" placeholder="Password">
-            <button id="loginAdminBtn">Access Dashboard</button>
-            <div id="passwordError" class="error-text">Incorrect password</div>
-        </div>
-    </div>
-
+    <!-- dashboard directly visible, no password overlay -->
     <div id="dashboard" class="dashboard">
         <div class="admin-header">
-            <h1><i class="fas fa-users-cog"></i> B.Y PRO Account Management</h1>
+            <h1><i class="fas fa-users-cog"></i> B.Y PRO · Account Management</h1>
             <div class="stats-container">
                 <div class="stat-item"><h4>Total</h4><div class="stat-value" id="statTotal">0</div></div>
                 <div class="stat-item"><h4>Balance</h4><div class="stat-value" id="statBalance">$0</div></div>
@@ -129,12 +495,16 @@
             </div>
         </div>
 
-        <button class="btn-add" id="addAccountBtn"><i class="fas fa-plus"></i> Add New Account</button>
+        <button class="btn-add" id="addAccountBtn"><i class="fas fa-plus"></i> Add Account</button>
 
         <div class="table-wrapper">
-             <table>
-                <thead> <tr><th>Avatar</th><th>ID</th><th>Name</th><th>Email</th><th>Balance</th><th>Card</th><th>Status</th><th></th></tr> </thead>
-                <tbody id="accountsTable"> <tr><td colspan="8" style="text-align:center; padding:60px;"><i class="fas fa-spinner fa-spin"></i> Loading...</td></tr> </tbody>
+            <table>
+                <thead>
+                    <tr><th>Avatar</th><th>ID</th><th>Name</th><th>Email</th><th>Balance</th><th>Card</th><th>Status</th><th></th></tr>
+                </thead>
+                <tbody id="accountsTable">
+                    <tr><td colspan="8" style="text-align:center; padding:48px;"><i class="fas fa-spinner fa-pulse"></i> Loading accounts...</td></tr>
+                </tbody>
             </table>
         </div>
     </div>
@@ -152,11 +522,11 @@
                     <div class="detail-row"><span class="detail-label"><i class="fas fa-lock"></i> Status</span><span class="detail-value" id="popupStatus">-</span></div>
                 </div>
                 <div class="popup-actions">
-                    <button class="popup-action-btn" id="popupEditBtn"><i class="fas fa-edit"></i> Edit Account</button>
-                    <button class="popup-action-btn" id="popupFinancialBtn"><i class="fas fa-wallet"></i> Financial Details</button>
-                    <button class="popup-action-btn" id="popupQRBtn"><i class="fas fa-qrcode"></i> Generate QR Code</button>
-                    <button class="popup-action-btn warning" id="popupBlockBtn"><i class="fas fa-ban"></i> Block Account</button>
-                    <button class="popup-action-btn danger" id="popupDeleteBtn"><i class="fas fa-trash"></i> Delete Account</button>
+                    <button class="popup-action-btn" id="popupEditBtn"><i class="fas fa-edit"></i> Edit</button>
+                    <button class="popup-action-btn" id="popupFinancialBtn"><i class="fas fa-wallet"></i> Financial</button>
+                    <button class="popup-action-btn" id="popupQRBtn"><i class="fas fa-qrcode"></i> QR Code</button>
+                    <button class="popup-action-btn warning" id="popupBlockBtn"><i class="fas fa-ban"></i> Block</button>
+                    <button class="popup-action-btn danger" id="popupDeleteBtn"><i class="fas fa-trash"></i> Delete</button>
                 </div>
             </div>
         </div>
@@ -167,24 +537,24 @@
         <div class="confirm-container">
             <i class="fas fa-exclamation-triangle"></i>
             <h3 id="confirmTitle">Confirm Action</h3>
-            <p id="confirmMessage">Are you sure you want to proceed?</p>
+            <p id="confirmMessage">Are you sure?</p>
             <div class="confirm-buttons"><button class="confirm-cancel" id="confirmCancelBtn">Cancel</button><button class="confirm-ok" id="confirmOkBtn">Confirm</button></div>
         </div>
     </div>
 
-    <!-- Add Modal -->
+    <!-- Add Modal (compact) -->
     <div id="addModal" class="modal-overlay">
         <div class="modal-container">
             <div class="modal-header"><h3><i class="fas fa-user-plus"></i> Add Account</h3><button class="modal-close" onclick="closeModal('addModal')">&times;</button></div>
-            <div class="form-field"><label>Name</label><input type="text" id="addName" placeholder="Enter full name"></div>
-            <div class="form-field"><label>Email</label><input type="email" id="addEmail" placeholder="Enter email address"></div>
-            <div class="form-field"><label>Password</label><input type="text" id="addPassword" placeholder="Create a password"></div>
+            <div class="form-field"><label>Full name</label><input type="text" id="addName" placeholder="John Doe"></div>
+            <div class="form-field"><label>Email</label><input type="email" id="addEmail" placeholder="user@example.com"></div>
+            <div class="form-field"><label>Password</label><input type="text" id="addPassword" placeholder="min 6 characters"></div>
             <div class="avatar-upload-area">
                 <img id="addAvatarPreview" class="avatar-preview-circle" src="https://i.ibb.co/SDxkt40s/user.png" onclick="document.getElementById('addAvatarFile').click()">
                 <input type="file" id="addAvatarFile" accept="image/*" style="display:none">
-                <div class="avatar-hint" onclick="document.getElementById('addAvatarFile').click()"><i class="fas fa-camera"></i> Click to change avatar</div>
+                <div class="avatar-hint" onclick="document.getElementById('addAvatarFile').click()"><i class="fas fa-camera"></i> change avatar</div>
             </div>
-            <div class="flex-row"><button class="btn-secondary" onclick="closeModal('addModal')">Cancel</button><button class="btn-primary" id="confirmAddBtn">Create Account</button></div>
+            <div class="flex-row"><button class="btn-secondary" onclick="closeModal('addModal')">Cancel</button><button class="btn-primary" id="confirmAddBtn">Create</button></div>
         </div>
     </div>
 
@@ -195,35 +565,35 @@
             <div class="form-field"><label>ID</label><input type="text" id="editId" readonly></div>
             <div class="form-field"><label>Name</label><input type="text" id="editName"></div>
             <div class="form-field"><label>Email</label><input type="email" id="editEmail"></div>
-            <div class="form-field"><label>New Password</label><input type="text" id="editNewPwd" placeholder="Leave empty to keep current"></div>
+            <div class="form-field"><label>New Password</label><input type="text" id="editNewPwd" placeholder="leave empty to keep"></div>
             <div class="avatar-upload-area">
                 <img id="editAvatarPreview" class="avatar-preview-circle" src="https://i.ibb.co/SDxkt40s/user.png" onclick="document.getElementById('editAvatarFile').click()">
                 <input type="file" id="editAvatarFile" accept="image/*" style="display:none">
-                <div class="avatar-hint" onclick="document.getElementById('editAvatarFile').click()"><i class="fas fa-camera"></i> Change avatar</div>
+                <div class="avatar-hint" onclick="document.getElementById('editAvatarFile').click()"><i class="fas fa-camera"></i> change</div>
             </div>
-            <div class="flex-row"><button class="btn-secondary" onclick="closeModal('editModal')">Cancel</button><button class="btn-primary" id="saveEditBtn">Save Changes</button></div>
+            <div class="flex-row"><button class="btn-secondary" onclick="closeModal('editModal')">Cancel</button><button class="btn-primary" id="saveEditBtn">Save</button></div>
         </div>
     </div>
 
     <!-- Financial Modal -->
     <div id="financialModal" class="modal-overlay">
         <div class="modal-container">
-            <div class="modal-header"><h3><i class="fas fa-wallet"></i> Financial Details</h3><button class="modal-close" onclick="closeModal('financialModal')">&times;</button></div>
+            <div class="modal-header"><h3><i class="fas fa-wallet"></i> Financial</h3><button class="modal-close" onclick="closeModal('financialModal')">&times;</button></div>
             <div id="financialInfo"></div>
-            <div class="form-field"><label>Update Balance ($)</label><input type="number" id="financialAmount" step="0.01"></div>
+            <div class="form-field"><label>Amount ($)</label><input type="number" id="financialAmount" step="0.01"></div>
             <div class="form-field"><label>Action</label><select id="financialAction"><option value="add">Add to Balance</option><option value="set">Set New Balance</option></select></div>
             <div class="form-field"><label>Card Code</label><input type="text" id="financialCardCode"></div>
-            <div class="flex-row"><button class="btn-secondary" onclick="closeModal('financialModal')">Cancel</button><button class="btn-primary" id="saveFinancialBtn">Save Changes</button></div>
+            <div class="flex-row"><button class="btn-secondary" onclick="closeModal('financialModal')">Cancel</button><button class="btn-primary" id="saveFinancialBtn">Update</button></div>
         </div>
     </div>
 
     <!-- QR Modal -->
     <div id="qrModal" class="modal-overlay">
         <div class="modal-container">
-            <div class="modal-header"><h3><i class="fas fa-qrcode"></i> Login QR Code</h3><button class="modal-close" onclick="closeModal('qrModal')">&times;</button></div>
-            <div id="qrCodeDisplay" style="text-align:center; padding:20px;"></div>
-            <div class="form-field"><input type="text" id="qrDataText" readonly style="font-family:monospace; font-size:12px;"></div>
-            <button class="btn-secondary" onclick="copyQRData()" style="width:100%"><i class="fas fa-copy"></i> Copy QR Data</button>
+            <div class="modal-header"><h3><i class="fas fa-qrcode"></i> QR Login</h3><button class="modal-close" onclick="closeModal('qrModal')">&times;</button></div>
+            <div id="qrCodeDisplay" style="text-align:center; padding:12px;"></div>
+            <div class="form-field"><input type="text" id="qrDataText" readonly style="font-family:monospace; font-size:11px;"></div>
+            <button class="btn-secondary" onclick="copyQRData()" style="width:100%"><i class="fas fa-copy"></i> Copy Data</button>
         </div>
     </div>
 
@@ -233,7 +603,6 @@
     <script>
         const API_BASE = 'https://b-y-pro-acounts-login.onrender.com/api';
         const INTERNAL_KEY = 'bypro-internal-key-2025';
-        const ADMIN_PWD = '20070909';
 
         let allAccounts = [];
         let currentPopupAccount = null;
@@ -248,7 +617,7 @@
             toast.textContent = msg;
             toast.className = `toast-message ${isError ? 'toast-error' : ''}`;
             toast.style.display = 'block';
-            setTimeout(() => toast.style.display = 'none', 3000);
+            setTimeout(() => toast.style.display = 'none', 2600);
         }
 
         function showLoading(show) { document.getElementById('loadingOverlay').style.display = show ? 'flex' : 'none'; }
@@ -326,21 +695,17 @@
                         <td>${acc.name}</td>
                         <td>${acc.email}</td>
                         <td style="color:#2ecc71;">$${acc.balance.toFixed(2)}</td>
-                        <td><code style="font-size:11px;">${acc.cardCode}</code></td>
+                        <td><code style="font-size:10px;">${acc.cardCode.substring(0,12)}</code></td>
                         <td><span class="badge ${acc.blocked ? 'badge-blocked' : 'badge-active'}">${acc.blocked ? 'BLOCKED' : 'ACTIVE'}</span></td>
                         <td><button class="action-btn" data-id="${acc.id}"><i class="fas fa-ellipsis-v"></i></button></td>
                     `;
                     tbody.appendChild(row);
                 });
-                // Attach event listeners to the newly created buttons
                 document.querySelectorAll('.action-btn').forEach(btn => {
-                    btn.onclick = (e) => {
-                        const id = btn.getAttribute('data-id');
-                        openAccountPopup(id);
-                    };
+                    btn.onclick = (e) => { const id = btn.getAttribute('data-id'); openAccountPopup(id); };
                 });
             } catch (error) {
-                document.getElementById('accountsTable').innerHTML = `<tr><td colspan="8" style="text-align:center; padding:60px;">Error: ${error.message}</td></tr>`;
+                document.getElementById('accountsTable').innerHTML = `<tr><td colspan="8" style="text-align:center; padding:48px;">⚠️ ${error.message}</td></tr>`;
                 showToast('Error loading accounts', true);
             } finally { showLoading(false); }
         }
@@ -357,45 +722,21 @@
             document.getElementById('popupStatus').textContent = account.blocked ? 'BLOCKED' : 'ACTIVE';
             document.getElementById('popupStatus').style.color = account.blocked ? '#e74c3c' : '#2ecc71';
             const blockBtn = document.getElementById('popupBlockBtn');
-            blockBtn.innerHTML = account.blocked ? '<i class="fas fa-unlock"></i> Unblock Account' : '<i class="fas fa-ban"></i> Block Account';
+            blockBtn.innerHTML = account.blocked ? '<i class="fas fa-unlock"></i> Unblock' : '<i class="fas fa-ban"></i> Block';
             document.getElementById('accountPopup').style.display = 'flex';
         }
 
-        // Fixed popup action handlers (save ID before closing)
-        document.getElementById('popupEditBtn').onclick = () => {
-            if (currentPopupAccount) {
-                const id = currentPopupAccount.id;
-                closePopup();
-                openEditAccount(id);
-            } else {
-                showToast('Please select an account first', true);
-            }
-        };
-        document.getElementById('popupFinancialBtn').onclick = () => {
-            if (currentPopupAccount) {
-                const id = currentPopupAccount.id;
-                closePopup();
-                openFinancialModal(id);
-            } else {
-                showToast('Please select an account first', true);
-            }
-        };
-        document.getElementById('popupQRBtn').onclick = () => {
-            if (currentPopupAccount) {
-                const id = currentPopupAccount.id;
-                closePopup();
-                generateQRCode(id);
-            } else {
-                showToast('Please select an account first', true);
-            }
-        };
+        // popup handlers
+        document.getElementById('popupEditBtn').onclick = () => { if(currentPopupAccount) { const id = currentPopupAccount.id; closePopup(); openEditAccount(id); } };
+        document.getElementById('popupFinancialBtn').onclick = () => { if(currentPopupAccount) { const id = currentPopupAccount.id; closePopup(); openFinancialModal(id); } };
+        document.getElementById('popupQRBtn').onclick = () => { if(currentPopupAccount) { const id = currentPopupAccount.id; closePopup(); generateQRCode(id); } };
         document.getElementById('popupBlockBtn').onclick = async () => {
             if (!currentPopupAccount) return;
             const newBlock = !currentPopupAccount.blocked;
             showLoading(true);
             try {
                 await callAPI(`/accounts/${currentPopupAccount.id}/block`, 'POST', { blocked: newBlock });
-                showToast(`Account ${currentPopupAccount.id} ${newBlock ? 'BLOCKED' : 'UNBLOCKED'}`, false);
+                showToast(`${currentPopupAccount.id} ${newBlock ? 'blocked' : 'unblocked'}`);
                 closePopup();
                 loadAccounts();
             } catch (error) { showToast(error.message, true); }
@@ -403,11 +744,11 @@
         };
         document.getElementById('popupDeleteBtn').onclick = () => {
             if (!currentPopupAccount) return;
-            showConfirm('Delete Account', `⚠️ Permanently delete account ${currentPopupAccount.id}? This cannot be undone.`, async () => {
+            showConfirm('Delete account', `Permanently delete ${currentPopupAccount.id}? irreversible.`, async () => {
                 showLoading(true);
                 try {
                     await callAPI(`/accounts/${currentPopupAccount.id}`, 'DELETE');
-                    showToast(`Account ${currentPopupAccount.id} deleted`, false);
+                    showToast(`Deleted ${currentPopupAccount.id}`);
                     closePopup();
                     loadAccounts();
                 } catch (error) { showToast(error.message, true); }
@@ -415,7 +756,6 @@
             });
         };
 
-        // Edit account functions
         async function openEditAccount(id) {
             const acc = allAccounts.find(a => a.id === id);
             if (!acc) return;
@@ -433,14 +773,14 @@
             const name = document.getElementById('editName').value.trim();
             const email = document.getElementById('editEmail').value.trim();
             const newPwd = document.getElementById('editNewPwd').value.trim();
-            if (!name || !email) { showToast('Name and email required', true); return; }
+            if (!name || !email) { showToast('Name & email required', true); return; }
             const payload = { name, email };
             if (newPwd) payload.password = newPwd;
             showLoading(true);
             try {
                 await callAPI(`/accounts/${id}`, 'PUT', payload);
                 if (editAvatarFile) await uploadAvatar(id, editAvatarFile);
-                showToast(`Account ${id} updated`, false);
+                showToast(`Updated ${id}`);
                 closeModal('editModal');
                 loadAccounts();
             } catch (error) { showToast(error.message, true); }
@@ -448,15 +788,13 @@
         };
         document.getElementById('saveEditBtn').onclick = window.saveEditAccount;
 
-        // Financial functions
         async function openFinancialModal(userId) {
             currentFinancialId = userId;
             const financial = await fetchFinancial(userId);
             document.getElementById('financialInfo').innerHTML = `
                 <div class="info-box">
                     <div class="info-row"><span class="info-label">💰 Balance</span><span class="info-value">$${(financial?.balance || 0).toFixed(2)}</span></div>
-                    <div class="info-row"><span class="info-label">💳 Card Code</span><span class="info-value"><code>${financial?.cardCode || 'Not set'}</code></span></div>
-                    <div class="info-row"><span class="info-label">📅 Last Transaction</span><span class="info-value">${financial?.transactions?.[0]?.description || 'None'}</span></div>
+                    <div class="info-row"><span class="info-label">💳 Card</span><span class="info-value"><code>${financial?.cardCode || 'Not set'}</code></span></div>
                 </div>
             `;
             document.getElementById('financialAmount').value = '';
@@ -473,12 +811,12 @@
                 const current = await fetchFinancial(userId);
                 if (!isNaN(amount)) {
                     let newBalance = action === 'set' ? amount : current.balance + amount;
-                    await callAPI('/financial/add-balance', 'POST', { userId, amount: newBalance - current.balance, description: `Admin ${action} balance` });
+                    await callAPI('/financial/add-balance', 'POST', { userId, amount: newBalance - current.balance, description: `Admin ${action}` });
                 }
                 if (newCardCode && newCardCode !== current.cardCode) {
                     await callAPI('/financial/update-card', 'POST', { userId, cardCode: newCardCode });
                 }
-                showToast('Financial data updated', false);
+                showToast('Financial updated');
                 closeModal('financialModal');
                 loadAccounts();
             } catch (error) { showToast(error.message, true); }
@@ -486,43 +824,36 @@
         };
         document.getElementById('saveFinancialBtn').onclick = window.saveFinancialChanges;
 
-        // QR code
         async function generateQRCode(userId) {
             try {
                 const account = await callAPI(`/accounts/${userId}`);
                 const qrText = `BYPRO:${account.account.id}:${account.account.password}`;
                 const container = document.getElementById('qrCodeDisplay');
                 container.innerHTML = '';
-                new QRCode(container, { text: qrText, width: 180, height: 180 });
+                new QRCode(container, { text: qrText, width: 160, height: 160 });
                 document.getElementById('qrDataText').value = qrText;
                 document.getElementById('qrModal').style.display = 'flex';
-            } catch (error) { showToast('Error generating QR: ' + error.message, true); }
+            } catch (error) { showToast('QR error: ' + error.message, true); }
         }
-        window.copyQRData = () => { const data = document.getElementById('qrDataText'); data.select(); document.execCommand('copy'); showToast('QR data copied'); };
+        window.copyQRData = () => { const data = document.getElementById('qrDataText'); data.select(); document.execCommand('copy'); showToast('Copied'); };
 
-        // Add account (with avatar upload fallback)
         window.addNewAccount = async () => {
-            const name = document.getElementById('addName')?.value.trim() || '';
-            const email = document.getElementById('addEmail')?.value.trim() || '';
-            const password = document.getElementById('addPassword')?.value.trim() || '';
-            if (!name) { showToast('Name is required', true); return; }
-            if (!email) { showToast('Email is required', true); return; }
-            if (!password) { showToast('Password is required', true); return; }
-            if (password.length < 6) { showToast('Password must be at least 6 characters', true); return; }
+            const name = document.getElementById('addName').value.trim();
+            const email = document.getElementById('addEmail').value.trim();
+            const password = document.getElementById('addPassword').value.trim();
+            if (!name || !email || !password) { showToast('All fields required', true); return; }
+            if (password.length < 6) { showToast('Password min 6 chars', true); return; }
             showLoading(true);
             try {
                 const response = await fetch(`${API_BASE}/create-account`, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json', 'x-api-key': INTERNAL_KEY },
+                    method: 'POST', headers: { 'Content-Type': 'application/json', 'x-api-key': INTERNAL_KEY },
                     body: JSON.stringify({ name, email, password })
                 });
                 const result = await response.json();
                 if (result.success) {
                     const newId = result.account.id;
-                    if (addAvatarFile) {
-                        try { await uploadAvatar(newId, addAvatarFile); } catch (e) { console.warn('Avatar upload failed:', e); showToast('Avatar upload failed, but account created.', false); }
-                    }
-                    showToast(`✅ Account ${newId} created!`, false);
+                    if (addAvatarFile) { try { await uploadAvatar(newId, addAvatarFile); } catch(e) { showToast('Avatar failed but account created', false); } }
+                    showToast(`✅ Account ${newId} created`);
                     closeModal('addModal');
                     document.getElementById('addName').value = '';
                     document.getElementById('addEmail').value = '';
@@ -530,30 +861,22 @@
                     addAvatarFile = null;
                     document.getElementById('addAvatarPreview').src = 'https://i.ibb.co/SDxkt40s/user.png';
                     loadAccounts();
-                } else {
-                    showToast(result.error || 'Failed to create account', true);
-                }
-            } catch (error) {
-                showToast('Error creating account: ' + error.message, true);
-            } finally { showLoading(false); }
+                } else { showToast(result.error || 'Creation failed', true); }
+            } catch (error) { showToast('Error: ' + error.message, true); }
+            finally { showLoading(false); }
         };
 
-        function handleAddAvatar(file) { if (!file) return; if (!file.type.match('image.*')) { showToast('Select an image file', true); return; } if (file.size > 5*1024*1024) { showToast('Max 5MB', true); return; } addAvatarFile = file; const reader = new FileReader(); reader.onload = e => { document.getElementById('addAvatarPreview').src = e.target.result; }; reader.readAsDataURL(file); }
-        function handleEditAvatar(file) { if (!file) return; if (!file.type.match('image.*')) { showToast('Select an image file', true); return; } if (file.size > 5*1024*1024) { showToast('Max 5MB', true); return; } editAvatarFile = file; const reader = new FileReader(); reader.onload = e => { document.getElementById('editAvatarPreview').src = e.target.result; }; reader.readAsDataURL(file); }
+        function handleAddAvatar(file) { if(!file) return; if(!file.type.match('image.*')) { showToast('Image only', true); return; } if(file.size>5*1024*1024){ showToast('Max 5MB', true); return; } addAvatarFile=file; const reader=new FileReader(); reader.onload=e=>document.getElementById('addAvatarPreview').src=e.target.result; reader.readAsDataURL(file); }
+        function handleEditAvatar(file) { if(!file) return; if(!file.type.match('image.*')) { showToast('Image only', true); return; } if(file.size>5*1024*1024){ showToast('Max 5MB', true); return; } editAvatarFile=file; const reader=new FileReader(); reader.onload=e=>document.getElementById('editAvatarPreview').src=e.target.result; reader.readAsDataURL(file); }
 
-        document.getElementById('loginAdminBtn').onclick = () => {
-            if (document.getElementById('adminPassword').value === ADMIN_PWD) {
-                document.getElementById('passwordOverlay').style.display = 'none';
-                document.getElementById('dashboard').style.display = 'block';
-                loadAccounts();
-            } else { document.getElementById('passwordError').style.display = 'block'; }
-        };
-        document.getElementById('adminPassword').onkeypress = e => e.key === 'Enter' && document.getElementById('loginAdminBtn').click();
         document.getElementById('refreshBtn').onclick = loadAccounts;
         document.getElementById('addAccountBtn').onclick = () => document.getElementById('addModal').style.display = 'flex';
         document.getElementById('confirmAddBtn').onclick = () => window.addNewAccount();
         document.getElementById('addAvatarFile').onchange = e => handleAddAvatar(e.target.files[0]);
         document.getElementById('editAvatarFile').onchange = e => handleEditAvatar(e.target.files[0]);
+
+        // start without password
+        loadAccounts();
     </script>
 </body>
 </html>

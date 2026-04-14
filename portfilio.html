@@ -1,968 +1,634 @@
 <!DOCTYPE html>
-<html lang="en" dir="ltr">
+<html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Portfolio - Yacine-Dev | Web Developer</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+<title>Yacine Ben Mokrane | UI/UX & Front-end Architect</title>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700;14..32,800&display=swap" rel="stylesheet">
 <style>
-    /* --- Reset & Base --- */
-    * { 
-        margin:0; 
-        padding:0; 
-        box-sizing:border-box; 
-        font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
     }
-    
-    :root {
-        --primary-dark: #000000;
-        --primary-blue: #0077FF;
-        --blue-hover: #005ECC;
-        --blue-light: #3395FF;
-        --white: #FFFFFF;
-        --gray-light: #F5F5F5;
-        --gray-medium: #888888;
-        --gray-dark: #333333;
-        --card-bg: #0A0A0A;
-        --card-border: #222222;
-        --section-bg: #111111;
-        --glass-bg: rgba(0, 0, 0, 0.7);
-        --glass-border: rgba(255, 255, 255, 0.1);
+
+    body {
+        font-family: 'Inter', system-ui, -apple-system, sans-serif;
+        background: #f4f6fa;
+        color: #111827;
+        line-height: 1.5;
     }
-    
-    body { 
-        background: var(--primary-dark);
-        color: var(--white);
-        overflow-x: hidden;
-        line-height: 1.6;
+
+    .container {
+        max-width: 1440px;
+        margin: 0 auto;
+        padding: 2rem;
     }
-    
-    html {
-        scroll-behavior: smooth;
-    }
-    
-    /* --- Header --- */
-    .header {
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100%;
-        background: var(--glass-bg);
-        backdrop-filter: blur(15px);
-        -webkit-backdrop-filter: blur(15px);
-        border-bottom: 1px solid var(--glass-border);
-        z-index: 1000;
-        padding: 1rem 2rem;
+
+    /* header minimal */
+    .top-bar {
         display: flex;
         justify-content: space-between;
         align-items: center;
+        flex-wrap: wrap;
+        gap: 1rem;
+        margin-bottom: 2rem;
+        padding-bottom: 1rem;
+        border-bottom: 1px solid #e4e9f0;
     }
-    
     .logo {
+        font-size: 1.8rem;
+        font-weight: 800;
+        background: linear-gradient(135deg, #0f172a, #1e293b);
+        background-clip: text;
+        -webkit-background-clip: text;
+        color: transparent;
+        letter-spacing: -0.02em;
+    }
+    .logo i {
+        background: none;
+        color: #1e293b;
+        margin-right: 6px;
+    }
+    .lang-selector {
+        background: white;
+        border: 1px solid #d4dcec;
+        padding: 0.5rem 1.2rem;
+        border-radius: 40px;
+        font-weight: 500;
+        font-size: 0.85rem;
+        cursor: pointer;
+        font-family: inherit;
+        transition: 0.2s;
+        color: #1e293b;
+    }
+    .lang-selector:hover {
+        border-color: #8b9dc3;
+    }
+
+    /* two columns */
+    .dashboard {
+        display: flex;
+        gap: 2rem;
+        flex-wrap: wrap;
+    }
+    .main-content {
+        flex: 2.2;
+        min-width: 260px;
+    }
+    .sidebar {
+        flex: 1;
+        min-width: 280px;
+    }
+
+    /* cards modern */
+    .card {
+        background: #ffffff;
+        border-radius: 32px;
+        box-shadow: 0 8px 24px rgba(0,0,0,0.02), 0 1px 2px rgba(0,0,0,0.02);
+        padding: 1.6rem;
+        margin-bottom: 2rem;
+        border: 1px solid #eef2fa;
+        transition: all 0.25s ease;
+    }
+    .card:hover {
+        box-shadow: 0 20px 35px -12px rgba(0,0,0,0.06);
+        border-color: #dce5f0;
+    }
+
+    .section-title {
         font-size: 1.5rem;
         font-weight: 700;
-        color: var(--white);
+        margin-bottom: 1.4rem;
         display: flex;
         align-items: center;
         gap: 10px;
+        color: #0f172a;
     }
-    
-    .logo i {
-        color: var(--primary-blue);
+    .section-title i {
+        color: #1e293b;
+        font-size: 1.3rem;
     }
-    
-.hero {
-    position: relative;
-    min-height: 100vh;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 120px 2rem 4rem;
-    background: linear-gradient(135deg, #000000 0%, #001933 100%);
-}
 
-.hero::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: 
-        radial-gradient(circle at 20% 30%, rgba(0, 119, 255, 0.1) 0%, transparent 50%),
-        radial-gradient(circle at 80% 70%, rgba(0, 119, 255, 0.05) 0%, transparent 50%);
-    pointer-events: none; /* هذا السطر المهم */
-    z-index: 1;
-}
-
-.hero-content {
-    max-width: 800px;
-    text-align: center;
-    position: relative; /* إضافة هذا */
-    z-index: 2; /* إضافة هذا */
-}
-
-.hero::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: 
-        radial-gradient(circle at 20% 30%, rgba(0, 119, 255, 0.1) 0%, transparent 50%),
-        radial-gradient(circle at 80% 70%, rgba(0, 119, 255, 0.05) 0%, transparent 50%);
-    pointer-events: none; /* السطر المهم */
-}
-
-
-    
-    .profile-img {
-        width: 180px;
-        height: 180px;
-        border-radius: 50%;
-        object-fit: cover;
-        border: 4px solid var(--primary-blue);
-        margin: 0 auto 2rem;
-        box-shadow: 0 0 30px rgba(0, 119, 255, 0.3);
-        background: var(--card-bg);
+    /* projects grid - clean */
+    .projects-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+        gap: 1.5rem;
     }
-    
-    .hero-title {
-        font-size: 3rem;
-        font-weight: 700;
-        color: var(--white);
-        margin-bottom: 1rem;
+    .project-card {
+        background: #ffffff;
+        border-radius: 24px;
+        border: 1px solid #eef2fa;
+        padding: 1.3rem;
+        transition: all 0.3s ease;
+        display: flex;
+        flex-direction: column;
     }
-    
-    .hero-title span {
-        color: var(--primary-blue);
+    .project-card:hover {
+        transform: translateY(-4px);
+        border-color: #cddae9;
+        box-shadow: 0 20px 30px -12px rgba(0,0,0,0.06);
     }
-    
-    .hero-subtitle {
-        font-size: 1.2rem;
-        color: var(--gray-medium);
-        max-width: 600px;
-        margin: 0 auto 2rem;
-    }
-    
-    .badge {
-        display: inline-block;
-        background: rgba(0, 119, 255, 0.2);
-        color: var(--primary-blue);
-        padding: 0.5rem 1.5rem;
-        border-radius: 50px;
-        font-weight: 600;
-        margin-bottom: 2rem;
-        border: 1px solid rgba(0, 119, 255, 0.3);
-    }
-    
-    /* --- Buttons --- */
-    .btn {
+    .project-category {
         display: inline-flex;
         align-items: center;
         gap: 8px;
-        padding: 0.875rem 2rem;
-        border-radius: 8px;
+        font-size: 0.7rem;
         font-weight: 600;
-        text-decoration: none;
-        transition: all 0.3s ease;
-        border: none;
-        cursor: pointer;
-        font-size: 1rem;
+        background: #f0f3f9;
+        padding: 0.25rem 1rem;
+        border-radius: 40px;
+        width: fit-content;
+        margin-bottom: 0.9rem;
+        color: #1e293b;
     }
-    
-    .btn-primary {
-        background: var(--primary-blue);
-        color: var(--white);
+    .project-category i {
+        color: #1e293b;
+        font-size: 0.7rem;
     }
-    
-    .btn-primary:hover {
-        background: var(--blue-hover);
-        transform: translateY(-2px);
-        box-shadow: 0 10px 20px rgba(0, 119, 255, 0.3);
-    }
-    
-    .btn-secondary {
-        background: transparent;
-        color: var(--white);
-        border: 2px solid rgba(255, 255, 255, 0.2);
-    }
-    
-    .btn-secondary:hover {
-        background: rgba(255, 255, 255, 0.1);
-        transform: translateY(-2px);
-    }
-    
-    .btn-group {
-        display: flex;
-        gap: 1rem;
-        justify-content: center;
-        flex-wrap: wrap;
-        margin-top: 2rem;
-    }
-    
-    /* --- Sections --- */
-    .section {
-        padding: 5rem 2rem;
-        max-width: 1200px;
-        margin: 0 auto;
-    }
-    
-    .section-title {
-        font-size: 2.5rem;
-        font-weight: 700;
-        margin-bottom: 3rem;
-        text-align: center;
-        color: var(--white);
-    }
-    
-    .section-title i {
-        color: var(--primary-blue);
-        margin-right: 10px;
-    }
-    
-    /* --- Tech Stack --- */
-    .tech-grid {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-        gap: 1.5rem;
-        margin-top: 2rem;
-    }
-    
-    .tech-card {
-        background: var(--card-bg);
-        border: 1px solid var(--card-border);
-        border-radius: 12px;
-        padding: 1.5rem;
-        text-align: center;
-        transition: all 0.3s ease;
-    }
-    
-    .tech-card:hover {
-        border-color: var(--primary-blue);
-        transform: translateY(-5px);
-        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
-    }
-    
-    .tech-card i {
-        font-size: 2.5rem;
-        margin-bottom: 1rem;
-        color: var(--primary-blue);
-    }
-    
-    /* --- Projects (Card Only - No Images) --- */
-    .projects-grid {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-        gap: 2rem;
-        margin-top: 2rem;
-    }
-    
-    .project-card-simple {
-        background: var(--card-bg);
-        border: 1px solid var(--card-border);
-        border-radius: 12px;
-        padding: 2rem;
-        text-align: center;
-        transition: all 0.3s ease;
-    }
-    
-    .project-card-simple:hover {
-        border-color: var(--primary-blue);
-        transform: translateY(-5px);
-        box-shadow: 0 15px 30px rgba(0, 0, 0, 0.4);
-    }
-    
-    .project-card-simple .project-title {
-        font-size: 1.5rem;
-        font-weight: 600;
-        color: var(--white);
-        margin-bottom: 1rem;
-    }
-    
-    .project-card-simple .project-description {
-        color: var(--gray-medium);
-        margin-bottom: 1.5rem;
-        font-size: 1rem;
-    }
-    
-    .project-card-simple .project-price {
-        color: var(--primary-blue);
-        font-weight: 600;
-        margin: 1.5rem 0;
+    .project-title {
         font-size: 1.2rem;
+        font-weight: 700;
+        margin-bottom: 0.5rem;
+        color: #0f172a;
+        display: flex;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 8px;
     }
-    
-    /* --- Web Design Gallery --- */
-    .gallery-section {
-        background: var(--section-bg);
-        border-radius: 20px;
-        padding: 3rem;
-        margin: 3rem 0;
+    .highlight-badge {
+        background: #1e293b0c;
+        border: 1px solid #1e293b20;
+        font-size: 0.65rem;
+        font-weight: 600;
+        padding: 0.2rem 0.7rem;
+        border-radius: 40px;
+        color: #1e293b;
     }
-    
+    .project-description {
+        font-size: 0.8rem;
+        color: #4b5565;
+        margin: 0.6rem 0;
+        line-height: 1.45;
+        flex: 1;
+    }
+    .project-link {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        background: #0f172a;
+        color: white;
+        font-size: 0.75rem;
+        font-weight: 500;
+        padding: 0.45rem 1.2rem;
+        border-radius: 40px;
+        text-decoration: none;
+        transition: 0.2s;
+        width: fit-content;
+        margin-top: 0.8rem;
+    }
+    .project-link i {
+        font-size: 0.7rem;
+    }
+    .project-link:hover {
+        background: #1e293b;
+        gap: 10px;
+    }
+
+    /* tech stack */
+    .tech-grid {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.75rem;
+    }
+    .tech-item {
+        background: #f0f3f9;
+        border-radius: 40px;
+        padding: 0.45rem 1rem;
+        font-size: 0.8rem;
+        font-weight: 500;
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        color: #0f172a;
+    }
+    .tech-item i {
+        color: #1e293b;
+        font-size: 0.9rem;
+    }
+
+    /* gallery */
     .gallery-grid {
         display: grid;
-        grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-        gap: 1.5rem;
-        margin-top: 2rem;
+        grid-template-columns: repeat(auto-fill, minmax(105px, 1fr));
+        gap: 1rem;
     }
-    
-    .gallery-item {
-        position: relative;
-        border-radius: 12px;
+    .gallery-img-card {
+        background: #f8fafd;
+        border-radius: 20px;
         overflow: hidden;
         cursor: pointer;
-        border: 1px solid var(--card-border);
-        transition: all 0.3s ease;
+        border: 1px solid #eef2fa;
+        transition: 0.2s;
+        aspect-ratio: 1 / 0.9;
     }
-    
-    .gallery-item:hover {
-        border-color: var(--primary-blue);
-        transform: scale(1.02);
-    }
-    
-    .gallery-item img {
+    .gallery-img-card img {
         width: 100%;
-        height: 200px;
+        height: 100%;
         object-fit: cover;
         display: block;
     }
-    
-    .gallery-overlay {
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background: rgba(0, 0, 0, 0.7);
+    .gallery-img-card:hover {
+        transform: scale(0.97);
+        border-color: #b9c8e0;
+    }
+
+    /* profile */
+    .profile-card {
+        text-align: center;
+    }
+    .avatar {
+        width: 128px;
+        height: 128px;
+        border-radius: 50%;
+        object-fit: cover;
+        border: 3px solid white;
+        box-shadow: 0 15px 25px -10px rgba(0,0,0,0.08);
+        margin-bottom: 1rem;
+        background: #eef2fa;
+    }
+    .name {
+        font-size: 1.7rem;
+        font-weight: 800;
+        letter-spacing: -0.3px;
+    }
+    .name span {
+        background: linear-gradient(135deg, #1e293b, #2d3a4e);
+        background-clip: text;
+        -webkit-background-clip: text;
+        color: transparent;
+    }
+    .exp-tag {
+        background: #eef2fa;
+        display: inline-block;
+        padding: 0.2rem 1rem;
+        border-radius: 40px;
+        font-size: 0.7rem;
+        font-weight: 600;
+        margin: 0.7rem 0;
+        color: #1e293b;
+    }
+    .bio {
+        font-size: 0.85rem;
+        color: #4b5565;
+        margin: 1rem 0;
+        line-height: 1.5;
+    }
+    .contact-row {
+        display: flex;
+        justify-content: center;
+        gap: 1rem;
+        margin: 1.2rem 0;
+    }
+    .contact-icon {
+        background: #f0f3f9;
+        width: 48px;
+        height: 48px;
         display: flex;
         align-items: center;
         justify-content: center;
-        opacity: 0;
-        transition: opacity 0.3s ease;
+        border-radius: 50%;
+        color: #1e293b;
+        font-size: 1.2rem;
+        transition: all 0.2s;
+        text-decoration: none;
     }
-    
-    .gallery-item:hover .gallery-overlay {
-        opacity: 1;
+    .contact-icon:hover {
+        background: #1e293b;
+        color: white;
+        transform: translateY(-3px);
     }
-    
-    .view-btn {
-        background: var(--primary-blue);
-        color: var(--white);
-        padding: 0.5rem 1rem;
-        border-radius: 6px;
-        border: none;
-        cursor: pointer;
+    .freelance-badge {
+        background: #f8fafd;
+        border-left: 3px solid #1e293b;
+        padding: 0.7rem;
+        border-radius: 20px;
+        font-size: 0.75rem;
         font-weight: 500;
+        color: #1e293b;
+        margin-top: 0.8rem;
     }
-    
-    /* --- Divider Line --- */
-    .gallery-divider {
-        width: 100%;
-        height: 2px;
-        background: var(--card-border);
-        margin: 3rem 0;
-        position: relative;
+    .service-row {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.6rem;
+        justify-content: center;
+        margin-top: 1rem;
     }
-    
-    .gallery-divider::before {
-        content: '';
-        position: absolute;
-        left: 50%;
-        top: 50%;
-        transform: translate(-50%, -50%);
-        background: var(--primary-blue);
-        width: 60px;
-        height: 4px;
-        border-radius: 2px;
+    .service-chip {
+        background: #ffffff;
+        border: 1px solid #e2e8f0;
+        border-radius: 40px;
+        padding: 0.3rem 1rem;
+        font-size: 0.7rem;
+        font-weight: 500;
+        color: #1e293b;
     }
-    
-    .gallery-group-title {
+    .sample-note {
+        margin-top: 1.2rem;
+        font-size: 0.7rem;
+        background: #fef9e8;
+        border-radius: 24px;
+        padding: 0.6rem;
         text-align: center;
-        font-size: 1.5rem;
-        font-weight: 600;
-        margin: 2rem 0;
-        color: var(--white);
+        color: #7b5e2e;
+        border: 1px solid #f5e6c4;
     }
-    
-    /* --- Contact --- */
-    .contact-grid {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-        gap: 2rem;
-        margin-top: 2rem;
-    }
-    
-    .contact-card {
-        background: var(--card-bg);
-        border: 1px solid var(--card-border);
-        border-radius: 12px;
-        padding: 2rem;
-        text-align: center;
-        transition: all 0.3s ease;
-    }
-    
-    .contact-card:hover {
-        border-color: var(--primary-blue);
-        transform: translateY(-5px);
-    }
-    
-    .contact-card i {
-        font-size: 2.5rem;
-        color: var(--primary-blue);
-        margin-bottom: 1rem;
-    }
-    
-    /* --- Modal --- */
+
+    /* modal */
     .modal {
         display: none;
         position: fixed;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background: rgba(0, 0, 0, 0.95);
+        top: 0; left: 0;
+        width: 100%; height: 100%;
+        background: rgba(0,0,0,0.92);
         z-index: 2000;
         justify-content: center;
         align-items: center;
+        backdrop-filter: blur(6px);
     }
-    
     .modal-content {
-        max-width: 90%;
-        max-height: 90%;
-        border-radius: 12px;
+        max-width: 85vw;
+        max-height: 85vh;
+        border-radius: 28px;
+        border: 2px solid white;
     }
-    
     .close-modal {
         position: absolute;
-        top: 20px;
-        right: 30px;
-        font-size: 2.5rem;
-        color: var(--white);
+        top: 25px;
+        right: 35px;
+        font-size: 2.2rem;
+        color: white;
         cursor: pointer;
-        transition: color 0.3s ease;
     }
-    
-    .close-modal:hover {
-        color: var(--primary-blue);
-    }
-    
-    /* --- Responsive --- */
-    @media (max-width: 768px) {
-        .header {
-            padding: 0.75rem 1rem;
-        }
-        
-        .hero {
-            padding: 100px 1rem 3rem;
-        }
-        
-        .hero-title {
-            font-size: 2.2rem;
-        }
-        
-        .profile-img {
-            width: 150px;
-            height: 150px;
-        }
-        
-        .section {
-            padding: 3rem 1rem;
-        }
-        
-        .section-title {
-            font-size: 2rem;
-        }
-        
-        .btn-group {
-            flex-direction: column;
-            align-items: center;
-        }
-        
-        .btn {
-            width: 100%;
-            justify-content: center;
-        }
-        
-        .projects-grid {
-            grid-template-columns: 1fr;
-        }
-        
-        .gallery-grid {
-            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-        }
-        
-        .gallery-section {
-            padding: 2rem 1rem;
-        }
-    }
-    
-    @media (max-width: 480px) {
-        .hero-title {
-            font-size: 1.8rem;
-        }
-        
-        .profile-img {
-            width: 120px;
-            height: 120px;
-        }
-        
-        .section-title {
-            font-size: 1.6rem;
-        }
-        
-        .tech-grid {
-            grid-template-columns: repeat(2, 1fr);
-        }
-        
-        .gallery-grid {
-            grid-template-columns: 1fr;
-        }
+    @media (max-width: 780px) {
+        .container { padding: 1rem; }
+        .dashboard { flex-direction: column; }
+        .projects-grid { grid-template-columns: 1fr; }
     }
 </style>
 </head>
 <body>
-
-<!-- Header -->
-<header class="header">
-    <div class="logo">
-        <i class="fas fa-code"></i>
-        <span id="logoText">Yacine-Dev</span>
+<div class="container">
+    <div class="top-bar">
+        <div class="logo"><i class="fas fa-crown"></i> Yacine-Dev</div>
+        <select id="langSelect" class="lang-selector">
+            <option value="en">English</option>
+            <option value="ar">العربية</option>
+            <option value="fr">Français</option>
+        </select>
     </div>
-    <select id="langSelect" style="background: rgba(0,0,0,0.5); color: white; padding: 0.5rem; border-radius: 6px; border: 1px solid #333;">
-        <option value="en">English</option>
-        <option value="ar">العربية</option>
-        <option value="fr">Français</option>
-    </select>
-</header>
 
-<!-- Hero Section -->
-<section class="hero">
-    <div class="hero-content">
-        <img src="https://yacine2007.github.io/Yacine2007/picture.png" alt="Yacine-Dev" class="profile-img">
-        <h1 class="hero-title">Yacine-<span>Dev</span></h1>
-        <div class="badge" id="experienceBadge">3+ Years Experience</div>
-        <p class="hero-subtitle" id="intro">
-            Web Developer specializing in front-end development, creating responsive and modern websites with focus on user experience.
-        </p>
-        <div class="btn-group">
-            <!-- تم تغيير هذا الزر من button إلى a -->
-            <a href="#projects" class="btn btn-primary">
-                <i class="fas fa-briefcase"></i>
-                <span id="viewProjectsText">View Projects</span>
-            </a>
-            <a href="https://barmejli.kesug.com/" target="_blank" class="btn btn-secondary">
-                <i class="fas fa-laptop-code"></i>
-                <span id="viewBarmejliText">BarmejLi Platform</span>
-            </a>
-        </div>
-    </div>
-</section>
-
-<!-- Technologies -->
-<section class="section">
-    <h2 class="section-title"><i class="fas fa-code"></i> Technologies</h2>
-    <div class="tech-grid">
-        <div class="tech-card">
-            <i class="fab fa-html5"></i>
-            <h3>HTML5</h3>
-        </div>
-        <div class="tech-card">
-            <i class="fab fa-css3-alt"></i>
-            <h3>CSS3</h3>
-        </div>
-        <div class="tech-card">
-            <i class="fab fa-js-square"></i>
-            <h3>JavaScript</h3>
-        </div>
-        <div class="tech-card">
-            <i class="fab fa-react"></i>
-            <h3>React</h3>
-        </div>
-        <div class="tech-card">
-            <i class="fas fa-bolt"></i>
-            <h3>Express.js</h3>
-        </div>
-        <div class="tech-card">
-            <i class="fab fa-node-js"></i>
-            <h3>Node.js</h3>
-        </div>
-    </div>
-</section>
-
-<!-- Featured Projects (Card Only - No Images) -->
-<section class="section" id="projects">
-    <h2 class="section-title"><i class="fas fa-briefcase"></i> Featured Projects</h2>
-    <div class="projects-grid">
-        <!-- BarmejLi Platform -->
-        <div class="project-card-simple">
-            <h3 class="project-title">BarmejLi - برمجلي</h3>
-            <p class="project-description" id="barmejliDescriptionEn">
-                A service platform to facilitate receiving and organizing customer project requests. Customers can specify their web project type, fill out data forms, enter details, features, and personal contact information.
-            </p>
-            <div class="barmejli-features" style="text-align: left; margin: 1.5rem 0; color: var(--gray-medium);">
-                <p style="margin-bottom: 0.5rem;"><i class="fas fa-check-circle" style="color: var(--primary-blue);"></i> <span id="feature1">Custom project forms</span></p>
-                <p style="margin-bottom: 0.5rem;"><i class="fas fa-check-circle" style="color: var(--primary-blue);"></i> <span id="feature2">Detailed cost estimates</span></p>
-                <p style="margin-bottom: 0.5rem;"><i class="fas fa-check-circle" style="color: var(--primary-blue);"></i> <span id="feature3">Order management dashboard</span></p>
+    <div class="dashboard">
+        <!-- MAIN: projects + tech + gallery -->
+        <div class="main-content">
+            <div class="card">
+                <div class="section-title">
+                    <i class="fas fa-layer-group"></i>
+                    <span id="projectsTitle">Key Projects</span>
+                </div>
+                <div id="projectsGrid" class="projects-grid"></div>
+                <div class="sample-note" id="sampleNote">
+                    <i class="fas fa-infinity"></i> Representative sample — 12+ core projects, many more in portfolio.
+                </div>
             </div>
-            <a href="https://barmejli.kesug.com/" target="_blank" class="btn btn-primary">
-                <i class="fas fa-external-link-alt"></i>
-                <span id="visitBarmejliText">Visit Platform</span>
-            </a>
+
+            <div class="card">
+                <div class="section-title">
+                    <i class="fas fa-code"></i>
+                    <span id="techTitle">Core Expertise</span>
+                </div>
+                <div id="techStack" class="tech-grid"></div>
+            </div>
+
+            <div class="card">
+                <div class="section-title">
+                    <i class="fas fa-images"></i>
+                    <span id="galleryTitle">Visual Gallery</span>
+                </div>
+                <div id="galleryGrid" class="gallery-grid"></div>
+            </div>
         </div>
-        
-        <!-- Algerian Freelancers Platform -->
-        <div class="project-card-simple">
-            <h3 class="project-title">Algerian Freelancers Platform</h3>
-            <p class="project-description">A platform for Algerian freelancers where you can find me in the web development section</p>
-            <a href="https://dz-dev-freelancers.kesug.com/" target="_blank" class="btn btn-primary">
-                <i class="fas fa-external-link-alt"></i>
-                Visit Platform
-            </a>
-        </div>
-        
-        <!-- Ready-to-Sell E-commerce Store -->
-        <div class="project-card-simple">
-            <h3 class="project-title">Ready-to-Sell E-commerce Store</h3>
-            <p class="project-description">A complete e-commerce store ready for business</p>
-            <p class="project-price">7000DA / 35€ / 50$</p>
-            <a href="https://my-storewin.great-site.net/" target="_blank" class="btn btn-primary">
-                <i class="fas fa-shopping-cart"></i>
-                Visit Store
-            </a>
-        </div>
-        
-        <!-- Storakeg -->
-        <div class="project-card-simple">
-            <h3 class="project-title">Storakeg</h3>
-            <p class="project-title" style="font-size: 1rem; margin-top: -0.5rem; margin-bottom: 1.5rem; color: var(--gray-medium);">Storakeg</p>
-            <a href="https://storakeg.com" target="_blank" class="btn btn-primary">
-                <i class="fas fa-globe"></i>
-                Visit Website
-            </a>
-        </div>
-        
-        <!-- Qeematech -->
-        <div class="project-card-simple">
-            <h3 class="project-title">Qeematech</h3>
-            <p class="project-title" style="font-size: 1rem; margin-top: -0.5rem; margin-bottom: 1.5rem; color: var(--gray-medium);">Qeematech</p>
-            <a href="https://www.qeematech.net" target="_blank" class="btn btn-primary">
-                <i class="fas fa-globe"></i>
-                Visit Website
-            </a>
-        </div>
-        
-        <!-- Barmaja -->
-        <div class="project-card-simple">
-            <h3 class="project-title">Barmaja</h3>
-            <p class="project-title" style="font-size: 1rem; margin-top: -0.5rem; margin-bottom: 1.5rem; color: var(--gray-medium);">Barmaja</p>
-            <a href="https://www.barmaja.qa" target="_blank" class="btn btn-primary">
-                <i class="fas fa-globe"></i>
-                Visit Website
-            </a>
+
+        <!-- SIDEBAR -->
+        <div class="sidebar">
+            <div class="card profile-card">
+                <img src="https://yacine2007.github.io/Yacine2007/picture.png" alt="Yacine Ben Mokrane" class="avatar" id="profileImg" onerror="this.onerror=null; this.src='https://ui-avatars.com/api/?background=1e293b&color=fff&bold=true&size=128&name=Yacine+BM';">
+                <div class="name">Yacine Ben <span>Mokrane</span></div>
+                <div class="exp-tag" id="expBadge"></div>
+                <div class="bio" id="heroBio"></div>
+                <div class="contact-row">
+                    <a href="mailto:yassinebenmokran@gmail.com" class="contact-icon" title="Email"><i class="fas fa-envelope"></i></a>
+                    <a href="tel:+213795082763" class="contact-icon" title="Phone"><i class="fas fa-phone-alt"></i></a>
+                    <a href="https://yacine2007.github.io/Yacine2007/communication.html" target="_blank" class="contact-icon" title="All Links"><i class="fas fa-link"></i></a>
+                </div>
+                <div class="freelance-badge" id="freelanceText">
+                    <i class="fas fa-briefcase"></i> Freelance · Global · Remote
+                </div>
+                <div class="service-row" id="servicesList"></div>
+            </div>
         </div>
     </div>
-</section>
+</div>
 
-<!-- Web Design Gallery -->
-<section class="section" id="gallery">
-    <h2 class="section-title"><i class="fas fa-palette"></i> Web Design Gallery</h2>
-    
-    <div class="gallery-section">
-        <!-- المجموعة الأولى -->
-        <div class="gallery-grid" id="galleryGroup1">
-            <!-- Group 1 Images will be loaded here -->
-        </div>
-        
-        <!-- خط الفصل -->
-        <div class="gallery-divider"></div>
-        
-        <!-- المجموعة الثانية -->
-        <div class="gallery-grid" id="galleryGroup2">
-            <!-- Group 2 Images will be loaded here -->
-        </div>
-        
-        <!-- خط الفصل -->
-        <div class="gallery-divider"></div>
-        
-        <!-- المجموعة الثالثة -->
-        <div class="gallery-grid" id="galleryGroup3">
-            <!-- Group 3 Images will be loaded here -->
-        </div>
-    </div>
-</section>
-
-<!-- Contact Section -->
-<section class="section" id="contact">
-    <h2 class="section-title"><i class="fas fa-envelope"></i> Contact</h2>
-    <div class="contact-grid">
-        <div class="contact-card">
-            <i class="fas fa-envelope"></i>
-            <h3>Email</h3>
-            <p>yassinebenmokran@gmail.com</p>
-            <button class="btn btn-primary mt-2" onclick="window.location.href='mailto:yassinebenmokran@gmail.com'">Send Email</button>
-        </div>
-        
-        <div class="contact-card">
-            <i class="fas fa-phone"></i>
-            <h3>Phone</h3>
-            <p>+213795082763</p>
-            <button class="btn btn-primary mt-2" onclick="window.location.href='tel:+213795082763'">Call Now</button>
-        </div>
-        
-        <div class="contact-card">
-            <i class="fas fa-link"></i>
-            <h3>All Links</h3>
-            <p>All communication channels</p>
-            <a href="https://yacine2007.github.io/Yacine2007/communication.html" target="_blank" class="btn btn-primary mt-2">Contact Page</a>
-        </div>
-        
-        <div class="contact-card">
-            <i class="fas fa-laptop-code"></i>
-            <h3 id="barmejliContactTitle">BarmejLi Platform</h3>
-            <p id="barmejliContactDesc">Submit your project request</p>
-            <a href="https://barmejli.kesug.com/" target="_blank" class="btn btn-primary mt-2" id="visitBarmejliBtn">Visit Platform</a>
-        </div>
-    </div>
-</section>
-
-<!-- Image Modal -->
-<div class="modal" id="imageModal">
+<div id="imageModal" class="modal">
     <span class="close-modal">&times;</span>
     <img class="modal-content" id="modalImage">
 </div>
 
 <script>
-// Language data
-const langData = {
-    en: {
-        logoText: "Yacine-Dev",
-        intro: "Web Developer specializing in front-end development, creating responsive and modern websites with focus on user experience.",
-        experienceBadge: "3+ Years Experience",
-        viewProjectsText: "View Projects",
-        viewBarmejliText: "BarmejLi Platform",
-        projectsTitle: "Featured Projects",
-        galleryTitle: "Web Design Gallery",
-        contactTitle: "Contact",
-        // BarmejLi project description
-        barmejliDescription: "A service platform to facilitate receiving and organizing customer project requests. Customers can specify their web project type, fill out data forms, enter details, features, and personal contact information.",
-        feature1: "Custom project forms",
-        feature2: "Detailed cost estimates",
-        feature3: "Order management dashboard",
-        visitBarmejliText: "Visit Platform",
-        barmejliContactTitle: "BarmejLi Platform",
-        barmejliContactDesc: "Submit your project request"
-    },
-    ar: {
-        logoText: "ياسين-ديف",
-        intro: "مطور ويب متخصص في تطوير الواجهات الأمامية، أنشئ مواقع ويب متجاوبة وحديثة مع التركيز على تجربة المستخدم.",
-        experienceBadge: "خبرة أكثر من 3 سنوات",
-        viewProjectsText: "عرض المشاريع",
-        viewBarmejliText: "منصة برمجلي",
-        projectsTitle: "المشاريع المميزة",
-        galleryTitle: "معرض تصاميم الويب",
-        contactTitle: "اتصال",
-        // BarmejLi project description
-        barmejliDescription: "منصة خدمية تهدف إلى تسهيل عملية تلقي طلبات العملاء وتنظيمها. تتيح للعملاء تحديد نوع مشروع الويب الخاص بهم، وملء استمارة البيانات حوله، وإدخال التفاصيل والميزات ومعلوماتهم الشخصية للتواصل.",
-        feature1: "استمارات مشاريع مخصصة",
-        feature2: "تقدير تكلفة مفصلة",
-        feature3: "لوحة تحكم لإدارة الطلبات",
-        visitBarmejliText: "زيارة المنصة",
-        barmejliContactTitle: "منصة برمجلي",
-        barmejliContactDesc: "أرسل طلب مشروعك"
-    },
-    fr: {
-        logoText: "Yacine-Dev",
-        intro: "Développeur Web spécialisé dans le développement front-end, créant des sites web responsifs et modernes avec un accent sur l'expérience utilisateur.",
-        experienceBadge: "3+ Ans d'Expérience",
-        viewProjectsText: "Voir les Projets",
-        viewBarmejliText: "Plateforme BarmejLi",
-        projectsTitle: "Projets en Vedette",
-        galleryTitle: "Galerie de Design Web",
-        contactTitle: "Contact",
-        // BarmejLi project description
-        barmejliDescription: "Une plateforme de service pour faciliter la réception et l'organisation des demandes de projet des clients. Les clients peuvent spécifier leur type de projet web, remplir des formulaires de données, saisir les détails, les fonctionnalités et leurs informations personnelles de contact.",
-        feature1: "Formulaires de projet personnalisés",
-        feature2: "Estimations de coût détaillées",
-        feature3: "Tableau de bord de gestion des commandes",
-        visitBarmejliText: "Visiter la Plateforme",
-        barmejliContactTitle: "Plateforme BarmejLi",
-        barmejliContactDesc: "Soumettre votre demande de projet"
-    }
-};
+    const startYear = 2023;
+    const currentYear = new Date().getFullYear();
+    const expYears = currentYear - startYear;
 
-function scrollToElement(elementId) {
-    const element = document.getElementById(elementId);
-    if (element) {
-        const headerHeight = document.querySelector('.header').offsetHeight;
-        const elementPosition = element.getBoundingClientRect().top;
-        const offsetPosition = elementPosition + window.pageYOffset - headerHeight;
-        
-        window.scrollTo({
-            top: offsetPosition,
-            behavior: 'smooth'
-        });
-    }
-}
+    // ---------- PROJECTS with CORRECT categories (no fake OS, proper landing pages) ----------
+    const projectsData = {
+        en: [
+            { title: "BarmejLi Platform", desc: "Service platform to receive & manage software project requests with full admin dashboard.", link: "https://barmejli.kesug.com/", category: "Platform / Dashboard", icon: "fas fa-globe", highlight: false },
+            { title: "Alpha OS", desc: "Landing page & download portal for a custom operating system concept (UI/UX heavy).", link: "https://by-pro.kesug.com/Alphaos/Alphaos.html", category: "Landing page (OS download)", icon: "fas fa-download", highlight: false },
+            { title: "PC Store DZ", desc: "Professional e‑commerce store with integrated admin dashboard, inventory & orders.", link: "http://pc-store.kesug.com/", category: "E‑store + Dashboard", icon: "fas fa-store", highlight: true },
+            { title: "BY-PRO Software Co.", desc: "Official corporate landing page for software agency — brand identity & services.", link: "https://by-pro.kesug.com/", category: "Landing page (Corporate)", icon: "fas fa-building", highlight: true },
+            { title: "El-Wajiha DZ", desc: "Graduation project – University academic platform for students & faculty.", link: "http://el-wajiha-dz.kesug.com/", category: "Graduation Project", icon: "fas fa-graduation-cap", highlight: false },
+            { title: "Ardifilahia", desc: "Graduation project – Digital agriculture solution & farm management.", link: "https://ardifilahia.kesug.com/", category: "Graduation Project", icon: "fas fa-seedling", highlight: false },
+            { title: "Algeria Tourist Pass", desc: "Graduation project – Interactive tourism platform for Algeria.", link: "http://algeria-tourist-pass.kesug.com/", category: "Graduation Project", icon: "fas fa-umbrella-beach", highlight: false },
+            { title: "Facebook Bot", desc: "Marketing automation bot for software services + realtime dashboard.", link: "https://www.facebook.com/61561793138138/", category: "Automation / AI Chatbot", icon: "fas fa-robot", highlight: false },
+            { title: "Algerian Freelancers", desc: "Freelancer hub & community platform for web developers.", link: "https://dz-dev-freelancers.kesug.com/", category: "Community Hub", icon: "fas fa-users", highlight: false },
+            { title: "Storakeg", desc: "Inventory & business SaaS platform (stock management).", link: "https://storakeg.com", category: "SaaS Platform", icon: "fas fa-cloud", highlight: false },
+            { title: "Qeematech", desc: "Tech solutions & consulting firm website.", link: "https://www.qeematech.net", category: "Consulting / Corporate", icon: "fas fa-chart-line", highlight: false },
+            { title: "Barmaja", desc: "Digital innovation platform (QA based).", link: "https://www.barmaja.qa", category: "Innovation Platform", icon: "fas fa-lightbulb", highlight: false }
+        ],
+        ar: [
+            { title: "منصة برمجلي", desc: "منصة خدمية لتلقي وإدارة طلبات المشاريع البرمجية مع لوحة تحكم كاملة.", link: "https://barmejli.kesug.com/", category: "منصة / لوحة تحكم", icon: "fas fa-globe", highlight: false },
+            { title: "ألفا OS", desc: "صفحة هبوط وتحميل لنظام تشغيل تجريبي (تركيز على واجهات المستخدم).", link: "https://by-pro.kesug.com/Alphaos/Alphaos.html", category: "صفحة هبوط (تحميل نظام)", icon: "fas fa-download", highlight: false },
+            { title: "PC Store DZ", desc: "متجر إلكتروني احترافي مع لوحة تحكم إدارية.", link: "http://pc-store.kesug.com/", category: "متجر + لوحة تحكم", icon: "fas fa-store", highlight: true },
+            { title: "BY-PRO للبرمجيات", desc: "الصفحة الرسمية للشركة – الهوية والخدمات.", link: "https://by-pro.kesug.com/", category: "صفحة هبوط (شركة)", icon: "fas fa-building", highlight: true },
+            { title: "الوجيحة DZ", desc: "مشروع تخرج – منصة جامعية.", link: "http://el-wajiha-dz.kesug.com/", category: "مشروع تخرج", icon: "fas fa-graduation-cap", highlight: false },
+            { title: "أرض الفلاحة", desc: "مشروع تخرج – حل رقمي للزراعة.", link: "https://ardifilahia.kesug.com/", category: "مشروع تخرج", icon: "fas fa-seedling", highlight: false },
+            { title: "Algeria Tourist Pass", desc: "مشروع تخرج – منصة سياحية.", link: "http://algeria-tourist-pass.kesug.com/", category: "مشروع تخرج", icon: "fas fa-umbrella-beach", highlight: false },
+            { title: "بوت فيسبوك", desc: "بوت تسويق آلي + لوحة تحكم (ذكاء اصطناعي).", link: "https://www.facebook.com/61561793138138/", category: "أتمتة / بوتات ذكاء", icon: "fas fa-robot", highlight: false },
+            { title: "المستقلون الجزائريون", desc: "منصة مجتمع للمستقلين.", link: "https://dz-dev-freelancers.kesug.com/", category: "منصة مجتمع", icon: "fas fa-users", highlight: false },
+            { title: "Storakeg", desc: "منصة SaaS للمخزون والأعمال.", link: "https://storakeg.com", category: "منصة SaaS", icon: "fas fa-cloud", highlight: false },
+            { title: "Qeematech", desc: "موقع استشارات وحلول تقنية.", link: "https://www.qeematech.net", category: "استشارات / شركة", icon: "fas fa-chart-line", highlight: false },
+            { title: "برمجة", desc: "منصة الابتكار الرقمي.", link: "https://www.barmaja.qa", category: "منصة ابتكار", icon: "fas fa-lightbulb", highlight: false }
+        ],
+        fr: [
+            { title: "Plateforme BarmejLi", desc: "Plateforme de gestion de demandes de projets logiciels + dashboard.", link: "https://barmejli.kesug.com/", category: "Plateforme / Dashboard", icon: "fas fa-globe", highlight: false },
+            { title: "Alpha OS", desc: "Page de téléchargement & landing pour un OS conceptuel (UX/UI).", link: "https://by-pro.kesug.com/Alphaos/Alphaos.html", category: "Landing (téléchargement OS)", icon: "fas fa-download", highlight: false },
+            { title: "PC Store DZ", desc: "Boutique e‑commerce pro avec tableau de bord intégré.", link: "http://pc-store.kesug.com/", category: "E‑store + Dashboard", icon: "fas fa-store", highlight: true },
+            { title: "BY-PRO Software", desc: "Site corporate officiel – identité & services.", link: "https://by-pro.kesug.com/", category: "Landing (Corporate)", icon: "fas fa-building", highlight: true },
+            { title: "El-Wajiha DZ", desc: "Projet de fin d'études – plateforme universitaire.", link: "http://el-wajiha-dz.kesug.com/", category: "Projet diplômant", icon: "fas fa-graduation-cap", highlight: false },
+            { title: "Ardifilahia", desc: "Projet de fin d'études – solution agricole numérique.", link: "https://ardifilahia.kesug.com/", category: "Projet diplômant", icon: "fas fa-seedling", highlight: false },
+            { title: "Algeria Tourist Pass", desc: "Projet de fin d'études – plateforme touristique.", link: "http://algeria-tourist-pass.kesug.com/", category: "Projet diplômant", icon: "fas fa-umbrella-beach", highlight: false },
+            { title: "Bot Facebook", desc: "Bot marketing automatisé + dashboard (IA).", link: "https://www.facebook.com/61561793138138/", category: "Automatisation / Chatbot AI", icon: "fas fa-robot", highlight: false },
+            { title: "Freelances Algériens", desc: "Hub communautaire pour développeurs web.", link: "https://dz-dev-freelancers.kesug.com/", category: "Hub communautaire", icon: "fas fa-users", highlight: false },
+            { title: "Storakeg", desc: "Plateforme SaaS d'inventaire et business.", link: "https://storakeg.com", category: "SaaS", icon: "fas fa-cloud", highlight: false },
+            { title: "Qeematech", desc: "Solutions tech et consulting.", link: "https://www.qeematech.net", category: "Consulting / Corporate", icon: "fas fa-chart-line", highlight: false },
+            { title: "Barmaja", desc: "Plateforme d'innovation digitale.", link: "https://www.barmaja.qa", category: "Plateforme innovation", icon: "fas fa-lightbulb", highlight: false }
+        ]
+    };
 
-// جميع الصور مجمعة في كائن واحد
-const allImages = [
-    // المجموعة الأولى: الصور الرئيسية
-    '1.PNG', '2.PNG', '3.PNG', 
-    'ex.PNG', 'ex1.PNG', 'ex2.PNG', 'ex3.PNG',
-    
-    // المجموعة الثانية: الصور الخاصة
-    '258.PNG', '741.PNG', '963.PNG',
-    
-    // المجموعة الثالثة: الصور الإضافية
-    '111.PNG', '166.PNG', '555.PNG', '666.PNG'
-];
+    // Updated tech stack: front-end focused + AI chatbots + UI/UX + logo design
+    const techData = {
+        en: ["HTML5", "CSS3", "JavaScript", "React", "UI/UX Design", "Logo Design", "AI Chatbots", "MongoDB", "Node.js", "Python"],
+        ar: ["HTML5", "CSS3", "JavaScript", "React", "تصميم واجهات", "تصميم شعارات", "بوتات ذكاء اصطناعي", "MongoDB", "Node.js", "Python"],
+        fr: ["HTML5", "CSS3", "JavaScript", "React", "UI/UX Design", "Logo Design", "Chatbots IA", "MongoDB", "Node.js", "Python"]
+    };
 
-document.addEventListener('DOMContentLoaded', function() {
-    // Language switcher
-    const langSelect = document.getElementById('langSelect');
-    langSelect.addEventListener('change', function() {
-        const lang = this.value;
-        const data = langData[lang];
-        
-        // Update all text elements
-        document.getElementById('logoText').textContent = data.logoText;
-        document.getElementById('intro').textContent = data.intro;
-        document.getElementById('experienceBadge').textContent = data.experienceBadge;
-        document.getElementById('viewProjectsText').textContent = data.viewProjectsText;
-        document.getElementById('viewBarmejliText').textContent = data.viewBarmejliText;
-        
-        // Update BarmejLi project card
-        document.getElementById('barmejliDescriptionEn').textContent = data.barmejliDescription;
-        document.getElementById('feature1').textContent = data.feature1;
-        document.getElementById('feature2').textContent = data.feature2;
-        document.getElementById('feature3').textContent = data.feature3;
-        document.getElementById('visitBarmejliText').textContent = data.visitBarmejliText;
-        
-        // Update BarmejLi contact card
-        document.getElementById('barmejliContactTitle').textContent = data.barmejliContactTitle;
-        document.getElementById('barmejliContactDesc').textContent = data.barmejliContactDesc;
-        document.getElementById('visitBarmejliBtn').textContent = data.visitBarmejliText;
-        
-        // Update section titles
-        const titles = document.querySelectorAll('.section-title');
-        titles[0].innerHTML = `<i class="fas fa-code"></i> Technologies`;
-        titles[1].innerHTML = `<i class="fas fa-briefcase"></i> ${data.projectsTitle}`;
-        titles[2].innerHTML = `<i class="fas fa-palette"></i> ${data.galleryTitle}`;
-        titles[3].innerHTML = `<i class="fas fa-envelope"></i> ${data.contactTitle}`;
-    });
+    const techIcons = {
+        'HTML5':'fab fa-html5','CSS3':'fab fa-css3-alt','JavaScript':'fab fa-js','React':'fab fa-react','Node.js':'fab fa-node-js',
+        'Python':'fab fa-python','MongoDB':'fas fa-database','UI/UX Design':'fas fa-pen-ruler','Logo Design':'fas fa-palette',
+        'AI Chatbots':'fas fa-brain','Chatbots IA':'fas fa-brain','بوتات ذكاء اصطناعي':'fas fa-brain','تصميم واجهات':'fas fa-pen-ruler','تصميم شعارات':'fas fa-palette'
+    };
 
-    // Load gallery images into groups
-    function loadGalleryGroups() {
-        const group1 = document.getElementById('galleryGroup1');
-        const group2 = document.getElementById('galleryGroup2');
-        const group3 = document.getElementById('galleryGroup3');
-        
-        // تفريغ المجموعات أولاً
-        group1.innerHTML = '';
-        group2.innerHTML = '';
-        group3.innerHTML = '';
-        
-        // تحميل الصور في مجموعاتها
-        allImages.forEach((image, index) => {
-            const item = document.createElement('div');
-            item.className = 'gallery-item';
-            item.innerHTML = `
-                <img src="https://raw.githubusercontent.com/Yacine2007/Yacine2007/main/prtf/${image}" 
-                     alt="Design ${index + 1}" 
-                     data-src="https://raw.githubusercontent.com/Yacine2007/Yacine2007/main/prtf/${image}">
-                <div class="gallery-overlay">
-                    <button class="view-btn">View</button>
-                </div>
-            `;
-            
-            // توزيع الصور على المجموعات الثلاث
-            if (index < 7) { // أول 7 صور (1-7)
-                group1.appendChild(item);
-            } else if (index < 10) { // الصور 8-10 (258, 741, 963)
-                group2.appendChild(item);
-            } else { // باقي الصور
-                group3.appendChild(item);
-            }
-        });
-    }
+    // First-person bio
+    const bioText = {
+        en: "I'm a UI/UX designer and front-end architect. I craft high-performance e‑stores, landing pages, SaaS platforms, and custom dashboards. 60% of my focus is on interface design & front-end excellence — I also build AI chatbots and visual identities (logos).",
+        ar: "أنا مصمم واجهات ومطور ويب أمامي. أصمم متاجر إلكترونية عالية الأداء، صفحات هبوط، منصات SaaS، ولوحات تحكم. 60% من تركيزي على تصميم الواجهات والفرونت إند — وأبني أيضاً بوتات ذكاء اصطناعي وهوية بصرية (شعارات).",
+        fr: "Je suis designer UI/UX et architecte front-end. Je conçois des e‑commerces, landing pages, SaaS, tableaux de bord. 60% de mon focus est sur le design d'interface et l'excellence front-end — je développe aussi des chatbots IA et des identités visuelles (logos)."
+    };
+    const freelanceTexts = {
+        en: "<i class='fas fa-check-circle'></i> Freelance · UI/UX specialist · Global remote",
+        ar: "<i class='fas fa-check-circle'></i> عمل حر · اختصاصي واجهات · عن بُعد عالمي",
+        fr: "<i class='fas fa-check-circle'></i> Freelance · spécialiste UI/UX · Remote global"
+    };
+    const uiText = {
+        en: { projectsTitle: "Key Projects", galleryTitle: "Design Gallery", techTitle: "Core Expertise" },
+        ar: { projectsTitle: "المشاريع الرئيسية", galleryTitle: "معرض التصاميم", techTitle: "الخبرات الأساسية" },
+        fr: { projectsTitle: "Projets clés", galleryTitle: "Galerie Design", techTitle: "Expertises" }
+    };
+    const servicesList = {
+        en: ["UI/UX Design", "Landing Pages", "E‑stores", "SaaS Platforms", "AI Chatbots", "Logo Design"],
+        ar: ["تصميم واجهات", "صفحات هبوط", "متاجر إلكترونية", "منصات SaaS", "بوتات ذكاء", "تصميم شعارات"],
+        fr: ["UI/UX Design", "Landing Pages", "Boutiques en ligne", "SaaS", "Chatbots IA", "Logo Design"]
+    };
+    const sampleNoteText = {
+        en: "<i class='fas fa-infinity'></i> Representative sample — 12+ core projects, many more in portfolio.",
+        ar: "<i class='fas fa-infinity'></i> عينة متوسطة — 12+ مشروعاً رئيسياً، والمزيد في المحفظة.",
+        fr: "<i class='fas fa-infinity'></i> Échantillon représentatif — 12+ projets phares, portfolio étendu."
+    };
 
-    // تحميل معرض الصور
-    loadGalleryGroups();
+    // gallery images (unchanged)
+    const originalImages = ['1.PNG', '2.PNG', '3.PNG', 'ex.PNG', 'ex1.PNG', 'ex2.PNG', 'ex3.PNG', '258.PNG', '741.PNG', '963.PNG', '111.PNG', '166.PNG', '555.PNG', '666.PNG'];
+    const baseGalleryUrl = "https://raw.githubusercontent.com/Yacine2007/Yacine2007/main/prtf/";
+    const fallbackImg = "https://placehold.co/400x300/eef2fa/1e293b?text=Design+Preview";
 
-    // Modal functionality
-    const modal = document.getElementById('imageModal');
-    const modalImg = document.getElementById('modalImage');
-    const closeModal = document.querySelector('.close-modal');
-
-    function setupModal() {
-        // Add click events to gallery items
-        document.querySelectorAll('.gallery-item').forEach(item => {
-            item.addEventListener('click', function() {
-                const img = this.querySelector('img');
+    function loadGallery() {
+        const container = document.getElementById('galleryGrid');
+        container.innerHTML = '';
+        originalImages.forEach(imgName => {
+            const imgUrl = baseGalleryUrl + imgName;
+            const div = document.createElement('div');
+            div.className = 'gallery-img-card';
+            const img = document.createElement('img');
+            img.src = imgUrl;
+            img.alt = 'design preview';
+            img.setAttribute('data-src', imgUrl);
+            img.onerror = function() { this.src = fallbackImg; this.setAttribute('data-src', fallbackImg); };
+            div.appendChild(img);
+            div.addEventListener('click', () => {
+                const modal = document.getElementById('imageModal');
+                const modalImg = document.getElementById('modalImage');
                 modal.style.display = 'flex';
-                modalImg.src = img.getAttribute('data-src');
+                modalImg.src = img.getAttribute('data-src') || img.src;
             });
-        });
-
-        // Close modal
-        closeModal.addEventListener('click', () => {
-            modal.style.display = 'none';
-        });
-
-        // Close on outside click
-        modal.addEventListener('click', (e) => {
-            if (e.target === modal) {
-                modal.style.display = 'none';
-            }
-        });
-
-        // Close with Escape key
-        document.addEventListener('keydown', (e) => {
-            if (e.key === 'Escape') {
-                modal.style.display = 'none';
-            }
+            container.appendChild(div);
         });
     }
 
-    setupModal();
-
-    // إضافة حدث النقر على الأزرار في قسم الاتصال
-    document.querySelectorAll('.btn-primary, .btn-secondary').forEach(btn => {
-        btn.addEventListener('click', function(e) {
-            // إذا كان الزر يحتوي على رابط href، اتركه يعمل بشكل طبيعي
-            if (this.tagName === 'A' || this.hasAttribute('href') || this.onclick) {
-                return;
-            }
-            
-            // إذا كان الزر لديه زر أبناء، ابحث عن رابط
-            const link = this.querySelector('a');
-            if (link) {
-                e.preventDefault();
-                window.open(link.href, link.target || '_self');
-            }
+    function renderProjects(lang) {
+        const projects = projectsData[lang];
+        const grid = document.getElementById('projectsGrid');
+        grid.innerHTML = '';
+        projects.forEach(proj => {
+            const card = document.createElement('div');
+            card.className = 'project-card';
+            const highlightHtml = proj.highlight ? `<span class="highlight-badge"><i class="fas fa-star"></i> Featured</span>` : '';
+            card.innerHTML = `
+                <div class="project-category"><i class="${proj.icon}"></i> ${proj.category}</div>
+                <div class="project-title">
+                    ${proj.title}
+                    ${highlightHtml}
+                </div>
+                <div class="project-description">${proj.desc}</div>
+                <a href="${proj.link}" target="_blank" class="project-link"><i class="fas fa-arrow-right"></i> Visit Project</a>
+            `;
+            grid.appendChild(card);
         });
-    });
+    }
 
-    // Header scroll effect
-    window.addEventListener('scroll', function() {
-        const header = document.querySelector('.header');
-        if (window.scrollY > 50) {
-            header.style.background = 'rgba(0, 0, 0, 0.9)';
-            header.style.backdropFilter = 'blur(20px)';
-        } else {
-            header.style.background = 'rgba(0, 0, 0, 0.7)';
-            header.style.backdropFilter = 'blur(15px)';
-        }
-    });
+    function renderTech(lang) {
+        const container = document.getElementById('techStack');
+        const techs = techData[lang];
+        container.innerHTML = '';
+        techs.forEach(tech => {
+            const icon = techIcons[tech] || 'fas fa-code';
+            const span = document.createElement('span');
+            span.className = 'tech-item';
+            span.innerHTML = `<i class="${icon}"></i> ${tech}`;
+            container.appendChild(span);
+        });
+    }
 
-    // إضافة مؤشر الماوس على جميع الأزرار
-    document.querySelectorAll('.btn').forEach(btn => {
-        btn.style.cursor = 'pointer';
-    });
-});
+    function setLanguage(lang) {
+        renderProjects(lang);
+        renderTech(lang);
+        document.getElementById('heroBio').innerText = bioText[lang];
+        document.getElementById('freelanceText').innerHTML = freelanceTexts[lang];
+        const ui = uiText[lang];
+        document.getElementById('projectsTitle').innerHTML = `<i class="fas fa-layer-group"></i> ${ui.projectsTitle}`;
+        document.getElementById('galleryTitle').innerHTML = `<i class="fas fa-images"></i> ${ui.galleryTitle}`;
+        document.getElementById('techTitle').innerHTML = `<i class="fas fa-code"></i> ${ui.techTitle}`;
+        document.getElementById('expBadge').innerHTML = `<i class="fas fa-trophy"></i> ${expYears}+ Years · Global Freelance`;
+        const servContainer = document.getElementById('servicesList');
+        const servArr = servicesList[lang];
+        servContainer.innerHTML = servArr.map(s => `<span class="service-chip"><i class="fas fa-check-circle"></i> ${s}</span>`).join('');
+        document.getElementById('sampleNote').innerHTML = sampleNoteText[lang];
+    }
+
+    const langSelect = document.getElementById('langSelect');
+    langSelect.addEventListener('change', (e) => setLanguage(e.target.value));
+
+    // modal close
+    const modal = document.getElementById('imageModal');
+    const closeModal = document.querySelector('.close-modal');
+    closeModal.addEventListener('click', () => modal.style.display = 'none');
+    modal.addEventListener('click', (e) => { if(e.target === modal) modal.style.display = 'none'; });
+    document.addEventListener('keydown', (e) => { if(e.key === 'Escape') modal.style.display = 'none'; });
+
+    setLanguage('en');
+    loadGallery();
 </script>
 </body>
 </html>

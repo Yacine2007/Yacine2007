@@ -15,8 +15,7 @@
 
     body {
         font-family: 'Inter', 'Segoe UI', system-ui, -apple-system, sans-serif;
-        background: url('https://images.pexels.com/photos/574069/pexels-photo-574069.jpeg') center/cover no-repeat fixed;
-        background-color: #0a0c12;
+        background: #fef9e8; /* كريمي متناسق */
         min-height: 100vh;
         padding: 1.5rem;
         position: relative;
@@ -24,6 +23,7 @@
         line-height: 1.5;
     }
 
+    /* إضافة تدرج خفيف للعمق */
     body::before {
         content: "";
         position: fixed;
@@ -31,9 +31,9 @@
         left: 0;
         width: 100%;
         height: 100%;
-        background: rgba(255, 255, 255, 0.75);
-        backdrop-filter: blur(2px);
+        background: radial-gradient(circle at 20% 30%, rgba(255,245,220,0.4), rgba(245,235,210,0.2));
         z-index: 0;
+        pointer-events: none;
     }
 
     .glass-container {
@@ -46,10 +46,10 @@
         z-index: 2;
     }
 
-    /* Header with language dropdown - high z-index */
+    /* Header with language dropdown */
     .glass-header {
-        background: rgba(255, 255, 255, 0.75);
-        backdrop-filter: blur(20px);
+        background: rgba(255, 255, 255, 0.85);
+        backdrop-filter: blur(12px);
         border-radius: 32px;
         padding: 0.6rem 1.5rem;
         display: flex;
@@ -57,8 +57,8 @@
         align-items: center;
         flex-wrap: wrap;
         gap: 1rem;
-        border: 1px solid rgba(255, 255, 255, 0.5);
-        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.03);
+        border: 1px solid rgba(0, 0, 0, 0.05);
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.02);
         position: relative;
         z-index: 10;
     }
@@ -72,34 +72,34 @@
         height: 36px;
         border-radius: 50%;
         object-fit: cover;
-        border: 1.5px solid rgba(255,255,255,0.8);
+        border: 1.5px solid rgba(0,0,0,0.08);
     }
     .logo-text {
         font-size: clamp(1rem, 4vw, 1.3rem);
         font-weight: 700;
-        color: #0f172a;
+        color: #2d2a1e;
     }
     .lang-dropdown {
         position: relative;
         z-index: 1000;
     }
     .lang-btn {
-        background: rgba(0,0,0,0.05);
-        border: 1px solid rgba(255,255,255,0.5);
+        background: rgba(0,0,0,0.03);
+        border: 1px solid rgba(0,0,0,0.08);
         padding: 0.35rem 0.9rem;
         border-radius: 40px;
         font-size: 0.75rem;
         font-weight: 600;
         cursor: pointer;
         font-family: inherit;
-        color: #1e293b;
+        color: #2d2a1e;
         transition: 0.2s;
         display: flex;
         align-items: center;
         gap: 4px;
     }
     .lang-btn:hover {
-        background: rgba(0,0,0,0.1);
+        background: rgba(0,0,0,0.06);
     }
     .lang-menu {
         position: absolute;
@@ -108,7 +108,7 @@
         margin-top: 5px;
         background: white;
         border-radius: 20px;
-        box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+        box-shadow: 0 8px 20px rgba(0,0,0,0.1);
         border: 1px solid #e2e8f0;
         overflow: hidden;
         display: none;
@@ -123,26 +123,26 @@
         font-weight: 500;
         cursor: pointer;
         transition: 0.1s;
-        color: #1e293b;
+        color: #2d2a1e;
     }
     .lang-option:hover {
-        background: #f1f5f9;
+        background: #f8f4e8;
     }
 
-    /* Glass cards */
+    /* Glass cards - بيضاء مع ظل كريمي */
     .glass-card {
-        background: rgba(255, 255, 255, 0.85);
-        backdrop-filter: blur(20px);
+        background: rgba(255, 255, 255, 0.92);
+        backdrop-filter: blur(8px);
         border-radius: 28px;
-        border: 1px solid rgba(255, 255, 255, 0.6);
-        box-shadow: 0 12px 28px rgba(0, 0, 0, 0.04);
+        border: 1px solid rgba(0, 0, 0, 0.04);
+        box-shadow: 0 12px 28px rgba(0, 0, 0, 0.03), 0 2px 4px rgba(0, 0, 0, 0.02);
         padding: 1.5rem;
         transition: all 0.3s ease;
     }
     .glass-card:hover {
         transform: translateY(-2px);
-        box-shadow: 0 20px 35px -12px rgba(0, 0, 0, 0.1);
-        background: rgba(255, 255, 255, 0.92);
+        box-shadow: 0 20px 35px -12px rgba(0, 0, 0, 0.08);
+        background: rgba(255, 255, 255, 0.98);
     }
 
     /* Profile */
@@ -155,35 +155,35 @@
         border-radius: 50%;
         object-fit: cover;
         border: 3px solid white;
-        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.06);
         margin-bottom: 0.8rem;
     }
     .name {
         font-size: clamp(1.5rem, 5vw, 2rem);
         font-weight: 700;
-        color: #0f172a;
+        color: #2d2a1e;
         letter-spacing: -0.02em;
     }
     .name span {
-        background: linear-gradient(135deg, #1e293b, #2d3a4e);
+        background: linear-gradient(135deg, #5c4b2e, #8b7355);
         background-clip: text;
         -webkit-background-clip: text;
         color: transparent;
     }
     .exp-tag {
-        background: #f1f5f9;
+        background: #f8f4e8;
         display: inline-block;
         padding: 0.2rem 1rem;
         border-radius: 60px;
         font-size: clamp(0.65rem, 2.5vw, 0.75rem);
         font-weight: 600;
         margin: 0.6rem 0;
-        color: #1e293b;
-        border: 1px solid #e2e8f0;
+        color: #5c4b2e;
+        border: 1px solid #e8e0d0;
     }
     .bio {
         font-size: clamp(0.85rem, 3vw, 1rem);
-        color: #334155;
+        color: #4a3f2e;
         margin: 0.8rem auto;
         line-height: 1.5;
         max-width: 650px;
@@ -195,8 +195,8 @@
         font-size: clamp(1.2rem, 4vw, 1.6rem);
         font-weight: 700;
         margin-bottom: 1.2rem;
-        color: #0f172a;
-        border-left: 3px solid #1e293b;
+        color: #2d2a1e;
+        border-left: 3px solid #c4a86a;
         padding-left: 12px;
     }
 
@@ -209,16 +209,16 @@
     .project-card {
         background: #ffffff;
         border-radius: 22px;
-        border: 1px solid #eef2fa;
+        border: 1px solid #f0e8dc;
         padding: 1.1rem;
         transition: 0.25s;
         display: flex;
         flex-direction: column;
     }
     .project-card:hover {
-        border-color: #cbd5e1;
+        border-color: #d4c4a8;
         transform: translateY(-2px);
-        box-shadow: 0 8px 20px -10px rgba(0, 0, 0, 0.08);
+        box-shadow: 0 8px 20px -10px rgba(0, 0, 0, 0.06);
     }
     .project-category {
         display: inline-flex;
@@ -226,28 +226,28 @@
         gap: 6px;
         font-size: clamp(0.6rem, 2.5vw, 0.7rem);
         font-weight: 600;
-        background: #f1f5f9;
+        background: #f8f4e8;
         padding: 0.2rem 0.9rem;
         border-radius: 60px;
         width: fit-content;
         margin-bottom: 0.6rem;
-        color: #1e293b;
-        border: 1px solid #e2e8f0;
+        color: #5c4b2e;
+        border: 1px solid #e8e0d0;
     }
     .project-category i {
-        color: #1e293b;
+        color: #8b7355;
         font-size: 0.65rem;
     }
     .project-title {
         font-size: clamp(1rem, 3.5vw, 1.2rem);
         font-weight: 700;
         margin-bottom: 0.4rem;
-        color: #0f172a;
+        color: #2d2a1e;
         line-height: 1.3;
     }
     .project-description {
         font-size: clamp(0.7rem, 2.5vw, 0.8rem);
-        color: #475569;
+        color: #5a4f3a;
         margin: 0.5rem 0;
         line-height: 1.45;
         flex: 1;
@@ -256,7 +256,7 @@
         display: inline-flex;
         align-items: center;
         gap: 6px;
-        background: #0f172a;
+        background: #2d2a1e;
         color: white;
         font-size: clamp(0.6rem, 2.5vw, 0.7rem);
         font-weight: 500;
@@ -268,7 +268,7 @@
         transition: 0.2s;
     }
     .project-link:hover {
-        background: #1e293b;
+        background: #5c4b2e;
         gap: 8px;
     }
 
@@ -279,7 +279,7 @@
         gap: 0.6rem;
     }
     .tech-item {
-        background: #f1f5f9;
+        background: #f8f4e8;
         border-radius: 60px;
         padding: 0.35rem 1rem;
         font-size: clamp(0.65rem, 2.5vw, 0.75rem);
@@ -287,11 +287,11 @@
         display: inline-flex;
         align-items: center;
         gap: 6px;
-        color: #1e293b;
-        border: 1px solid #e2e8f0;
+        color: #2d2a1e;
+        border: 1px solid #e8e0d0;
     }
     .tech-item i {
-        color: #1e293b;
+        color: #8b7355;
         font-size: 0.75rem;
     }
 
@@ -304,51 +304,51 @@
         flex-wrap: wrap;
     }
     .contact-icon-small {
-        background: #f1f5f9;
+        background: #f8f4e8;
         width: clamp(40px, 8vw, 48px);
         height: clamp(40px, 8vw, 48px);
         display: flex;
         align-items: center;
         justify-content: center;
         border-radius: 24px;
-        color: #1e293b;
+        color: #2d2a1e;
         font-size: clamp(1rem, 3.5vw, 1.2rem);
         transition: all 0.2s;
         text-decoration: none;
-        border: 1px solid #e2e8f0;
+        border: 1px solid #e8e0d0;
     }
     .contact-icon-small:hover {
-        background: #1e293b;
+        background: #2d2a1e;
         color: white;
         transform: translateY(-3px);
     }
     .freelance-badge {
         margin-top: 1rem;
-        background: #f8fafc;
+        background: #f8f4e8;
         padding: 0.5rem;
         border-radius: 60px;
         font-size: clamp(0.65rem, 2.5vw, 0.75rem);
         font-weight: 500;
-        border: 1px solid #e2e8f0;
-        color: #1e293b;
+        border: 1px solid #e8e0d0;
+        color: #2d2a1e;
         text-align: center;
     }
     .investor-note {
         margin-top: 1rem;
         font-size: clamp(0.65rem, 2.5vw, 0.75rem);
-        background: #eef2ff;
+        background: #fdf7ed;
         border-radius: 20px;
         padding: 0.7rem;
         text-align: center;
-        color: #1e40af;
-        border: 1px solid #c7d2fe;
+        color: #8b7355;
+        border: 1px solid #e8dcc8;
         font-weight: 500;
     }
     .more-projects {
         margin-top: 1rem;
         font-size: clamp(0.65rem, 2.5vw, 0.75rem);
         text-align: center;
-        color: #2563eb;
+        color: #c4a86a;
         font-weight: 500;
     }
 
@@ -366,7 +366,7 @@
         align-items: center;
         justify-content: center;
         font-size: clamp(1.5rem, 5vw, 1.8rem);
-        box-shadow: 0 6px 18px rgba(0, 0, 0, 0.15);
+        box-shadow: 0 6px 18px rgba(0, 0, 0, 0.1);
         transition: 0.2s;
         z-index: 1000;
         text-decoration: none;
@@ -376,7 +376,6 @@
         background: #128C7E;
     }
 
-    /* Responsive adjustments */
     @media (max-width: 680px) {
         body {
             padding: 1rem;
@@ -390,9 +389,6 @@
         }
         .section-title {
             margin-bottom: 1rem;
-        }
-        .bio {
-            padding: 0 0.5rem;
         }
     }
 
@@ -414,7 +410,7 @@
 <div class="glass-container">
     <div class="glass-header">
         <div class="logo-area">
-            <img src="https://yacine2007.github.io/Yacine2007/picture.png" alt="profile" class="mini-avatar" onerror="this.onerror=null; this.src='https://ui-avatars.com/api/?background=1e293b&color=fff&size=36&name=YB';">
+            <img src="https://yacine2007.github.io/Yacine2007/picture.png" alt="profile" class="mini-avatar" onerror="this.onerror=null; this.src='https://ui-avatars.com/api/?background=8b7355&color=fff&size=36&name=YB';">
             <span class="logo-text">Yacine-Dev</span>
         </div>
         <div class="lang-dropdown">
@@ -429,7 +425,7 @@
 
     <div class="glass-card">
         <div class="profile-center">
-            <img src="https://yacine2007.github.io/Yacine2007/picture.png" alt="Yacine Ben Mokrane" class="avatar-large" id="profileImg" onerror="this.onerror=null; this.src='https://ui-avatars.com/api/?background=1e293b&color=fff&bold=true&size=140&name=Yacine+BM';">
+            <img src="https://yacine2007.github.io/Yacine2007/picture.png" alt="Yacine Ben Mokrane" class="avatar-large" id="profileImg" onerror="this.onerror=null; this.src='https://ui-avatars.com/api/?background=8b7355&color=fff&bold=true&size=140&name=Yacine+BM';">
             <div class="name">Yacine Ben <span>Mokrane</span></div>
             <div class="exp-tag" id="expBadge"></div>
             <div class="bio" id="heroBio"></div>
@@ -481,7 +477,6 @@
     const currentYear = new Date().getFullYear();
     const expYears = currentYear - startYear;
 
-    // Project titles are fixed (do not translate) - only descriptions and categories are translated
     const projectsData = {
         en: [
             { title: "BarmejLi Platform", desc: "Service platform to receive & manage software project requests with full admin dashboard.", link: "https://barmejli.kesug.com/", category: "Platform / Dashboard", icon: "fas fa-globe" },
@@ -617,7 +612,6 @@
         document.getElementById('currentLangLabel').innerText = lang === 'en' ? 'EN' : (lang === 'ar' ? 'ع' : 'FR');
     }
 
-    // Language dropdown logic
     const langBtn = document.getElementById('langBtn');
     const langMenu = document.getElementById('langMenu');
     langBtn.addEventListener('click', (e) => {
